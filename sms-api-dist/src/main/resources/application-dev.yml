@@ -1,0 +1,40 @@
+# server
+server:
+  port: 8081
+
+# swagger
+swagger:
+  enabled: true
+  title: 接口文档
+  description: 接口文档描述
+  contact:
+    name: 张晓峰
+    url: https://leonzhangxf.com
+    email: leonzhangxf@gmail.com
+
+# logger
+logging:
+  level:
+    root: info
+    org.springframework: info
+    com.boxuegu: info
+    org.keycloak: debug
+  path: /tmp/sms-api-dist
+
+keycloak:
+  enabled: true
+  realm: employee
+  auth-server-url: http://127.0.0.1:8080/auth
+  ssl-required: none
+  resource: sms-api-dist
+  cors: true
+  bearer-only: true
+  autodetect-bearer-only: true
+  credentials:
+    secret: bbfb1fa3-7663-4925-aa76-338d7a5bbacc
+  security-constraints:
+    - auth-roles:
+        - user
+      security-collections:
+        - patterns:
+            - /api/*
