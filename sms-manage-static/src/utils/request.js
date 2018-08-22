@@ -36,7 +36,8 @@ service.interceptors.response.use(
       response.status === 304) {
       return response.data;
     } else if (response.status === 401) {
-      // 未认证，需要进行认证 TODO
+      // 未认证，或者token过期，登出
+      keycloak.logout();
     } else {
       return Promise.reject(res);
     }
