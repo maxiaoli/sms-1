@@ -25,6 +25,8 @@
         <module>sms-open-api-dist</module>
         <!-- 一般api -->
         <module>sms-api-dist</module>
+        <!-- 对外开放api调用SDK -->
+        <module>sms-open-api-sdk</module>
     </modules>
 
     <properties>
