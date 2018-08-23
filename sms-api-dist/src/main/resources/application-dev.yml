@@ -32,9 +32,10 @@ keycloak:
   autodetect-bearer-only: true
   credentials:
     secret: bbfb1fa3-7663-4925-aa76-338d7a5bbacc
-  security-constraints:
-    - auth-roles:
-        - user
-      security-collections:
-        - patterns:
-            - /api/*
+
+# keycloak 授权配置
+spring:
+  profiles:
+    include:
+      - keycloak
+

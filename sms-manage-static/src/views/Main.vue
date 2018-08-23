@@ -1,11 +1,17 @@
 <template>
     <div class="hello">
         <h2>{{ msg }}</h2>
-        <h2>{{ subject }}</h2>
-        <h2>{{ token }}</h2>
+
+        <h2>subject: {{ subject }}</h2>
+        <h2>Token: {{ token }}</h2>
+        <h2>RealmAccess: {{ realmAccess }}</h2>
+        <h2>ResourceAccess: {{ resourceAccess }}</h2>
 
         <button @click="getIndex">get index</button>
+        <button @click="getUser">get user</button>
+        <button @click="getAdmin">get admin</button>
 
+        <br/>
         <button @click="logout">log out</button>
     </div>
 </template>
@@ -20,12 +26,16 @@
       return {
         msg: '',
         subject: '',
-        token: ''
+        token: '',
+        realmAccess: '',
+        resourceAccess: ''
       }
     },
     mounted() {
       this.subject = keycloak.subject;
       this.token = keycloak.token;
+      this.realmAccess = keycloak.realmAccess;
+      this.resourceAccess = keycloak.resourceAccess;
     },
     methods: {
       getIndex() {
@@ -33,7 +43,26 @@
           url: '/api/index',
           method: 'get'
         }).then((res) => {
-          console.log(res.data);
+          this.msg = res;
+        }).catch((err) => {
+          console.log(err);
+        });
+      },
+      getUser() {
+        request({
+          url: '/api/user',
+          method: 'get'
+        }).then((res) => {
+          this.msg = res;
+        }).catch((err) => {
+          console.log(err);
+        });
+      },
+      getAdmin() {
+        request({
+          url: '/api/admin',
+          method: 'get'
+        }).then((res) => {
           this.msg = res;
         }).catch((err) => {
           console.log(err);

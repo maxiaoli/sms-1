@@ -5,10 +5,12 @@ Vue.use(VueRouter);
 
 import Main from '../views/Main'
 
-
 //router
 const routeMap = [
-  {path: '/main', component: Main}
+  {
+    path: '/main',
+    component: Main
+  }
 ];
 
 const router = new VueRouter({

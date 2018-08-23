@@ -4,7 +4,7 @@ import keycloak from './auth'
 // 创建axios实例
 const service = axios.create({
   baseURL: 'http://localhost:8081', // api的base_url
-  timeout: 2000,// 请求超时时间
+  timeout: 15000,// 请求超时时间
   withCredentials: false,
   headers: {'X-Requested-With': 'XMLHttpRequest'},
   transformRequest: [function (data) { //对请求数据进行处理
@@ -14,7 +14,10 @@ const service = axios.create({
       ret += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]) + '&';
     }
     return ret
-  }]
+  }],
+  validateStatus: function (status) {
+    return status >= 200 && status < 300 || status === 401 || status === 403; // default
+  },
 });
 
 // request拦截器
@@ -22,6 +25,7 @@ service.interceptors.request.use(config => {
   if (keycloak.token) {
     config.headers['Authorization'] = 'Bearer ' + keycloak.token;
   }
+
   return config
 }, error => {
   // Do something with request error
@@ -32,18 +36,20 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
   response => {
     const res = response.data;
-    if (response.status === 200 ||
-      response.status === 304) {
-      return response.data;
+    if (response.status === 200 || response.status === 304) {
+      return res;
     } else if (response.status === 401) {
       // 未认证，或者token过期，登出
       keycloak.logout();
+    } else if (response.status === 403) {
+      //没有权限
+      alert("No Authorization")
     } else {
       return Promise.reject(res);
     }
   },
   error => {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
 );
 

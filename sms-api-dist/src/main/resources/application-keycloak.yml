@@ -1,0 +1,20 @@
+# keycloak 授权配置
+keycloak:
+  # 对整个rest资源的基本配置，这里对所有资源，要求至少有 sms-user用户
+  security-constraints:
+    # sms-user 用户
+    - auth-roles:
+        - sms-user
+      security-collections:
+        - patterns:
+            - /*
+
+  # 这里配置的是所有的在启动时会从keycloak拉取资源对应授权配置的路径资源
+  policy-enforcer-config:
+    paths:
+      - name: sms-api-index
+        path: /api/index
+      - name: sms-api-user
+        path: /api/user
+      - name: sms-api-admin
+        path: /api/admin

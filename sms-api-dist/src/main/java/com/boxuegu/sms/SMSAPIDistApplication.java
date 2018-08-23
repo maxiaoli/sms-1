@@ -3,6 +3,7 @@ package com.boxuegu.sms;
 import cn.itcast.bxg.common.util.bean.APIResponse;
 import com.boxuegu.sms.configuration.CorsConfiguration;
 import com.boxuegu.sms.configuration.SwaggerConfiguration;
+import org.keycloak.KeycloakPrincipal;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -32,7 +33,36 @@ public class SMSAPIDistApplication {
     @GetMapping("/api/index")
     public APIResponse<String> index(HttpServletRequest request) {
         Principal userPrincipal = request.getUserPrincipal();
-        System.out.println(userPrincipal);
+
+        KeycloakPrincipal keycloakPrincipal = null;
+        if (null != userPrincipal && userPrincipal instanceof KeycloakPrincipal) {
+            keycloakPrincipal = (KeycloakPrincipal)userPrincipal;
+            System.out.println(keycloakPrincipal.getKeycloakSecurityContext().getToken().getPreferredUsername());
+        }
         return APIResponse.newOKResponse("index");
+    }
+
+    @GetMapping("/api/user")
+    public APIResponse<String> user(HttpServletRequest request) {
+        Principal userPrincipal = request.getUserPrincipal();
+
+        KeycloakPrincipal keycloakPrincipal = null;
+        if (null != userPrincipal && userPrincipal instanceof KeycloakPrincipal) {
+            keycloakPrincipal = (KeycloakPrincipal)userPrincipal;
+            System.out.println(keycloakPrincipal.getKeycloakSecurityContext().getToken().getPreferredUsername());
+        }
+        return APIResponse.newOKResponse("user");
+    }
+
+    @GetMapping("/api/admin")
+    public APIResponse<String> admin(HttpServletRequest request) {
+        Principal userPrincipal = request.getUserPrincipal();
+
+        KeycloakPrincipal keycloakPrincipal = null;
+        if (null != userPrincipal && userPrincipal instanceof KeycloakPrincipal) {
+            keycloakPrincipal = (KeycloakPrincipal)userPrincipal;
+            System.out.println(keycloakPrincipal.getKeycloakSecurityContext().getToken().getPreferredUsername());
+        }
+        return APIResponse.newOKResponse("admin");
     }
 }
