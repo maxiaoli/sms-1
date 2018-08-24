@@ -21,6 +21,7 @@ logging:
     org.keycloak: debug
   path: /tmp/sms-api-dist
 
+# keycloak 核心配置
 keycloak:
   enabled: true
   realm: employee
@@ -31,7 +32,7 @@ keycloak:
   bearer-only: true
   autodetect-bearer-only: true
   credentials:
-    secret: bbfb1fa3-7663-4925-aa76-338d7a5bbacc
+    secret: 8b2deef9-fc4b-46b2-9678-26a9a02f48b4
 
 # keycloak 授权配置
 spring:

@@ -4,6 +4,7 @@
 
         <h2>subject: {{ subject }}</h2>
         <h2>Token: {{ token }}</h2>
+        <h2>TokenParsed: {{ tokenParsed }}</h2>
         <h2>RealmAccess: {{ realmAccess }}</h2>
         <h2>ResourceAccess: {{ resourceAccess }}</h2>
 
@@ -21,12 +22,13 @@
   import keycloak from '../utils/auth'
 
   export default {
-    name: 'Index',
+    name: 'Main',
     data() {
       return {
         msg: '',
         subject: '',
         token: '',
+        tokenParsed: '',
         realmAccess: '',
         resourceAccess: ''
       }
@@ -34,6 +36,7 @@
     mounted() {
       this.subject = keycloak.subject;
       this.token = keycloak.token;
+      this.tokenParsed = keycloak.tokenParsed;
       this.realmAccess = keycloak.realmAccess;
       this.resourceAccess = keycloak.resourceAccess;
     },

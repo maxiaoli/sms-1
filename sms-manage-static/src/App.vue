@@ -1,6 +1,8 @@
 <template>
     <div id="app">
-        <router-link to="/main">Go Main</router-link>
+        <h1>hello app</h1>
+
+        <router-link to="/main">to main</router-link>
 
         <router-view></router-view>
     </div>

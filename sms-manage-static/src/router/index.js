@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-Vue.use(VueRouter);
-
 import Main from '../views/Main'
+
+Vue.use(VueRouter);
 
 //router
 const routeMap = [
   {
     path: '/main',
+    name: 'main',
     component: Main
   }
 ];
