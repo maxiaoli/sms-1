@@ -7,7 +7,7 @@ keycloak:
         - sms-user
       security-collections:
         - patterns:
-            - /*
+            - /api/*
 
   # 这里配置的是所有的在启动时会从keycloak拉取资源对应授权配置的路径资源
   policy-enforcer-config:
