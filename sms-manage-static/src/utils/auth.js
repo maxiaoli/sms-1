@@ -1,7 +1,7 @@
 import './keycloak'
 import config from '../../config/config'
 
-var keycloak = Keycloak({
+let keycloak = Keycloak({
   url: config.keycloak.url,
   realm: config.keycloak.realm,
   clientId: config.keycloak.clientId

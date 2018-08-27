@@ -19,7 +19,7 @@
 
 <script>
   import request from '../utils/request'
-  import keycloak from '../utils/auth'
+  import auth from '../utils/auth'
 
   export default {
     name: 'Main',
@@ -34,11 +34,11 @@
       }
     },
     mounted() {
-      this.subject = keycloak.subject;
-      this.token = keycloak.token;
-      this.tokenParsed = keycloak.tokenParsed;
-      this.realmAccess = keycloak.realmAccess;
-      this.resourceAccess = keycloak.resourceAccess;
+      this.subject = auth.subject;
+      this.token = auth.token;
+      this.tokenParsed = auth.tokenParsed;
+      this.realmAccess = auth.realmAccess;
+      this.resourceAccess = auth.resourceAccess;
     },
     methods: {
       getIndex() {
@@ -72,7 +72,7 @@
         });
       },
       logout() {
-        keycloak.logout();
+        auth.logout();
       }
     }
   }
