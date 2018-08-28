@@ -10,6 +10,11 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * The server cross origin support configuration.
+ *
+ * @author leonzhangxf 20180808
+ */
 @ConfigurationProperties("spring.cors")
 public class CorsConfiguration implements WebMvcConfigurer {
 
