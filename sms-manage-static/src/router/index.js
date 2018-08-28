@@ -1,16 +1,24 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import Main from '../views/Main'
-
 Vue.use(VueRouter);
+
+const load = component => {
+  return () => import(`@/views/${component}.vue`)
+};
 
 //router
 const routeMap = [
   {
-    path: '/main',
-    name: 'main',
-    component: Main
+    path: '',
+    name: 'index',
+    component: load('layout/index'),
+    redirect: 'dashboard',
+    children: [{
+      path: '/dashboard',
+      name: 'dashboard',
+      component: load('dashboard/index')
+    }]
   }
 ];
 

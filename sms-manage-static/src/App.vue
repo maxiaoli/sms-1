@@ -1,22 +1,18 @@
 <template>
     <div id="app">
-        <div>
-            <el-button>el-button</el-button>
-        </div>
-
-        <router-link to="/main">to main</router-link>
 
         <router-view></router-view>
+
     </div>
 </template>
 
 <script>
   export default {
-    name: 'app'
+    name: 'App'
   }
 </script>
 
-<style>
+<style rel="stylesheet/scss" lang="scss" scoped>
     #app {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;
