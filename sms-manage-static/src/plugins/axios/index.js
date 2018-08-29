@@ -1,5 +1,4 @@
 import axios from 'axios'
-import auth from './auth'
 
 // 创建axios实例
 const service = axios.create({
@@ -20,18 +19,6 @@ const service = axios.create({
   },
 });
 
-// request拦截器
-service.interceptors.request.use(config => {
-  if (auth.token) {
-    config.headers['Authorization'] = 'Bearer ' + auth.token;
-  }
-
-  return config
-}, error => {
-  // Do something with request error
-  Promise.reject(error)
-});
-
 // respone拦截器
 service.interceptors.response.use(
   response => {
@@ -40,7 +27,7 @@ service.interceptors.response.use(
       return res;
     } else if (response.status === 401) {
       // 未认证，或者token过期，登出
-      auth.logout();
+      alert('401')
     } else if (response.status === 403) {
       //没有权限
       alert("No Authorization")

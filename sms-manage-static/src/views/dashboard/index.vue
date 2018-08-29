@@ -1,6 +1,6 @@
 <template>
     <div class="dashboard-container">
-        <div class="dashboard-text">{{username}} 欢迎访问短信服务管理系统=。=</div>
+        <div class="dashboard-text">{{name}} 欢迎访问短信服务管理系统=。=</div>
     </div>
 </template>
 
@@ -9,7 +9,15 @@
     name: 'dashboard',
     data() {
       return {
-        username: '张晓峰'
+        name: '无名'
+      }
+    },
+    mounted() {
+        this.name = this.getName();
+    },
+    methods: {
+      getName() {
+        return this.$store.getters.name;
       }
     }
   }
