@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from '../plugins/axios'
-import { setKeycloak, setUsername, getUsername, getName, setName} from './modules/auth'
+import { setKeycloak, removeKeycloak, setUsername, getUsername, getName, setName} from './modules/auth'
 import Keycloak from "keycloak-js";
 import config from '../../config'
 
@@ -28,6 +28,7 @@ export default new Vuex.Store({
     KEYCLOAK: (state, keycloak, deleted = false) => {
       if (deleted) {
         setUsername(null);
+        removeKeycloak();
       } else {
         try {
           state.keycloak = keycloak;

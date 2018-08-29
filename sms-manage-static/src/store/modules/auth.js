@@ -11,12 +11,9 @@ export function getKeycloak() {
 }
 
 export function removeKeycloak() {
-  localStorage.removeItem(constant.KEYCLOAK)
-}
-
-function clone(obj) {
-  let proto = Object.getPrototypeOf(obj);
-  return Object.assign({}, Object.create(proto), obj);
+  localStorage.removeItem(constant.KEYCLOAK);
+  localStorage.removeItem(constant.USERNAME);
+  localStorage.removeItem(constant.NAME);
 }
 
 export function setUsername(username) {
