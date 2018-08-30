@@ -8,18 +8,23 @@ const view = {
     }
   },
   mutations: {
-    [COLLAPSE]: (state) => {
-      if (state.sider.collapsed) {
-        ViewStorage.setCollapsed(false);
+    [COLLAPSE]: (state, collapsed = null) => {
+      if (null != collapsed) {
+        ViewStorage.setCollapsed(collapsed);
+        state.sider.collapsed = collapsed;
       } else {
-        ViewStorage.setCollapsed(true);
+        if (state.sider.collapsed) {
+          ViewStorage.setCollapsed(false);
+        } else {
+          ViewStorage.setCollapsed(true);
+        }
+        state.sider.collapsed = !state.sider.collapsed;
       }
-      state.sider.collapsed = !state.sider.collapsed;
     }
   },
   actions: {
-    [TOGGLE_COLLAPSE]: ({commit}) => {
-      commit(COLLAPSE);
+    [TOGGLE_COLLAPSE]: ({commit}, collapsed = null) => {
+      commit(COLLAPSE, collapsed);
     }
   }
 };

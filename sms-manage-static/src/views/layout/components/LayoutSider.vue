@@ -1,10 +1,10 @@
 <template>
 
     <div class="sider">
-        <Menu active-name="1-1" accordion theme="dark" width="auto" :class="menuitemClasses">
+        <Menu accordion theme="dark" width="auto" :class="menuitemClasses">
             <Submenu name="1">
                 <template slot="title">
-                    <Icon type="ios-navigate"></Icon>
+                    <Icon type="ios-navigate" v-on:click="noCollapsed"></Icon>
                     <span>Item 1</span>
                 </template>
                 <MenuItem name="1-1">
@@ -30,6 +30,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import {TOGGLE_COLLAPSE} from '../../../store/types'
 
   export default {
     name: 'LayoutSider',
@@ -42,6 +43,14 @@
           'menu-item',
           this.siderCollapsed ? 'collapsed-menu' : ''
         ]
+      }
+    },
+    methods: {
+      noCollapsed() {
+        if (this.siderCollapsed) {
+          console.log('1111');
+          this.$store.dispatch(TOGGLE_COLLAPSE, false);
+        }
       }
     }
   }
@@ -56,7 +65,7 @@
         span {
             display: inline-block;
             overflow: hidden;
-            width: 69px;
+            width: 70px;
             text-overflow: ellipsis;
             white-space: nowrap;
             vertical-align: bottom;
@@ -69,7 +78,6 @@
             vertical-align: middle;
             font-size: 16px;
         }
-
     }
 
     .collapsed-menu {
