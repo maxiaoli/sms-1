@@ -52,6 +52,8 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .header {
+        height: 100%;
+
         &-title {
             color: azure;
             float: left;

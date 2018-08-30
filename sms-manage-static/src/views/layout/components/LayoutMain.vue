@@ -44,6 +44,7 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
     .main {
         padding: 0 24px 24px;
+        height: 100%;
 
         &-breadcrumb {
             margin: 24px 0;
@@ -52,7 +53,6 @@
 
         &-content {
             padding: 24px;
-            height: -webkit-fill-available;
             background: #fff;
         }
 
