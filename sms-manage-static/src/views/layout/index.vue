@@ -8,7 +8,7 @@
             </Layout>
 
             <Layout>
-                <Sider hide-trigger :style="{background: '#fff'}">
+                <Sider class="layout-sider" :value="isCollapsed" collapsed-width="80" collapsible hide-trigger>
                     <LayoutSider></LayoutSider>
                 </Sider>
 
@@ -20,6 +20,7 @@
 
 <script>
   import {LayoutHeader, LayoutSider, LayoutMain} from './components'
+  import {mapGetters} from 'vuex'
 
   export default {
     name: 'LayoutIndex',
@@ -27,6 +28,14 @@
       LayoutHeader,
       LayoutSider,
       LayoutMain
+    },
+    computed: {
+      ...mapGetters([
+        'siderCollapsed'
+      ]),
+      isCollapsed() {
+        return this.siderCollapsed;
+      }
     }
   }
 </script>
@@ -37,7 +46,8 @@
         background: #f5f7f9;
         position: relative;
         border-radius: 4px;
-        overflow: hidden;
+
+        margin-top: -60px;
 
         &-logo {
             width: 100px;
@@ -51,8 +61,7 @@
 
         &-nav {
             width: 420px;
-            margin: 0 auto;
-            margin-right: 20px;
+            margin: 0 20px auto auto;
         }
     }
 

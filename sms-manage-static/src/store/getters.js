@@ -18,6 +18,10 @@ const getters = {
       }
     } catch (e) {}
     return state.user.name;
+  },
+  siderCollapsed: (state) => {
+    if (state.view.sider.collapsed === undefined || state.view.sider.collapsed === null) return false;
+    return state.view.sider.collapsed;
   }
 };
 
