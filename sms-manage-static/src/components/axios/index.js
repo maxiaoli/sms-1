@@ -1,9 +1,9 @@
 import axios from 'axios'
+import config from '../../../config/index'
 
-// 创建axios实例
 const service = axios.create({
-  baseURL: 'http://localhost:8081', // api的base_url
-  timeout: 15000,// 请求超时时间
+  baseURL: config.api.baseUrl,
+  timeout: config.api.timeout,// 请求超时时间
   withCredentials: false,
   headers: {'X-Requested-With': 'XMLHttpRequest'},
   transformRequest: [function (data) { //对请求数据进行处理

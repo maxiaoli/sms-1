@@ -1,3 +1,7 @@
-export const KEYCLOAK = "BXG_SMS_KEYCLOAK";
-export const USERNAME = "BXG_SMS_USERNAME";
-export const NAME = "BXG_SMS_NAME";
+const constant = {
+  KEYCLOAK: 'BXG_SMS_KEYCLOAK',
+  USERNAME: 'BXG_SMS_USERNAME',
+  NAME: 'BXG_SMS_NAME'
+};
+
+export default constant

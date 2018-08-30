@@ -1,30 +1,28 @@
 <template>
-    <div class="dashboard-container">
-        <div class="dashboard-text">{{name}} 欢迎访问短信服务管理系统=。=</div>
+    <div class="home-container">
+        <div class="home-text">{{name}} 欢迎访问短信服务管理系统=。=</div>
     </div>
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
   export default {
-    name: 'dashboard',
+    name: 'home',
     data() {
       return {
-        name: '无名'
       }
     },
-    mounted() {
-        this.name = this.getName();
-    },
-    methods: {
-      getName() {
-        return this.$store.getters.name;
-      }
+    computed: {
+      ...mapGetters([
+        'name'
+      ])
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-    .dashboard {
+    .home {
         &-container {
             margin: 30px;
         }
