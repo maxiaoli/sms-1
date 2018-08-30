@@ -8,7 +8,10 @@ Vue.config.productionTip = false;
 Vue.config.devtools = true;
 
 new Vue({
+  el: '#app',
   render: h => h(App),
   store,
-  router
-}).$mount('#app');
+  router,
+  template: '<App/>',
+  components: {App}
+});

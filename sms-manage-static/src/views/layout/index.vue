@@ -41,10 +41,6 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss">
-    html,body{
-        height: 100%;
-    }
-
     .layout {
         border: 1px solid #d7dde4;
         background: #f5f7f9;
