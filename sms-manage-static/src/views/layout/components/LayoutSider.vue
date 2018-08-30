@@ -1,7 +1,7 @@
 <template>
 
     <div class="sider">
-        <Menu active-name="1-1" theme="dark" width="auto" :class="menuitemClasses">
+        <Menu active-name="1-1" accordion theme="dark" width="auto" :class="menuitemClasses">
             <Submenu name="1">
                 <template slot="title">
                     <Icon type="ios-navigate"></Icon>

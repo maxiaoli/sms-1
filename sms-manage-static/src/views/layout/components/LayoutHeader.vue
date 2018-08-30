@@ -1,12 +1,12 @@
 <template>
 
-    <Header>
+    <Header style="height: 80px;">
         <div class="header">
             <Menu mode="horizontal" theme="dark" active-name="1">
                 <span class="header-title">SMS 短信服务</span>
 
                 <div class="header-user">
-                    <Dropdown class="user-setting" trigger="click" style="margin-left: 20px">
+                    <Dropdown class="header-user-setting" trigger="click">
                         <a href="javascript:void(0)">
                         <span class="header-user-name">
                             <Avatar size="large" style="background: #2a93a5;">{{name}}</Avatar>
@@ -65,6 +65,11 @@
 
             &-name {
                 color: #e1eac6;
+            }
+
+            &-setting {
+                margin-left: 20px;
+                margin-top: 3px;
             }
         }
     }
