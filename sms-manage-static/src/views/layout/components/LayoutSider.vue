@@ -1,7 +1,7 @@
 <template>
 
     <div class="sider">
-        <Menu accordion theme="dark" width="auto" :class="menuitemClasses">
+        <Menu theme="dark" width="auto" :class="menuitemClasses">
 
             <template v-for="item in routes" v-if="item.children && item.meta.sideShow">
 

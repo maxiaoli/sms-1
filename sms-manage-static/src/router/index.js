@@ -46,7 +46,7 @@ const routeMap = [
         path: 'template',
         name: 'channel-template',
         component: load('home/index'),
-        meta: {requiresAuth: true, sideShow: true, title: '渠道模板管理', icon: 'md-clipboard'}
+        meta: {requiresAuth: true, sideShow: true, title: '渠道模板管理', icon: 'md-pricetags'}
       }
     ]
   },
@@ -60,19 +60,19 @@ const routeMap = [
         path: 'log',
         name: 'sms-log',
         component: load('home/index'),
-        meta: {requiresAuth: true, sideShow: true, title: '发送记录查询', icon: 'ios-switch'},
+        meta: {requiresAuth: true, sideShow: true, title: '发送记录查询', icon: 'md-book'},
       },
       {
         path: 'client',
         name: 'sms-client',
         component: load('home/index'),
-        meta: {requiresAuth: true, sideShow: true, title: '接入方管理', icon: 'ios-switch'},
+        meta: {requiresAuth: true, sideShow: true, title: '接入方管理', icon: 'md-link'},
       },
       {
         path: 'template',
         name: 'sms-template',
         component: load('home/index'),
-        meta: {requiresAuth: true, sideShow: true, title: '模板管理', icon: 'ios-switch'},
+        meta: {requiresAuth: true, sideShow: true, title: '模板管理', icon: 'ios-copy'},
       }
     ]
   },
