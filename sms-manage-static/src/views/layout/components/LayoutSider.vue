@@ -2,27 +2,43 @@
 
     <div class="sider">
         <Menu accordion theme="dark" width="auto" :class="menuitemClasses">
-            <Submenu name="1">
-                <template slot="title">
-                    <Icon type="ios-navigate" v-on:click="noCollapsed"></Icon>
-                    <span>Item 1</span>
-                </template>
-                <MenuItem name="1-1">
-                    <router-link to="/home">
-                        <span>Option 1</span>
-                    </router-link>
+
+            <template v-for="item in routes" v-if="item.children && item.meta.sideShow">
+
+                <MenuItem v-if="item.children.length <= 1 && !item.children[0].children"
+                          :name="item.children[0].name" :to="item.path + '/' + item.children[0].path">
+                    <Icon v-if="item.children[0].meta && item.children[0].meta.icon"
+                          :type="item.children[0].meta.icon"
+                          v-on:click="noCollapsed"></Icon>
+                    <span v-if="item.children[0].meta && item.children[0].meta.title">
+                            {{item.children[0].meta.title}}
+                    </span>
                 </MenuItem>
-                <MenuItem name="1-2"><span>Option 2</span></MenuItem>
-                <MenuItem name="1-3"><span>Option 3</span></MenuItem>
-            </Submenu>
-            <Submenu name="2">
-                <template slot="title">
-                    <Icon type="ios-keypad"></Icon>
-                    <span>Item 2</span>
-                </template>
-                <MenuItem name="2-1"><span>Option 1</span></MenuItem>
-                <MenuItem name="2-2"><span>Option 2</span></MenuItem>
-            </Submenu>
+
+                <Submenu v-else :name="item.name">
+                    <template slot="title">
+                        <Icon v-if="item.meta && item.meta.icon" :type="item.meta.icon" v-on:click="noCollapsed"></Icon>
+                        <span v-if="item.meta && item.meta.title">{{ item.meta.title }}</span>
+                    </template>
+                    <template v-for="child in item.children" v-if="child.meta.sideShow">
+
+                        <layout-sider v-if="child.children && child.children.length > 0"
+                                      :routes="[child]">
+                        </layout-sider>
+
+                        <MenuItem v-else :name="child.name" :to="item.path + '/' + child.path">
+                            <Icon v-if="child.meta && child.meta.icon"
+                                  :type="child.meta.icon"></Icon>
+                            <span v-if="child.meta && child.meta.title" :title="child.meta.title">
+                                {{child.meta.title}}
+                            </span>
+                        </MenuItem>
+                    </template>
+
+                </Submenu>
+
+            </template>
+
         </Menu>
     </div>
 
@@ -34,6 +50,11 @@
 
   export default {
     name: 'LayoutSider',
+    props: {
+      routes: {
+        type: Array
+      }
+    },
     computed: {
       ...mapGetters([
         'siderCollapsed'
@@ -48,7 +69,6 @@
     methods: {
       noCollapsed() {
         if (this.siderCollapsed) {
-          console.log('1111');
           this.$store.dispatch(TOGGLE_COLLAPSE, false);
         }
       }
@@ -65,7 +85,7 @@
         span {
             display: inline-block;
             overflow: hidden;
-            width: 70px;
+            width: 100px;
             text-overflow: ellipsis;
             white-space: nowrap;
             vertical-align: bottom;
@@ -90,7 +110,11 @@
             transform: translateX(5px);
             transition: font-size .2s ease .2s, transform .2s ease .2s;
             vertical-align: middle;
-            font-size: 22px;
+            font-size: 28px;
+        }
+
+        ul {
+            display: none;
         }
 
         .ivu-menu-submenu-title-icon {

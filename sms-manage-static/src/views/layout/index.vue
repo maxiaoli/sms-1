@@ -8,8 +8,9 @@
             </Layout>
 
             <Layout style="height: 100%;">
-                <Sider class="layout-sider" :value="isCollapsed" collapsed-width="80" collapsible hide-trigger>
-                    <LayoutSider></LayoutSider>
+                <Sider class="layout-sider" :value="isCollapsed"
+                       collapsed-width="80" collapsible hide-trigger>
+                    <LayoutSider :routes="routes"></LayoutSider>
                 </Sider>
 
                 <LayoutMain></LayoutMain>
@@ -35,6 +36,9 @@
       ]),
       isCollapsed() {
         return this.siderCollapsed;
+      },
+      routes() {
+        return this.$router.options.routes;
       }
     }
   }
