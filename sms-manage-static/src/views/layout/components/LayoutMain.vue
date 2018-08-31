@@ -58,6 +58,8 @@
             text-align: left;
             color: #5f6969;
             margin: 0 20px;
+            height: 50px;
+            padding-top: 10px;
         }
 
         &-rotate-icon {

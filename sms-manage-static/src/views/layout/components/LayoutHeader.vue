@@ -1,34 +1,28 @@
 <template>
 
-    <Header style="height: 80px;">
-        <div class="header">
-            <div class="header-home">
-                <router-link to="/home">
-                    <span class="header-title">SMS 短信服务</span>
-                </router-link>
-            </div>
+    <Header style="height: 80px;" class="header">
+        <div class="header-home">
+            <router-link to="/home">
+                <span class="header-title">SMS 短信服务</span>
+            </router-link>
+        </div>
 
-            <Breadcrumb class="header-breadcrumb">
-                <BreadcrumbItem>
-                    <span style="color: azure">Home</span>
-                </BreadcrumbItem>
-            </Breadcrumb>
+        <HeaderBreadcrumb></HeaderBreadcrumb>
 
-            <div class="header-user">
-                <Dropdown trigger="click">
-                    <a href="javascript:void(0)">
-                        <Avatar size="large" style="background: #2a93a5;">
-                            <span class="header-user-name">{{name}}</span>
-                        </Avatar>
-                        <Icon type="ios-arrow-down"></Icon>
-                    </a>
-                    <DropdownMenu slot="list" class="header-user-setting" style="text-align: center;">
-                        <DropdownItem>
-                            <span @click="logout">退出</span>
-                        </DropdownItem>
-                    </DropdownMenu>
-                </Dropdown>
-            </div>
+        <div class="header-user">
+            <Dropdown trigger="click">
+                <a href="javascript:void(0)">
+                    <Avatar size="large" style="background: #2a93a5;">
+                        <span class="header-user-name">{{name}}</span>
+                    </Avatar>
+                    <Icon type="ios-arrow-down"></Icon>
+                </a>
+                <DropdownMenu slot="list" class="header-user-options">
+                    <DropdownItem>
+                        <span @click="logout">退出</span>
+                    </DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
         </div>
     </Header>
 
@@ -37,9 +31,13 @@
 <script>
   import {LOGOUT} from '../../../store/types'
   import {mapGetters} from 'vuex'
+  import HeaderBreadcrumb from '@/components/breadcrumb'
 
   export default {
     name: 'LayoutHeader',
+    components: {
+      HeaderBreadcrumb
+    },
     computed: {
       ...mapGetters([
         'name'
@@ -60,25 +58,29 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
     .header {
-        height: 100%;
+        height: 80px;
+
+        &-home {
+            text-align: left;
+            margin-left: -27px;
+        }
 
         &-title {
             color: azure;
-            float: left;
             font-size: 25px;
-        }
-
-        &-breadcrumb {
-            text-align: left;
+            float: left;
         }
 
         &-user {
-            text-align: right;
-            margin-top: -64px;
-            margin-right: -38px;
+            float: right;
+            margin-right: -40px;
 
             &-name {
                 color: #e1eac6;
+            }
+
+            &-options {
+                text-align: center;
             }
         }
     }
