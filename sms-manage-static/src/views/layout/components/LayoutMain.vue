@@ -4,13 +4,22 @@
 
         <Breadcrumb class="main-breadcrumb">
             <Icon v-on:click="collapsedSider" :class="rotateIcon" type="md-menu" size="25"></Icon>
+
+            <template v-for="view in cachedViews">
+                <BreadcrumbItem v-if="view && view.meta" >{{ view.meta.title }}</BreadcrumbItem>
+            </template>
+
             <BreadcrumbItem>Home</BreadcrumbItem>
-            <BreadcrumbItem>Components</BreadcrumbItem>
-            <BreadcrumbItem>Layout</BreadcrumbItem>
         </Breadcrumb>
 
         <Content class="main-content">
-            <router-view></router-view>
+            <!-- 动画过度组件 -->
+            <transition name="fade" mode="out-in">
+                <!-- 页面缓存组件 -->
+                <keep-alive :include="cachedViews">
+                    <router-view></router-view>
+                </keep-alive>
+            </transition>
         </Content>
     </Layout>
 
@@ -24,7 +33,8 @@
     name: 'LayoutMain',
     computed: {
       ...mapGetters([
-        'siderCollapsed'
+        'siderCollapsed',
+        'cachedViews'
       ]),
       rotateIcon() {
         return [

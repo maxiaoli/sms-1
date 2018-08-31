@@ -85,7 +85,7 @@
         span {
             display: inline-block;
             overflow: hidden;
-            width: 100px;
+            width: 90px;
             text-overflow: ellipsis;
             white-space: nowrap;
             vertical-align: bottom;
@@ -102,7 +102,7 @@
 
     .collapsed-menu {
         span {
-            width: 0px;
+            width: 0;
             transition: width .2s ease;
         }
 

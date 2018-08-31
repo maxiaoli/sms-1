@@ -3,6 +3,7 @@ import router from './router'
 import store from './store'
 import App from './App'
 import './components/iview'
+import '@/styles/index.scss' // global scss
 
 Vue.config.productionTip = false;
 Vue.config.devtools = true;

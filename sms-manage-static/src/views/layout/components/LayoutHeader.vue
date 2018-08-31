@@ -3,7 +3,9 @@
     <Header style="height: 80px;">
         <div class="header">
             <Menu mode="horizontal" theme="dark" active-name="1">
-                <span class="header-title">SMS 短信服务</span>
+                <router-link to="/home">
+                    <span class="header-title">SMS 短信服务</span>
+                </router-link>
 
                 <div class="header-user">
                     <Dropdown class="header-user-setting" trigger="click">
