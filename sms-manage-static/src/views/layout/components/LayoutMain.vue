@@ -1,8 +1,10 @@
 <template>
 
     <Layout class="main">
-        <div class="main-sider-toggle">
+        <div class="main-top-bar">
             <Icon v-on:click="collapsedSider" :class="rotateIcon" type="md-menu" size="25"></Icon>
+
+            <TagsBar></TagsBar>
         </div>
 
         <Content class="main-content">
@@ -21,9 +23,13 @@
 <script>
   import {TOGGLE_COLLAPSE} from '../../../store/types'
   import {mapGetters} from 'vuex'
+  import TagsBar from '@/components/tagsbar'
 
   export default {
     name: 'LayoutMain',
+    components: {
+      TagsBar
+    },
     computed: {
       ...mapGetters([
         'siderCollapsed',
@@ -31,7 +37,7 @@
       ]),
       rotateIcon() {
         return [
-          'menu-icon',
+          'main-toggle-bar menu-icon',
           this.siderCollapsed ? 'main-rotate-icon' : ''
         ];
       }
@@ -54,12 +60,16 @@
             background: #fff;
         }
 
-        &-sider-toggle {
+        &-top-bar {
             text-align: left;
             color: #5f6969;
             margin: 0 20px;
             height: 50px;
             padding-top: 10px;
+        }
+
+        &-toggle-bar {
+            float: left;
         }
 
         &-rotate-icon {

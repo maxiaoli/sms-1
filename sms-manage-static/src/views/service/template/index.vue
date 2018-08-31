@@ -13,8 +13,6 @@
 </template>
 
 <script>
-import { ADD_VISITED_VIEW,DEL_ALL_VIEW } from '../../../store/types'
-
   export default {
     name: 'service-template',
     data() {
