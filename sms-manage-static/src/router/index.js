@@ -146,6 +146,7 @@ router.beforeEach((to, from, next) => {
   if (to.meta.requiresAuth) {
     let keycloak = store.getters.keycloak;
     if (keycloak === undefined || !keycloak.authenticated) {
+      //认证组件未初始化或未认证
       InitAuth(next);
     } else {
       next();

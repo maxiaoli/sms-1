@@ -23,9 +23,8 @@ const getters = {
     if (state.view.sider.collapsed === undefined || state.view.sider.collapsed === null) return false;
     return state.view.sider.collapsed;
   },
-  cachedViews: (state) => {
-    return state.view.cachedViews;
-  }
+  cachedViews: state => state.view.cachedViews,
+  visitedViews: state => state.view.visitedViews
 };
 
 export default getters

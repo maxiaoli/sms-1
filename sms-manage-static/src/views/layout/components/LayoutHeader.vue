@@ -2,27 +2,33 @@
 
     <Header style="height: 80px;">
         <div class="header">
-            <Menu mode="horizontal" theme="dark" active-name="1">
+            <div class="header-home">
                 <router-link to="/home">
                     <span class="header-title">SMS 短信服务</span>
                 </router-link>
+            </div>
 
-                <div class="header-user">
-                    <Dropdown class="header-user-setting" trigger="click">
-                        <a href="javascript:void(0)">
-                        <span class="header-user-name">
-                            <Avatar size="large" style="background: #2a93a5;">{{name}}</Avatar>
-                        </span>
-                            <Icon type="ios-arrow-down"></Icon>
-                        </a>
-                        <DropdownMenu slot="list">
-                            <DropdownItem>
-                                <span @click="logout">退出</span>
-                            </DropdownItem>
-                        </DropdownMenu>
-                    </Dropdown>
-                </div>
-            </Menu>
+            <Breadcrumb class="header-breadcrumb">
+                <BreadcrumbItem>
+                    <span style="color: azure">Home</span>
+                </BreadcrumbItem>
+            </Breadcrumb>
+
+            <div class="header-user">
+                <Dropdown trigger="click">
+                    <a href="javascript:void(0)">
+                        <Avatar size="large" style="background: #2a93a5;">
+                            <span class="header-user-name">{{name}}</span>
+                        </Avatar>
+                        <Icon type="ios-arrow-down"></Icon>
+                    </a>
+                    <DropdownMenu slot="list" class="header-user-setting" style="text-align: center;">
+                        <DropdownItem>
+                            <span @click="logout">退出</span>
+                        </DropdownItem>
+                    </DropdownMenu>
+                </Dropdown>
+            </div>
         </div>
     </Header>
 
@@ -62,16 +68,17 @@
             font-size: 25px;
         }
 
+        &-breadcrumb {
+            text-align: left;
+        }
+
         &-user {
-            float: right;
+            text-align: right;
+            margin-top: -64px;
+            margin-right: -38px;
 
             &-name {
                 color: #e1eac6;
-            }
-
-            &-setting {
-                margin-left: 20px;
-                margin-top: 3px;
             }
         }
     }

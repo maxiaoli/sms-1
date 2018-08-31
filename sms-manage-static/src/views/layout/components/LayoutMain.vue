@@ -1,16 +1,9 @@
 <template>
 
     <Layout class="main">
-
-        <Breadcrumb class="main-breadcrumb">
+        <div class="main-sider-toggle">
             <Icon v-on:click="collapsedSider" :class="rotateIcon" type="md-menu" size="25"></Icon>
-
-            <template v-for="view in cachedViews">
-                <BreadcrumbItem v-if="view && view.meta" >{{ view.meta.title }}</BreadcrumbItem>
-            </template>
-
-            <BreadcrumbItem>Home</BreadcrumbItem>
-        </Breadcrumb>
+        </div>
 
         <Content class="main-content">
             <!-- 动画过度组件 -->
@@ -38,7 +31,7 @@
       ]),
       rotateIcon() {
         return [
-          'main-sider-toggle menu-icon',
+          'menu-icon',
           this.siderCollapsed ? 'main-rotate-icon' : ''
         ];
       }
@@ -56,17 +49,13 @@
         padding: 0 24px 24px;
         height: 100%;
 
-        &-breadcrumb {
-            margin: 24px 0;
-            text-align: left;
-        }
-
         &-content {
             padding: 24px;
             background: #fff;
         }
 
         &-sider-toggle {
+            text-align: left;
             color: #5f6969;
             margin: 0 20px;
         }

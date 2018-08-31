@@ -107,18 +107,21 @@ const view = {
     [ADD_VISITED_VIEW]: ({commit}, view) => {
       commit(DISPOSE_VIEWS, {type: ADD_VISITED_VIEW, view});
     },
+    //删除指定视图完成后，返回最新的已看视图列表
     [DEL_VISITED_VIEW]: ({commit, state}, view) => {
       return new Promise((resolve) => {
         commit(DISPOSE_VIEWS, {type: DEL_VISITED_VIEW, view});
         resolve([...state.visitedViews]);
       });
     },
+    //删除除目标视图外其他视图后，返回最新的已看视图列表
     [DEL_OTHERS_VIEW]: ({commit, state}, view) => {
       return new Promise((resolve) => {
         commit(DISPOSE_VIEWS, {type: DEL_OTHERS_VIEW, view});
         resolve([...state.visitedViews]);
       })
     },
+    //删除所有视图后，返回最新的已看视图列表
     [DEL_ALL_VIEW]: ({commit, state}) => {
       return new Promise((resolve) => {
         commit(DISPOSE_VIEWS, {type: DEL_ALL_VIEW});
