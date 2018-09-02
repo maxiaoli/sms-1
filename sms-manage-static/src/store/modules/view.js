@@ -56,7 +56,7 @@ const view = {
 
         case DEL_VISITED_VIEW: { //删除指定视图
           for (const [i, v] of state.visitedViews.entries()) {
-            if (v.path === view.path) {
+            if (v.name === view.name) {
               state.visitedViews.splice(i, 1);
               break;
             }

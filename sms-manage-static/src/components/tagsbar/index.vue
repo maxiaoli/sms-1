@@ -1,24 +1,10 @@
 <template>
 
     <div class="tags-bar">
-        <Tabs v-model="currentTab" closable type="card">
-            <TabPane label="标签一" name="name1"></TabPane>
-            <TabPane label="标签二" name="name2"></TabPane>
-            <TabPane label="标签三" name="name3"></TabPane>
-            <!--
-                   <router-link ref='tag' class="tags-view-item"
-                   :class="isActive(tag)?'active':''"
-                   v-for="tag in Array.from(visitedViews)"
-                   :to="tag.path"
-                   :key="tag.path"
-                   @contextmenu.prevent.native="openMenu(tag,$event)">
-                     {{generateTitle(tag.title)}}
-                    <span class='el-icon-close' @click.prevent.stop='closeSelectedTag(tag)'></span>
-                  </router-link>
-            -->
+        <Tabs v-model="currentTab" closable type="card" @on-click="targetView" @on-tab-remove="closeSelectedTag">
 
-            <template v-for="view in visitedViews">
-                <TabPane :label="view.title" :name="view.name"></TabPane>
+            <template v-for="view in visitedViews" v-if="visitedViews && visitedViews.length > 0">
+                <TabPane :label="view.title" :name="view.name" :key="view.name"></TabPane>
             </template>
 
         </Tabs>
@@ -34,7 +20,7 @@
     name: 'TagsBar',
     data() {
       return {
-        currentTab: 'name1'
+        currentTab: ''
       }
     },
     computed: {
@@ -53,35 +39,41 @@
     },
     methods: {
       generateRoute() {
-        if (this.$route.name) {
+        if (this.$route.name && this.$route.name !== 'home') {
           return this.$route
         }
         return false
       },
-      isActive(route) {
-        return route.path === this.$route.path || route.name === this.$route.name;
+      isActive(viewName) {
+        return viewName === this.$route.name;
       },
       addViewTags() {
         const route = this.generateRoute();
         if (!route) {
-          return false
+          return false;
         }
         this.$store.dispatch(ADD_VISITED_VIEW, route);
       },
       moveToCurrentTag() {
-
+        this.currentTab = this.$route.name;
       },
-      closeSelectedTag(view) {
-        this.$store.dispatch(DEL_VISITED_VIEW, view).then((views) => {
-          if (this.isActive(view)) {
+      targetView(name) {
+        this.$router.push({'name': name});
+      },
+      closeSelectedTag(viewName) {
+
+        this.$store.dispatch(DEL_VISITED_VIEW, {name: viewName}).then((views) => {
+
+          if (this.isActive(viewName)) {
             const latestView = views.slice(-1)[0];
             if (latestView) {
-              this.$router.push(latestView.path);
+              this.$router.push({name: latestView.name});
             } else {
               this.$router.push('/');
             }
           }
-        })
+
+        });
       }
     }
   }
