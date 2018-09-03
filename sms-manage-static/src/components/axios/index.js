@@ -1,7 +1,7 @@
 import axios from 'axios'
 import config from '../../../config/index'
 
-const service = axios.create({
+const api = axios.create({
   baseURL: config.api.baseUrl,
   timeout: config.api.timeout,// 请求超时时间
   withCredentials: false,
@@ -20,7 +20,7 @@ const service = axios.create({
 });
 
 // respone拦截器
-service.interceptors.response.use(
+api.interceptors.response.use(
   response => {
     const res = response.data;
     if (response.status === 200 || response.status === 304) {
@@ -40,4 +40,4 @@ service.interceptors.response.use(
   }
 );
 
-export default service
+export default api

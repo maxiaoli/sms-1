@@ -31,9 +31,11 @@ public class CorsConfiguration implements WebMvcConfigurer {
     private List<String> allowedOriginHeaders = new ArrayList<>(Collections.singletonList("*"));
 
     /**
-     * 默认支持四种请求方式
+     * Origin methods.
      */
     private List<String> allowedOriginMethods = new ArrayList<>(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+    private boolean allowCredentials = true;
 
     /**
      * 添加跨域配置
@@ -47,7 +49,8 @@ public class CorsConfiguration implements WebMvcConfigurer {
         CorsRegistration corsRegistration = registry.addMapping("/**");
         corsRegistration.allowedOrigins(allowOriginList.toArray(new String[]{}))
                 .allowedHeaders(allowedOriginHeaders.toArray(new String[]{}))
-                .allowedMethods(allowedOriginMethods.toArray(new String[]{}));
+                .allowedMethods(allowedOriginMethods.toArray(new String[]{}))
+                .allowCredentials(allowCredentials);
     }
 
     public List<String> getAllowOriginList() {
@@ -72,5 +75,13 @@ public class CorsConfiguration implements WebMvcConfigurer {
 
     public void setAllowedOriginMethods(List<String> allowedOriginMethods) {
         this.allowedOriginMethods = allowedOriginMethods;
+    }
+
+    public boolean isAllowCredentials() {
+        return allowCredentials;
+    }
+
+    public void setAllowCredentials(boolean allowCredentials) {
+        this.allowCredentials = allowCredentials;
     }
 }
