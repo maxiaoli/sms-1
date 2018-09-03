@@ -22,7 +22,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public ChannelConfigDOCriteria() {
         oredCriteria = new ArrayList<Criteria>();
@@ -30,7 +30,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public void setOrderByClause(String orderByClause) {
         this.orderByClause = orderByClause;
@@ -38,7 +38,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public String getOrderByClause() {
         return orderByClause;
@@ -46,7 +46,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public void setDistinct(boolean distinct) {
         this.distinct = distinct;
@@ -54,7 +54,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public boolean isDistinct() {
         return distinct;
@@ -62,7 +62,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public List<Criteria> getOredCriteria() {
         return oredCriteria;
@@ -70,7 +70,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public void or(Criteria criteria) {
         oredCriteria.add(criteria);
@@ -78,7 +78,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public Criteria or() {
         Criteria criteria = createCriteriaInternal();
@@ -88,7 +88,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public Criteria createCriteria() {
         Criteria criteria = createCriteriaInternal();
@@ -100,7 +100,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     protected Criteria createCriteriaInternal() {
         Criteria criteria = new Criteria();
@@ -109,7 +109,7 @@ public class ChannelConfigDOCriteria {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public void clear() {
         oredCriteria.clear();
@@ -118,7 +118,7 @@ public class ChannelConfigDOCriteria {
     }
 
     /**
-     * chnl_config 2018-08-28
+     * chnl_config 2018-09-03
      */
     protected abstract static class GeneratedCriteria {
         protected List<Criterion> criteria;
@@ -371,52 +371,52 @@ public class ChannelConfigDOCriteria {
             return (Criteria) this;
         }
 
-        public Criteria andTypeEqualTo(Boolean value) {
+        public Criteria andTypeEqualTo(Integer value) {
             addCriterion("`type` =", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotEqualTo(Boolean value) {
+        public Criteria andTypeNotEqualTo(Integer value) {
             addCriterion("`type` <>", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThan(Boolean value) {
+        public Criteria andTypeGreaterThan(Integer value) {
             addCriterion("`type` >", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andTypeGreaterThanOrEqualTo(Integer value) {
             addCriterion("`type` >=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThan(Boolean value) {
+        public Criteria andTypeLessThan(Integer value) {
             addCriterion("`type` <", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeLessThanOrEqualTo(Boolean value) {
+        public Criteria andTypeLessThanOrEqualTo(Integer value) {
             addCriterion("`type` <=", value, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeIn(List<Boolean> values) {
+        public Criteria andTypeIn(List<Integer> values) {
             addCriterion("`type` in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotIn(List<Boolean> values) {
+        public Criteria andTypeNotIn(List<Integer> values) {
             addCriterion("`type` not in", values, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeBetween(Boolean value1, Boolean value2) {
+        public Criteria andTypeBetween(Integer value1, Integer value2) {
             addCriterion("`type` between", value1, value2, "type");
             return (Criteria) this;
         }
 
-        public Criteria andTypeNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andTypeNotBetween(Integer value1, Integer value2) {
             addCriterion("`type` not between", value1, value2, "type");
             return (Criteria) this;
         }
@@ -673,7 +673,7 @@ public class ChannelConfigDOCriteria {
     }
 
     /**
-     * chnl_config 2018-08-28
+     * chnl_config 2018-09-03
      */
     public static class Criterion {
         private String condition;

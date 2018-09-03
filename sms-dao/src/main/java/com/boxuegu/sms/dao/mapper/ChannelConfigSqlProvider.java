@@ -12,7 +12,7 @@ public class ChannelConfigSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public String countByExample(ChannelConfigDOCriteria example) {
         SQL sql = new SQL();
@@ -23,7 +23,7 @@ public class ChannelConfigSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public String deleteByExample(ChannelConfigDOCriteria example) {
         SQL sql = new SQL();
@@ -34,50 +34,50 @@ public class ChannelConfigSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public String insertSelective(ChannelConfigDO record) {
         SQL sql = new SQL();
         sql.INSERT_INTO("chnl_config");
-        
+
         if (record.getId() != null) {
             sql.VALUES("id", "#{id,jdbcType=INTEGER}");
         }
-        
+
         if (record.getName() != null) {
             sql.VALUES("`name`", "#{name,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDesc() != null) {
             sql.VALUES("`desc`", "#{desc,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getType() != null) {
-            sql.VALUES("`type`", "#{type,jdbcType=BIT}");
+            sql.VALUES("`type`", "#{type,jdbcType=TINYINT}");
         }
-        
+
         if (record.getStatus() != null) {
-            sql.VALUES("`status`", "#{status,jdbcType=BIT}");
+            sql.VALUES("`status`", "#{status,jdbcType=TINYINT}");
         }
-        
+
         if (record.getCreateTime() != null) {
             sql.VALUES("create_time", "#{createTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getUpdateTime() != null) {
             sql.VALUES("update_time", "#{updateTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getDeleteFlag() != null) {
-            sql.VALUES("delete_flag", "#{deleteFlag,jdbcType=BIT}");
+            sql.VALUES("delete_flag", "#{deleteFlag,jdbcType=TINYINT}");
         }
-        
+
         return sql.toString();
     }
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public String selectByExample(ChannelConfigDOCriteria example) {
         SQL sql = new SQL();
@@ -95,78 +95,78 @@ public class ChannelConfigSqlProvider {
         sql.SELECT("delete_flag");
         sql.FROM("chnl_config");
         applyWhere(sql, example, false);
-        
+
         if (example != null && example.getOrderByClause() != null) {
             sql.ORDER_BY(example.getOrderByClause());
         }
-        
+
         return sql.toString();
     }
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public String updateByExampleSelective(Map<String, Object> parameter) {
         ChannelConfigDO record = (ChannelConfigDO) parameter.get("record");
         ChannelConfigDOCriteria example = (ChannelConfigDOCriteria) parameter.get("example");
-        
+
         SQL sql = new SQL();
         sql.UPDATE("chnl_config");
-        
+
         if (record.getId() != null) {
             sql.SET("id = #{record.id,jdbcType=INTEGER}");
         }
-        
+
         if (record.getName() != null) {
             sql.SET("`name` = #{record.name,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDesc() != null) {
             sql.SET("`desc` = #{record.desc,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getType() != null) {
-            sql.SET("`type` = #{record.type,jdbcType=BIT}");
+            sql.SET("`type` = #{record.type,jdbcType=TINYINT}");
         }
-        
+
         if (record.getStatus() != null) {
-            sql.SET("`status` = #{record.status,jdbcType=BIT}");
+            sql.SET("`status` = #{record.status,jdbcType=TINYINT}");
         }
-        
+
         if (record.getCreateTime() != null) {
             sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getUpdateTime() != null) {
             sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getDeleteFlag() != null) {
-            sql.SET("delete_flag = #{record.deleteFlag,jdbcType=BIT}");
+            sql.SET("delete_flag = #{record.deleteFlag,jdbcType=TINYINT}");
         }
-        
+
         applyWhere(sql, example, true);
         return sql.toString();
     }
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public String updateByExample(Map<String, Object> parameter) {
         SQL sql = new SQL();
         sql.UPDATE("chnl_config");
-        
+
         sql.SET("id = #{record.id,jdbcType=INTEGER}");
         sql.SET("`name` = #{record.name,jdbcType=VARCHAR}");
         sql.SET("`desc` = #{record.desc,jdbcType=VARCHAR}");
-        sql.SET("`type` = #{record.type,jdbcType=BIT}");
-        sql.SET("`status` = #{record.status,jdbcType=BIT}");
+        sql.SET("`type` = #{record.type,jdbcType=TINYINT}");
+        sql.SET("`status` = #{record.status,jdbcType=TINYINT}");
         sql.SET("create_time = #{record.createTime,jdbcType=TIMESTAMP}");
         sql.SET("update_time = #{record.updateTime,jdbcType=TIMESTAMP}");
-        sql.SET("delete_flag = #{record.deleteFlag,jdbcType=BIT}");
-        
+        sql.SET("delete_flag = #{record.deleteFlag,jdbcType=TINYINT}");
+
         ChannelConfigDOCriteria example = (ChannelConfigDOCriteria) parameter.get("example");
         applyWhere(sql, example, true);
         return sql.toString();
@@ -174,54 +174,54 @@ public class ChannelConfigSqlProvider {
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     public String updateByPrimaryKeySelective(ChannelConfigDO record) {
         SQL sql = new SQL();
         sql.UPDATE("chnl_config");
-        
+
         if (record.getName() != null) {
             sql.SET("`name` = #{name,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getDesc() != null) {
             sql.SET("`desc` = #{desc,jdbcType=VARCHAR}");
         }
-        
+
         if (record.getType() != null) {
-            sql.SET("`type` = #{type,jdbcType=BIT}");
+            sql.SET("`type` = #{type,jdbcType=TINYINT}");
         }
-        
+
         if (record.getStatus() != null) {
-            sql.SET("`status` = #{status,jdbcType=BIT}");
+            sql.SET("`status` = #{status,jdbcType=TINYINT}");
         }
-        
+
         if (record.getCreateTime() != null) {
             sql.SET("create_time = #{createTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getUpdateTime() != null) {
             sql.SET("update_time = #{updateTime,jdbcType=TIMESTAMP}");
         }
-        
+
         if (record.getDeleteFlag() != null) {
-            sql.SET("delete_flag = #{deleteFlag,jdbcType=BIT}");
+            sql.SET("delete_flag = #{deleteFlag,jdbcType=TINYINT}");
         }
-        
+
         sql.WHERE("id = #{id,jdbcType=INTEGER}");
-        
+
         return sql.toString();
     }
 
     /**
      *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     protected void applyWhere(SQL sql, ChannelConfigDOCriteria example, boolean includeExamplePhrase) {
         if (example == null) {
             return;
         }
-        
+
         String parmPhrase1;
         String parmPhrase1_th;
         String parmPhrase2;
@@ -243,7 +243,7 @@ public class ChannelConfigSqlProvider {
             parmPhrase3 = "#{oredCriteria[%d].allCriteria[%d].value[%d]}";
             parmPhrase3_th = "#{oredCriteria[%d].allCriteria[%d].value[%d],typeHandler=%s}";
         }
-        
+
         StringBuilder sb = new StringBuilder();
         List<Criteria> oredCriteria = example.getOredCriteria();
         boolean firstCriteria = true;
@@ -255,7 +255,7 @@ public class ChannelConfigSqlProvider {
                 } else {
                     sb.append(" or ");
                 }
-                
+
                 sb.append('(');
                 List<Criterion> criterions = criteria.getAllCriteria();
                 boolean firstCriterion = true;
@@ -266,7 +266,7 @@ public class ChannelConfigSqlProvider {
                     } else {
                         sb.append(" and ");
                     }
-                    
+
                     if (criterion.isNoValue()) {
                         sb.append(criterion.getCondition());
                     } else if (criterion.isSingleValue()) {
@@ -304,7 +304,7 @@ public class ChannelConfigSqlProvider {
                 sb.append(')');
             }
         }
-        
+
         if (sb.length() > 0) {
             sql.WHERE(sb.toString());
         }

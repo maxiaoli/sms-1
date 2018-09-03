@@ -5,7 +5,7 @@ import java.util.Date;
 
 public class ChannelConfigDO implements Serializable {
     /**
-     * 
+     *
      */
     private Integer id;
 
@@ -22,7 +22,7 @@ public class ChannelConfigDO implements Serializable {
     /**
      * 渠道类型，参见具体枚举。0-阿里云
      */
-    private Boolean type;
+    private Integer type;
 
     /**
      * 启禁用，0-禁用，1-启用
@@ -30,12 +30,12 @@ public class ChannelConfigDO implements Serializable {
     private Integer status;
 
     /**
-     * 
+     *
      */
     private Date createTime;
 
     /**
-     * 
+     *
      */
     private Date updateTime;
 
@@ -50,16 +50,14 @@ public class ChannelConfigDO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
-     * @return id 
+     * @return id
      */
     public Integer getId() {
         return id;
     }
 
     /**
-     * 
-     * @param id 
+     * @param id
      */
     public void setId(Integer id) {
         this.id = id;
@@ -67,6 +65,7 @@ public class ChannelConfigDO implements Serializable {
 
     /**
      * 名称
+     *
      * @return name 名称
      */
     public String getName() {
@@ -75,6 +74,7 @@ public class ChannelConfigDO implements Serializable {
 
     /**
      * 名称
+     *
      * @param name 名称
      */
     public void setName(String name) {
@@ -83,6 +83,7 @@ public class ChannelConfigDO implements Serializable {
 
     /**
      * 描述
+     *
      * @return desc 描述
      */
     public String getDesc() {
@@ -91,6 +92,7 @@ public class ChannelConfigDO implements Serializable {
 
     /**
      * 描述
+     *
      * @param desc 描述
      */
     public void setDesc(String desc) {
@@ -99,22 +101,25 @@ public class ChannelConfigDO implements Serializable {
 
     /**
      * 渠道类型，参见具体枚举。0-阿里云
+     *
      * @return type 渠道类型，参见具体枚举。0-阿里云
      */
-    public Boolean getType() {
+    public Integer getType() {
         return type;
     }
 
     /**
      * 渠道类型，参见具体枚举。0-阿里云
+     *
      * @param type 渠道类型，参见具体枚举。0-阿里云
      */
-    public void setType(Boolean type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
     /**
      * 启禁用，0-禁用，1-启用
+     *
      * @return status 启禁用，0-禁用，1-启用
      */
     public Integer getStatus() {
@@ -123,6 +128,7 @@ public class ChannelConfigDO implements Serializable {
 
     /**
      * 启禁用，0-禁用，1-启用
+     *
      * @param status 启禁用，0-禁用，1-启用
      */
     public void setStatus(Integer status) {
@@ -130,32 +136,28 @@ public class ChannelConfigDO implements Serializable {
     }
 
     /**
-     * 
-     * @return create_time 
+     * @return create_time
      */
     public Date getCreateTime() {
         return createTime;
     }
 
     /**
-     * 
-     * @param createTime 
+     * @param createTime
      */
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
     }
 
     /**
-     * 
-     * @return update_time 
+     * @return update_time
      */
     public Date getUpdateTime() {
         return updateTime;
     }
 
     /**
-     * 
-     * @param updateTime 
+     * @param updateTime
      */
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
@@ -163,6 +165,7 @@ public class ChannelConfigDO implements Serializable {
 
     /**
      * 0-未删除，1-已删除
+     *
      * @return delete_flag 0-未删除，1-已删除
      */
     public Integer getDeleteFlag() {
@@ -171,6 +174,7 @@ public class ChannelConfigDO implements Serializable {
 
     /**
      * 0-未删除，1-已删除
+     *
      * @param deleteFlag 0-未删除，1-已删除
      */
     public void setDeleteFlag(Integer deleteFlag) {
@@ -178,8 +182,7 @@ public class ChannelConfigDO implements Serializable {
     }
 
     /**
-     *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     @Override
     public boolean equals(Object that) {
@@ -194,18 +197,17 @@ public class ChannelConfigDO implements Serializable {
         }
         ChannelConfigDO other = (ChannelConfigDO) that;
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
-            && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
-            && (this.getDesc() == null ? other.getDesc() == null : this.getDesc().equals(other.getDesc()))
-            && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
-            && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
-            && (this.getDeleteFlag() == null ? other.getDeleteFlag() == null : this.getDeleteFlag().equals(other.getDeleteFlag()));
+                && (this.getName() == null ? other.getName() == null : this.getName().equals(other.getName()))
+                && (this.getDesc() == null ? other.getDesc() == null : this.getDesc().equals(other.getDesc()))
+                && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
+                && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
+                && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
+                && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
+                && (this.getDeleteFlag() == null ? other.getDeleteFlag() == null : this.getDeleteFlag().equals(other.getDeleteFlag()));
     }
 
     /**
-     *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     @Override
     public int hashCode() {
@@ -223,8 +225,7 @@ public class ChannelConfigDO implements Serializable {
     }
 
     /**
-     *
-     * @mbg.generated 2018-08-28
+     * @mbg.generated 2018-09-03
      */
     @Override
     public String toString() {
