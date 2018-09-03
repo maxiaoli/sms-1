@@ -45,12 +45,14 @@ public interface ChannelConfigMapper {
             "#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, ",
             "#{deleteFlag,jdbcType=TINYINT})"
     })
+    @Options(useGeneratedKeys = true)
     int insert(ChannelConfigDO record);
 
     /**
      * @mbg.generated 2018-09-03
      */
     @InsertProvider(type = ChannelConfigSqlProvider.class, method = "insertSelective")
+    @Options(useGeneratedKeys = true)
     int insertSelective(ChannelConfigDO record);
 
     /**

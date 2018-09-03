@@ -12,9 +12,6 @@ keycloak:
   # 这里配置的是所有的在启动时会从keycloak拉取资源对应授权配置的路径资源
   policy-enforcer-config:
     paths:
-      - name: sms-api-index
-        path: /api/index
-      - name: sms-api-user
-        path: /api/user
-      - name: sms-api-admin
-        path: /api/admin
+      - name: sms-api-channel-config
+        type: sms:api:channel:config
+        path: /api/channel/configs/*

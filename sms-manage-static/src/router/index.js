@@ -42,7 +42,7 @@ const routeMap = [
         meta: {
           requiresAuth: true,
           sideShow: true,
-          title: '渠道账号管理',
+          title: '渠道配置管理',
           icon: 'md-battery-charging',
           cacheView: false
         }
