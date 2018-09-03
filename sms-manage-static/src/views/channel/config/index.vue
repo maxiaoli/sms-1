@@ -62,11 +62,11 @@
             type: this.criteria.type
           }
         }).then((res) => {
-          console.log(res.data);
-          this.page.currentPage = res.data.currentPage;
-          this.page.pageSize = res.data.pageSize;
-          this.page.totalCount = res.data.totalCount;
-          this.page.items = res.data.items;
+          console.log(res);
+          this.page.currentPage = res.currentPage;
+          this.page.pageSize = res.pageSize;
+          this.page.totalCount = res.totalCount;
+          this.page.items = res.items;
         }).catch((err) => {
           console.log(err);
         })

@@ -76,7 +76,6 @@ public class ChannelConfigAPI {
         return ResponseEntity.ok("OK");
     }
 
-    @CrossOrigin
     @ApiOperation(value = "渠道配置分页列表", tags = {"渠道配置管理"})
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "名称", dataTypeClass = String.class, paramType = "query"),

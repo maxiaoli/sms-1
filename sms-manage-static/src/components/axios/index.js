@@ -24,7 +24,7 @@ api.interceptors.response.use(
   response => {
     const res = response.data;
     if (response.status === 200 || response.status === 304) {
-      return res;
+      return res;//直接返回数据
     } else if (response.status === 401) {
       // 未认证，或者token过期，登出
       alert('401')

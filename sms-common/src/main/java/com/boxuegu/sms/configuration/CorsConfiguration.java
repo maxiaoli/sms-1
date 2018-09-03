@@ -37,6 +37,8 @@ public class CorsConfiguration implements WebMvcConfigurer {
 
     private boolean allowCredentials = true;
 
+    private long maxAge = 1800;
+
     /**
      * 添加跨域配置
      * <p>
@@ -50,7 +52,8 @@ public class CorsConfiguration implements WebMvcConfigurer {
         corsRegistration.allowedOrigins(allowOriginList.toArray(new String[]{}))
                 .allowedHeaders(allowedOriginHeaders.toArray(new String[]{}))
                 .allowedMethods(allowedOriginMethods.toArray(new String[]{}))
-                .allowCredentials(allowCredentials);
+                .allowCredentials(allowCredentials)
+                .maxAge(maxAge);
     }
 
     public List<String> getAllowOriginList() {
@@ -83,5 +86,13 @@ public class CorsConfiguration implements WebMvcConfigurer {
 
     public void setAllowCredentials(boolean allowCredentials) {
         this.allowCredentials = allowCredentials;
+    }
+
+    public long getMaxAge() {
+        return maxAge;
+    }
+
+    public void setMaxAge(long maxAge) {
+        this.maxAge = maxAge;
     }
 }
