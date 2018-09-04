@@ -76,15 +76,6 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         channelConfigParamsService.saveChannelConfigParamsBatch(channelConfigParamsDOList);
     }
 
-    private boolean compareValuableValue(ChannelConfigDO existChannelConfigDO, ChannelConfigDO channelConfigDO) {
-        if (existChannelConfigDO == channelConfigDO) return true;
-
-        return existChannelConfigDO.getName().equals(channelConfigDO.getName())
-                && existChannelConfigDO.getDesc().equals(channelConfigDO.getDesc())
-                && existChannelConfigDO.getType().equals(channelConfigDO.getType())
-                && existChannelConfigDO.getStatus().equals(channelConfigDO.getStatus());
-    }
-
     @Override
     public void updateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
         if (null == channelConfigDetailDTO) return;
@@ -196,5 +187,14 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         List<ChannelConfigParamsDTO> channelConfigParamsDTOList = channelConfigParamsService.channelConfigParams(id);
         channelConfigDetailDTO.setParams(channelConfigParamsDTOList);
         return channelConfigDetailDTO;
+    }
+
+    private boolean compareValuableValue(ChannelConfigDO existChannelConfigDO, ChannelConfigDO channelConfigDO) {
+        if (existChannelConfigDO == channelConfigDO) return true;
+
+        return existChannelConfigDO.getName().equals(channelConfigDO.getName())
+                && existChannelConfigDO.getDesc().equals(channelConfigDO.getDesc())
+                && existChannelConfigDO.getType().equals(channelConfigDO.getType())
+                && existChannelConfigDO.getStatus().equals(channelConfigDO.getStatus());
     }
 }

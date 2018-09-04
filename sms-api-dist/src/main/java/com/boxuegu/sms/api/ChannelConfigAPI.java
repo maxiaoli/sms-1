@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 渠道（账号）配置管理接口列表
+ * 渠道配置管理接口列表
  *
  * @author leonzhangxf 20180903
  */

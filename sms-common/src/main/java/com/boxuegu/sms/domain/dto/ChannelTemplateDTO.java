@@ -1,40 +1,43 @@
 package com.boxuegu.sms.domain.dto;
 
-import com.boxuegu.sms.domain.ChannelConfigDO;
-import com.boxuegu.sms.enumeration.ChannelConfigType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 /**
- * 渠道配置
+ * 渠道模板
  *
- * @author leonzhangxf 20180903
+ * @author leonzhangxf 20180904
  */
-@ApiModel("渠道配置")
-public class ChannelConfigDTO implements Serializable {
+@ApiModel("渠道模板")
+public class ChannelTemplateDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("ID")
     private Integer id;
 
+    @ApiModelProperty(value = "渠道配置，在提交修改和保存时，只需要传递其ID即可", required = true)
+    private ChannelConfigDTO channelConfig;
+
     @ApiModelProperty(value = "名称", required = true)
     private String name;
 
-    @ApiModelProperty("描述")
-    private String desc;
+    @ApiModelProperty(value = "渠道短信模板code，如阿里云短信模板CODE", required = true)
+    private String code;
 
-    @ApiModelProperty(value = "渠道账号配置类型", required = true)
-    private ChannelConfigType type;
+    @ApiModelProperty(value = "渠道短信模板内容，携带变量使用“${code}”的格式", required = true)
+    private String content;
+
+    @ApiModelProperty("短信模板参数列表,多变量按顺序用英文逗号分隔,如\"name,vcode\"。无变量使用空字符。")
+    private String params;
 
     @ApiModelProperty(value = "启禁用，0-禁用，1-启用", required = true)
-    private Integer status = 0;
+    private Integer status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(hidden = true)
@@ -52,6 +55,14 @@ public class ChannelConfigDTO implements Serializable {
         this.id = id;
     }
 
+    public ChannelConfigDTO getChannelConfig() {
+        return channelConfig;
+    }
+
+    public void setChannelConfig(ChannelConfigDTO channelConfig) {
+        this.channelConfig = channelConfig;
+    }
+
     public String getName() {
         return name;
     }
@@ -60,20 +71,28 @@ public class ChannelConfigDTO implements Serializable {
         this.name = name;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getCode() {
+        return code;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setCode(String code) {
+        this.code = code;
     }
 
-    public ChannelConfigType getType() {
-        return type;
+    public String getContent() {
+        return content;
     }
 
-    public void setType(ChannelConfigType type) {
-        this.type = type;
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getParams() {
+        return params;
+    }
+
+    public void setParams(String params) {
+        this.params = params;
     }
 
     public Integer getStatus() {
@@ -100,31 +119,17 @@ public class ChannelConfigDTO implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public static ChannelConfigDTO convertChannelConfigDO(ChannelConfigDO channelConfigDO) {
-        if (null == channelConfigDO) return null;
-        ChannelConfigDTO channelConfigDTO = new ChannelConfigDTO();
-        BeanUtils.copyProperties(channelConfigDO, channelConfigDTO);
-        channelConfigDTO.setType(ChannelConfigType.getConfigType(channelConfigDO.getType()));
-        return channelConfigDTO;
-    }
-
-    public static ChannelConfigDO convertToChannelConfigDO(ChannelConfigDTO channelConfigDTO) {
-        if (null == channelConfigDTO) return null;
-        ChannelConfigDO channelConfigDO = new ChannelConfigDO();
-        BeanUtils.copyProperties(channelConfigDTO, channelConfigDO);
-        channelConfigDO.setType(channelConfigDTO.getType().getType());
-        return channelConfigDO;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChannelConfigDTO that = (ChannelConfigDTO) o;
+        ChannelTemplateDTO that = (ChannelTemplateDTO) o;
         return Objects.equals(id, that.id) &&
+                Objects.equals(channelConfig, that.channelConfig) &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(desc, that.desc) &&
-                type == that.type &&
+                Objects.equals(code, that.code) &&
+                Objects.equals(content, that.content) &&
+                Objects.equals(params, that.params) &&
                 Objects.equals(status, that.status) &&
                 Objects.equals(createTime, that.createTime) &&
                 Objects.equals(updateTime, that.updateTime);
@@ -132,16 +137,19 @@ public class ChannelConfigDTO implements Serializable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, desc, type, status, createTime, updateTime);
+
+        return Objects.hash(id, channelConfig, name, code, content, params, status, createTime, updateTime);
     }
 
     @Override
     public String toString() {
-        return "ChannelConfigDTO{" +
+        return "ChannelTemplateDTO{" +
                 "id=" + id +
+                ", channelConfig=" + channelConfig +
                 ", name='" + name + '\'' +
-                ", desc='" + desc + '\'' +
-                ", type=" + type +
+                ", code='" + code + '\'' +
+                ", content='" + content + '\'' +
+                ", params='" + params + '\'' +
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
