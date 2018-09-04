@@ -14,6 +14,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -51,6 +52,7 @@ public class ChannelConfigAPI {
         return ResponseEntity.ok("OK");
     }
 
+
     @ApiOperation(value = "删除渠道配置", tags = {"渠道配置管理"})
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
@@ -60,6 +62,7 @@ public class ChannelConfigAPI {
         channelConfigService.deleteChannelConfig(id);
         return ResponseEntity.ok("OK");
     }
+
 
     @ApiOperation(value = "修改渠道配置", tags = {"渠道配置管理"})
     @ApiResponses({
@@ -75,6 +78,7 @@ public class ChannelConfigAPI {
         channelConfigService.updateChannelConfig(channelConfigDetailDTO);
         return ResponseEntity.ok("OK");
     }
+
 
     @ApiOperation(value = "渠道配置分页列表", tags = {"渠道配置管理"})
     @ApiImplicitParams({
@@ -97,6 +101,7 @@ public class ChannelConfigAPI {
         return ResponseEntity.ok(channelConfigDTOPage);
     }
 
+
     @ApiOperation(value = "渠道配置详情", tags = {"渠道配置管理"})
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = ChannelConfigDetailDTO.class)
@@ -108,6 +113,30 @@ public class ChannelConfigAPI {
     public ResponseEntity<ChannelConfigDetailDTO> configDetail(@PathVariable("id") Integer id) {
         return ResponseEntity.ok(channelConfigService.channelConfigDetail(id));
     }
+
+
+    @ApiOperation(value = "渠道配置类型", tags = {"渠道配置管理"})
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = ChannelConfigType.class, responseContainer = "List")
+    })
+    @GetMapping("/config/types")
+    public ResponseEntity<List<ChannelConfigType>> configTypes() {
+        return ResponseEntity.ok(Arrays.asList(ChannelConfigType.values()));
+    }
+
+
+    @ApiOperation(value = "渠道配置类型参数", tags = {"渠道配置管理"})
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "type", value = "渠道配置类型", dataTypeClass = ChannelConfigType.class, paramType = "query"),
+    })
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK", response = ChannelConfigParam.class, responseContainer = "List")
+    })
+    @GetMapping("/config/type/params")
+    public ResponseEntity<List<ChannelConfigParam>> configTypeParams(@RequestParam("type") ChannelConfigType type) {
+        return ResponseEntity.ok(ChannelConfigParam.getChannelConfigParams(type));
+    }
+
 
     /**
      * 对新增，或更新的入口参数进行校验
@@ -139,7 +168,9 @@ public class ChannelConfigAPI {
                             .getChannelConfigParams(ChannelConfigType.ALIYUN).contains(channelConfigParams.getKey()))
                             ||
                             Long.valueOf(params.stream().distinct().count()).intValue() != ChannelConfigParam
-                                    .getChannelConfigParams(ChannelConfigType.ALIYUN).size()) {
+                                    .getChannelConfigParams(ChannelConfigType.ALIYUN).size()
+                            || !params.stream().allMatch((channelConfigParams) ->
+                            StringUtils.hasText(channelConfigParams.getValue()))) {
                         return ResponseEntity.badRequest().body("启用前需要配置完全对应渠道所需要的参数！");
                     }
 

@@ -2,11 +2,141 @@
 
     <div>
 
-        <h2>渠道配置管理</h2>
+        <div class="criteria-search">
+            <Input class="criteria-search-element" v-model="criteria.name" placeholder="名称" clearable
+                   style="width: 200px"/>
 
-        <Table :columns="column" :data="page.items"></Table>
+            <Select class="criteria-search-element" v-model="criteria.type" clearable style="width:200px">
+                <Option v-for="item in configTypes" :value="item" :key="item">{{ item }}</Option>
+            </Select>
 
-        <pagination :page="page" :pageLoading="pageLoading" @changePage="changePage"  @changePageSize="changePageSize"></pagination>
+            <Button class="criteria-search-element" type="primary" shape="circle" icon="ios-search"
+                    @click="channelConfigs">搜索
+            </Button>
+
+            <Button class="criteria-search-element" @click="getConfigCreateModal">新增渠道配置</Button>
+        </div>
+        <Table stripe
+               :columns="column"
+               :data="page.items"
+               :loading="pageLoading">
+        </Table>
+        <pagination :page="page"
+                    @changePage="changePage" @changePageSize="changePageSize"
+                    style="margin-top: 10px;">
+        </pagination>
+
+
+        <div class="modal">
+            <div class="modal-config-create">
+                <Modal v-model="showConfigCreateModal" title="新增渠道配置"
+                       :mask-closable="false" :loading="true"
+                       @on-ok="createConfig" @on-cancel="cleanModalData">
+
+                    <div class="modal-config-create-tabs">
+
+                        <Form ref="createConfigForm" :model="configDetail.config" :label-width="120" :rules="formRules">
+                            <FormItem label="名称" prop="name">
+                                <Input v-model="configDetail.config.name" size="large" placeholder="渠道配置名称"
+                                       :maxlength="45" style="width: 250px;"/>
+                            </FormItem>
+
+                            <FormItem label="描述" prop="desc">
+                                <Input v-model="configDetail.config.desc" type="textarea" placeholder="渠道配置描述"
+                                       :maxlength="250" :rows="3"
+                                       style="width: 250px;"/>
+                            </FormItem>
+
+                            <FormItem label="渠道配置类型" prop="type">
+                                <Select v-model="configDetail.config.type" style="width:200px"
+                                        @on-change="getConfigTypeParams">
+                                    <Option v-for="item in configTypes" :value="item" :key="item">{{ item }}</Option>
+                                </Select>
+                            </FormItem>
+
+                            <FormItem label="渠道配置状态" prop="status">
+                                <i-switch v-model="configDetail.config.status" size="large"
+                                          :true-value="1" :false-value="0">
+                                    <span slot="open">启用</span>
+                                    <span slot="close">禁用</span>
+                                </i-switch>
+                            </FormItem>
+
+                            <FormItem label="渠道配置参数">
+                                <span style="display: none;">{{configTypeParams}}</span>
+                                <Row v-for="param in configDetail.params">
+                                    <Col span="12">{{param.key}}</Col>
+                                    <Col span="12">
+                                        <Input type="text" v-model="param.value"
+                                               :placeholder="param.key" :maxlength="120"/>
+                                    </Col>
+                                </Row>
+                            </FormItem>
+
+                        </Form>
+
+                    </div>
+
+                </Modal>
+            </div>
+
+            <div class="modal-config-update">
+                <Modal v-model="showConfigUpdateModal" title="修改渠道配置"
+                       :mask-closable="false" :loading="true"
+                       @on-ok="updateConfig" @on-cancel="cleanModalData">
+
+                    <div class="modal-config-update-tabs">
+
+                        <Form ref="updateConfigForm" :model="configDetail.config" :label-width="120" :rules="formRules">
+                            <FormItem label="名称" prop="name">
+                                <Input v-model="configDetail.config.name" size="large" placeholder="渠道配置名称"
+                                       :maxlength="45" style="width: 250px;"/>
+                            </FormItem>
+
+                            <FormItem label="描述" prop="desc">
+                                <Input v-model="configDetail.config.desc" type="textarea" placeholder="渠道配置描述"
+                                       :maxlength="250" :rows="3"
+                                       style="width: 250px;"/>
+                            </FormItem>
+
+                            <FormItem label="渠道配置类型" prop="type">
+                                <Select v-model="configDetail.config.type" style="width:200px">
+                                    <Option v-for="item in configTypes" :value="item" :key="item">{{ item }}</Option>
+                                </Select>
+                            </FormItem>
+
+                            <FormItem label="渠道配置状态" prop="status">
+                                <i-switch v-model="configDetail.config.status" size="large"
+                                          :true-value="1" :false-value="0">
+                                    <span slot="open">启用</span>
+                                    <span slot="close">禁用</span>
+                                </i-switch>
+                            </FormItem>
+
+                            <FormItem label="渠道配置参数">
+                                <Row v-for="param in configDetail.params">
+                                    <Col span="12">{{param.key}}</Col>
+                                    <Col span="12">
+                                        <Input type="text" v-model="param.value"
+                                               :placeholder="param.key" :maxlength="120"/>
+                                    </Col>
+                                </Row>
+                            </FormItem>
+
+                        </Form>
+
+                    </div>
+
+                </Modal>
+            </div>
+
+            <div class="modal-config-delete">
+                <Modal v-model="showConfigDeleteModal" title="删除渠道配置"
+                       @on-ok="deleteConfig" @on-cancel="cleanModalData">
+                    <p>确定要删除名称为“{{configDetail.config.name}}”的渠道配置么？</p>
+                </Modal>
+            </div>
+        </div>
 
     </div>
 </template>
@@ -22,19 +152,55 @@
     },
     data() {
       return {
+        showConfigCreateModal: false,
+        showConfigUpdateModal: false,
+        showConfigDeleteModal: false,
         pageLoading: false,
         column: [
+          {title: '序号', type: 'index'},
+          {title: '名称', key: 'name'},
+          {title: '类型', key: 'type'},
           {
-            title: '名称',
-            key: 'name'
+            title: '状态', key: 'status',
+            render: (h, params) => {
+              if (params.row.status === 0) {
+                return h('span', '禁用');
+              } else if (params.row.status === 1) {
+                return h('span', '启用');
+              }
+            }
           },
           {
-            title: '类型',
-            key: 'type'
-          },
-          {
-            title: '状态',
-            key: 'status'
+            title: '操作', key: 'action', width: 200, align: 'center',
+            render: (h, params) => {
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.getConfigDetailForUpdate(params.row.id);
+                    }
+                  }
+                }, '修改'),
+                h('Button', {
+                  props: {
+                    type: 'error',
+                    size: 'small'
+                  },
+                  on: {
+                    click: () => {
+                      this.confirmDeleteConfig(params.row);
+                    }
+                  }
+                }, '删除')
+              ]);
+            }
           }
         ],
         page: {
@@ -48,35 +214,261 @@
           type: '',
           currentPage: 1,
           pageSize: 10
+        },
+        configTypes: [],
+        configDetail: {
+          config: {
+            id: null,
+            name: '',
+            desc: '',
+            type: '',
+            status: 0,
+            params: [{
+              key: '',
+              value: ''
+            }, {
+              key: '',
+              value: ''
+            }]
+          }
+        },
+        configTypeParams: [],
+        formRules: {
+          name: [
+            {required: true, message: '渠道配置名称不能为空！', trigger: 'change'}
+          ],
+          type: [
+            {required: true, message: '渠道配置类型不能为空！', trigger: 'change'}
+          ],
+          status: [
+            {type: 'number', required: true, message: '渠道配置状态不能为空！', trigger: 'change'}
+          ]
         }
       }
     },
     mounted() {
-        this.channelConfigs();
+      this.getConfigTypes();
+      this.channelConfigs();
     },
     methods: {
+      createConfig() {
+        this.$refs['createConfigForm'].validate((valid) => {
+          if (!valid) {
+            this.cleanModalData();
+            this.showConfigCreateModal = false;
+            this.$refs['createConfigForm'].resetFields();
+            this.$Message.warning('参数校验失败！');
+          } else {
+            api.post('/api/channel/config', {
+              config: {
+                id: this.configDetail.config.id,
+                name: this.configDetail.config.name,
+                desc: this.configDetail.config.desc,
+                type: this.configDetail.config.type,
+                status: this.configDetail.config.status
+              },
+              params: this.configDetail.params
+            }).then(() => {
+              this.cleanModalData();
+              this.showConfigCreateModal = false;
+              this.$refs['createConfigForm'].resetFields();
+              this.$Message.success('新增渠道配置成功！');
+
+              this.channelConfigs();
+            }).catch((err) => {
+              this.cleanModalData();
+              this.disposeApiError(err);
+              this.showConfigCreateModal = false;
+              this.$refs['createConfigForm'].resetFields();
+              this.channelConfigs();
+            });
+          }
+        });
+      },
+      getConfigCreateModal() {
+        this.showConfigCreateModal = true;
+      },
+      getConfigTypeParams() {
+        if (this.configDetail.config.type && this.configDetail.config.type !== '') {
+          api.get('/api/channel/config/type/params', {
+            params: {type: this.configDetail.config.type}
+          }).then((res) => {
+            this.configTypeParams = res;
+
+            //转换补充缺少参数
+            let tempConfigTypeParams = [];
+            for (let index in this.configTypeParams) {
+              let find = false;
+              for (let i in this.configDetail.params) {
+                if (this.configDetail.params[i].key === this.configTypeParams[index]) {
+                  tempConfigTypeParams.push(this.configDetail.params[i]);
+                  find = true;
+                  break;
+                }
+              }
+              if (!find) {
+                tempConfigTypeParams.push({
+                  key: this.configTypeParams[index],
+                  value: ''
+                })
+              }
+            }
+            this.configDetail.params = tempConfigTypeParams;
+          }).catch((err) => {
+            this.configTypeParams = [];
+            this.cleanModalData();
+            this.disposeApiError(err);
+            this.showConfigUpdateModal = false;
+            this.showConfigCreateModal = false;
+          });
+        }
+      },
+      confirmDeleteConfig(config) {
+        this.showConfigDeleteModal = true;
+        this.configDetail.config.id = config.id;
+        this.configDetail.config.name = config.name;
+      },
+      getConfigDetailForUpdate(configId) {
+        this.showConfigUpdateModal = true;
+        api.get('/api/channel/config/detail/' + configId).then((res) => {
+          this.configDetail = res;
+          this.getConfigTypeParams();
+        }).catch((err) => {
+          this.cleanModalData();
+          this.disposeApiError(err);
+          this.showConfigUpdateModal = false;
+        });
+      },
+      updateConfig() {
+        this.$refs['updateConfigForm'].validate((valid) => {
+          if (!valid) {
+            this.cleanModalData();
+            this.showConfigUpdateModal = false;
+            this.$refs['updateConfigForm'].resetFields();
+            this.$Message.warning('参数校验失败！');
+          } else {
+            api.put('/api/channel/config/' + this.configDetail.config.id, {
+              config: {
+                id: this.configDetail.config.id,
+                name: this.configDetail.config.name,
+                desc: this.configDetail.config.desc,
+                type: this.configDetail.config.type,
+                status: this.configDetail.config.status
+              },
+              params: this.configDetail.params
+            }).then(() => {
+              this.cleanModalData();
+              this.showConfigUpdateModal = false;
+              this.$refs['updateConfigForm'].resetFields();
+              this.$Message.success('更新渠道配置成功！');
+
+              this.channelConfigs();
+            }).catch((err) => {
+              this.cleanModalData();
+              this.disposeApiError(err);
+              this.showConfigUpdateModal = false;
+              this.$refs['updateConfigForm'].resetFields();
+              this.channelConfigs();
+            });
+          }
+        });
+      },
+      deleteConfig() {
+        api.delete('/api/channel/config/' + this.configDetail.config.id).then(() => {
+          this.$Message.success('删除渠道配置成功');
+          this.cleanModalData();
+          this.channelConfigs();
+        }).catch((err) => {
+          this.cleanModalData();
+          this.disposeApiError(err);
+        });
+      },
+      cleanModalData() {
+        this.$refs['createConfigForm'].resetFields();
+        this.$refs['updateConfigForm'].resetFields();
+        this.configDetail = {
+          config: {
+            id: null,
+            name: '',
+            desc: '',
+            type: '',
+            status: 0,
+            params: [{
+              key: '',
+              value: ''
+            }, {
+              key: '',
+              value: ''
+            }]
+          }
+        };
+      },
+      getConfigTypes() {
+        api.get('/api/channel/config/types').then((data) => {
+          this.configTypes = data;
+        }).catch((err) => {
+          this.disposeApiError(err);
+        })
+      },
       channelConfigs() {
+        this.pageLoading = true;
         api.get('/api/channel/configs/' + this.criteria.currentPage + '/' + this.criteria.pageSize, {
           params: {
             name: this.criteria.name,
             type: this.criteria.type
           }
-        }).then((res) => {
-          console.log(res);
-          this.page.currentPage = res.currentPage;
-          this.page.pageSize = res.pageSize;
-          this.page.totalCount = res.totalCount;
-          this.page.items = res.items;
+        }).then((data) => {
+          this.page.currentPage = data.currentPage;
+          this.page.pageSize = data.pageSize;
+          this.page.totalCount = data.totalCount;
+          this.page.items = data.items;
+
+          this.pageLoading = false;
         }).catch((err) => {
-          console.log(err);
+          this.pageLoading = false;
+          this.disposeApiError(err);
         })
       },
       changePage(currentPage) {
-
+        this.criteria.currentPage = currentPage;
+        this.channelConfigs();
       },
       changePageSize(pageSize) {
-
+        this.criteria.pageSize = pageSize;
+        this.criteria.currentPage = 1;
+        this.channelConfigs();
+      },
+      disposeApiError(err) {
+        switch (err.status) {
+          case 400:
+            this.$Message.warning(err.data);
+            break;
+          case 401:
+            this.$Message.error('未认证！');
+            break;
+          case 403:
+            this.$Message.warning('您没有权限访问该资源！');
+            break;
+          case 500:
+            this.$Message.error('系统异常！');
+            break;
+          default:
+            console.log(err);
+        }
       }
     }
   }
 </script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+
+    .criteria-search {
+        text-align: left;
+        margin-bottom: 15px;
+
+        &-element {
+            margin-left: 5px;
+        }
+    }
+
+</style>

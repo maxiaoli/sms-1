@@ -8,7 +8,13 @@
 
 <script>
   export default {
-    name: 'app'
+    name: 'app',
+    created() {
+      //全局配置iView消息提示
+      this.$Message.config({
+        duration: 2.5
+      });
+    }
   }
 </script>
 

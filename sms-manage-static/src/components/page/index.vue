@@ -4,7 +4,6 @@
           :total="page.totalCount"
           :page-size="page.pageSize"
           :page-size-opts="pageSizeOpts"
-          :loading="pageLoading"
           @on-change="changePage"
           @on-page-size-change="changePageSize"/>
 </template>
@@ -22,7 +21,6 @@
           }
         }
       },
-      pageLoading: false,
       pageSizeOpts: {
         default: () => {
           return [10, 20, 50, 100]
@@ -31,11 +29,9 @@
     },
     methods: {
       changePage(page) {
-        console.log(`当前页变为${page}`);
         this.$emit('changePage', page);
       },
       changePageSize(pageSize) {
-        console.log(`每页数变为${pageSize}`);
         this.$emit('changePageSize', pageSize);
       }
     }

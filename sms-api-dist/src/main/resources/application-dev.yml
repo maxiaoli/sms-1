@@ -43,7 +43,7 @@ logging:
 keycloak:
   enabled: false
   realm: employee
-  auth-server-url: http://auth-t.boxuegu.com/auth
+  auth-server-url: http://127.0.0.1:8080/auth
   ssl-required: none
   resource: sms-api-dist
   cors: true

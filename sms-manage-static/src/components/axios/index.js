@@ -1,4 +1,5 @@
 import axios from 'axios'
+import qs from 'qs'
 import config from '../../../config/index'
 
 const api = axios.create({
@@ -7,15 +8,12 @@ const api = axios.create({
   withCredentials: false,
   headers: {'X-Requested-With': 'XMLHttpRequest'},
   transformRequest: [function (data) { //对请求数据进行处理
-    // Do whatever you want to transform the data
-    let ret = '';
-    for (let key in data) {
-      ret += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]) + '&';
-    }
-    return ret
+    let trans = qs.stringify(data, { allowDots: true });
+    return trans;
   }],
   validateStatus: function (status) {
-    return status >= 200 && status < 300 || status === 401 || status === 403; // default
+    return status >= 200 && status < 300 || status === 400 || status === 401
+      || status === 403 || status === 500; // default
   },
 });
 
@@ -23,14 +21,17 @@ const api = axios.create({
 api.interceptors.response.use(
   response => {
     const res = response.data;
-    if (response.status === 200 || response.status === 304) {
+    if (response.status === 200) {
       return res;//直接返回数据
+    } else if (response.status === 400) {
+      //请求参数错误
+      return Promise.reject(response);
     } else if (response.status === 401) {
       // 未认证，或者token过期，登出
-      alert('401')
+      return Promise.reject(response);
     } else if (response.status === 403) {
       //没有权限
-      alert("No Authorization")
+      return Promise.reject(response);
     } else {
       return Promise.reject(res);
     }

@@ -10,7 +10,7 @@
         <HeaderBreadcrumb></HeaderBreadcrumb>
 
         <div class="header-user">
-            <Dropdown trigger="click">
+            <Dropdown trigger="click" @on-click="ifLogout">
                 <a href="javascript:void(0)">
                     <Avatar size="large" style="background: #2a93a5;">
                         <span class="header-user-name">{{name}}</span>
@@ -18,8 +18,8 @@
                     <Icon type="ios-arrow-down"></Icon>
                 </a>
                 <DropdownMenu slot="list" class="header-user-options">
-                    <DropdownItem>
-                        <span @click="logout">退出</span>
+                    <DropdownItem name="logout">
+                        <span>退出</span>
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
@@ -44,6 +44,12 @@
       ])
     },
     methods: {
+      ifLogout(name) {
+        if (name && name === 'logout') {
+          console.log('LOGOUT');
+          this.logout();
+        }
+      },
       logout() {
         try {
           this.$store.getters.keycloak.logout();

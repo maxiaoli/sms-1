@@ -96,7 +96,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         ChannelConfigDO channelConfigDO = ChannelConfigDTO.convertToChannelConfigDO(channelConfigDTO);
         if (null == channelConfigDO) return;
 
-        if (compareValuableValue(existChannelConfigDO, channelConfigDO)) {
+        if (!compareValuableValue(existChannelConfigDO, channelConfigDO)) {
             channelConfigDao.updateChannelConfig(channelConfigDO);
         }
 

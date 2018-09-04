@@ -13,5 +13,6 @@ keycloak:
   policy-enforcer-config:
     paths:
       - name: sms-api-channel-config
-        type: sms:api:channel:config
-        path: /api/channel/configs/*
+        path: /api/channel/configs/{currentPage}/{pageSize}
+      - name: sms-api-channel-config
+        path: /api/channel/config/types
