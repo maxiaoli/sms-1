@@ -19,24 +19,39 @@ import java.util.List;
 public class CorsConfiguration implements WebMvcConfigurer {
 
     /**
-     * 支持的关于访问域名配置
-     * <p>
-     * 默认支持所有域名跨域访问
+     * The origin allowed to send request to this server.
+     * Response with the header: Access-Control-Allow-Origin.
+     * Default all origins are allowed.
      */
     private List<String> allowOriginList = new ArrayList<>(Collections.singletonList("*"));
 
     /**
-     * 默认支持所有头跨域访问
+     * The headers allowed adding to origin request header.
+     * Response with the header: Access-Control-Allow-Headers.
+     * Default all headers allowed.
      */
     private List<String> allowedOriginHeaders = new ArrayList<>(Collections.singletonList("*"));
 
     /**
-     * Origin methods.
+     * The http method list allowed in origin request methods.
+     * Response with the header: Access-Control-Allow-Methods.
+     * Default allowed GET, POST, PUT, DELETE, OPTIONS
      */
     private List<String> allowedOriginMethods = new ArrayList<>(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
+    /**
+     * If allow the request with credentials.
+     * Response with the header: Access-Control-Allow-Credentials.
+     * Default true.
+     */
     private boolean allowCredentials = true;
 
+    /**
+     * Configure how long in seconds the response from a pre-flight request
+     * can be cached by clients.
+     * Response with the header: Access-Control-Max-Age.
+     * <p>By default this is set to 1800 seconds (30 minutes).
+     */
     private long maxAge = 1800;
 
     /**
