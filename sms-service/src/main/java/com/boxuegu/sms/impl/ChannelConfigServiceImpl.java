@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 /**
  * 渠道配置Service 实现
+ *
+ * @author leonzhangxf 201890903
  */
 @Service
 public class ChannelConfigServiceImpl implements ChannelConfigService {
