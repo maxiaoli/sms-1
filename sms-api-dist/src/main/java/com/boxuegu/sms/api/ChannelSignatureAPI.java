@@ -53,7 +53,7 @@ public class ChannelSignatureAPI {
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
     @PostMapping("/signature")
-    public ResponseEntity<String> saveTemplate(@ModelAttribute ChannelSignatureDTO channelSignatureDTO) {
+    public ResponseEntity<String> saveSignature(@ModelAttribute ChannelSignatureDTO channelSignatureDTO) {
         ResponseEntity<String> res = validateSignature(channelSignatureDTO);
         if (res != null) return res;
 
@@ -83,7 +83,7 @@ public class ChannelSignatureAPI {
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
     @DeleteMapping("/signature/{id}")
-    public ResponseEntity<String> deleteTemplate(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteSignature(@PathVariable("id") Integer id) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定删除参数");
         return ResponseEntity.ok("OK");
     }
@@ -99,7 +99,7 @@ public class ChannelSignatureAPI {
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
     @PutMapping("/signature/{id}")
-    public ResponseEntity<String> updateTemplate(@PathVariable("id") Integer id,
+    public ResponseEntity<String> updateSignature(@PathVariable("id") Integer id,
                                                  @ModelAttribute ChannelSignatureDTO channelSignatureDTO) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定更新参数");
 
@@ -116,7 +116,7 @@ public class ChannelSignatureAPI {
             @ApiImplicitParam(name = "pageSize", value = "每页数", dataTypeClass = Integer.class, paramType = "path", required = true),
     })
     @GetMapping("/signatures/{currentPage}/{pageSize}")
-    public ResponseEntity<Page<ChannelSignatureDTO>> templates(
+    public ResponseEntity<Page<ChannelSignatureDTO>> signatures(
             @RequestParam(value = "configId", required = false) Integer channelConfigId,
             @RequestParam(required = false) String signature,
             @RequestParam(required = false) Integer status,
@@ -124,6 +124,7 @@ public class ChannelSignatureAPI {
             @PathVariable("pageSize") Integer pageSize) {
         currentPage = null == currentPage ? 1 : currentPage;
         pageSize = null == pageSize ? 10 : pageSize;
+
 
         return ResponseEntity.ok(null);
     }
