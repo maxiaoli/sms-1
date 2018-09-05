@@ -11,14 +11,14 @@
 
             <span class="criteria-search-element">
                 <span>渠道配置类型：</span>
-                <Select v-model="criteria.type" clearable style="width:200px">
+                <Select v-model="criteria.type" clearable style="width:200px;">
                     <Option v-for="item in configTypes" :value="item" :key="item">{{ item }}</Option>
                 </Select>
             </span>
 
             <span class="criteria-search-element">
                 <span>状态：</span>
-                <Select v-model="criteria.status" clearable style="width:100px">
+                <Select v-model="criteria.status" clearable style="width:100px;">
                     <Option :value="1" :key="1">启用</Option>
                     <Option :value="0" :key="0">禁用</Option>
                 </Select>
@@ -62,7 +62,7 @@
                             </FormItem>
 
                             <FormItem label="渠道配置类型" prop="type">
-                                <Select v-model="configDetail.config.type" style="width:200px"
+                                <Select v-model="configDetail.config.type" style="width:200px;"
                                         @on-change="getConfigTypeParams">
                                     <Option v-for="item in configTypes" :value="item" :key="item">{{ item }}</Option>
                                 </Select>
@@ -114,7 +114,7 @@
                             </FormItem>
 
                             <FormItem label="渠道配置类型" prop="type">
-                                <Select v-model="configDetail.config.type" style="width:200px">
+                                <Select v-model="configDetail.config.type" style="width:200px;">
                                     <Option v-for="item in configTypes" :value="item" :key="item">{{ item }}</Option>
                                 </Select>
                             </FormItem>
