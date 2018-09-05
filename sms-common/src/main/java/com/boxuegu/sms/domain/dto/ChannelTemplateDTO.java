@@ -38,7 +38,7 @@ public class ChannelTemplateDTO implements Serializable {
     @ApiModelProperty("短信模板参数列表,多变量按顺序用英文逗号分隔,如\"name,vcode\"。无变量使用空字符。")
     private String params;
 
-    @ApiModelProperty(value = "启禁用，0-禁用，1-启用", required = true)
+    @ApiModelProperty(value = "启禁用，0-禁用，1-启用")
     private Integer status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -48,6 +48,9 @@ public class ChannelTemplateDTO implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(hidden = true)
     private Date updateTime;
+
+    @ApiModelProperty(value = "0-未删除，1-已删除", hidden = true)
+    private Integer deleteFlag;
 
     public Integer getId() {
         return id;
@@ -121,12 +124,33 @@ public class ChannelTemplateDTO implements Serializable {
         this.updateTime = updateTime;
     }
 
-    public static ChannelTemplateDTO convertChannelTemplateDO(ChannelTemplateDO channelTemplateDO, ChannelConfigDTO channelConfig) {
+    public Integer getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Integer deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
+    public static ChannelTemplateDTO convertChannelTemplateDO(ChannelTemplateDO channelTemplateDO,
+                                                              ChannelConfigDTO channelConfig) {
         if (null == channelTemplateDO || null == channelConfig) return null;
         ChannelTemplateDTO channelTemplateDTO = new ChannelTemplateDTO();
         BeanUtils.copyProperties(channelTemplateDO, channelTemplateDTO);
         channelTemplateDTO.setChannelConfig(channelConfig);
         return channelTemplateDTO;
+    }
+
+    public static ChannelTemplateDO convertToChannelTemplateDO(ChannelTemplateDTO channelTemplateDTO) {
+        if (null == channelTemplateDTO || null == channelTemplateDTO.getChannelConfig()
+                || null == channelTemplateDTO.getChannelConfig().getId())
+            return null;
+        ChannelTemplateDO channelTemplateDO = new ChannelTemplateDO();
+        BeanUtils.copyProperties(channelTemplateDTO, channelTemplateDO);
+        channelTemplateDO.setChnlConfigId(channelTemplateDTO.getChannelConfig().getId());
+        channelTemplateDO.setCreateTime(null);
+        channelTemplateDO.setUpdateTime(null);
+        return channelTemplateDO;
     }
 
     @Override
@@ -142,13 +166,13 @@ public class ChannelTemplateDTO implements Serializable {
                 Objects.equals(params, that.params) &&
                 Objects.equals(status, that.status) &&
                 Objects.equals(createTime, that.createTime) &&
-                Objects.equals(updateTime, that.updateTime);
+                Objects.equals(updateTime, that.updateTime) &&
+                Objects.equals(deleteFlag, that.deleteFlag);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(id, channelConfig, name, code, content, params, status, createTime, updateTime);
+        return Objects.hash(id, channelConfig, name, code, content, params, status, createTime, updateTime, deleteFlag);
     }
 
     @Override
@@ -163,6 +187,7 @@ public class ChannelTemplateDTO implements Serializable {
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", deleteFlag=" + deleteFlag +
                 '}';
     }
 }

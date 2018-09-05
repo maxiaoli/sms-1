@@ -64,7 +64,13 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     public ChannelConfigDO channelConfig(Integer id) {
         if (null == id) return null;
         ChannelConfigDO channelConfigDO = channelConfigMapper.selectByPrimaryKey(id);
-        return channelConfigDO.getDeleteFlag() == 1 ? null : channelConfigDO;
+        return null == channelConfigDO || channelConfigDO.getDeleteFlag().equals(1) ? null : channelConfigDO;
+    }
+
+    @Override
+    public ChannelConfigDO channelConfigWithinDeleted(Integer id) {
+        if (null == id) return null;
+        return channelConfigMapper.selectByPrimaryKey(id);
     }
 
     @Override
@@ -79,7 +85,14 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
 
     @Override
     public ChannelConfigDO saveChannelConfig(ChannelConfigDO channelConfigDO) {
-        if (null == channelConfigDO) return null;
+        if (null == channelConfigDO
+                || !StringUtils.hasText(channelConfigDO.getName())
+                || null == channelConfigDO.getType())
+            return null;
+
+        if (null == channelConfigDO.getStatus())
+            channelConfigDO.setStatus(0);
+
         int result = channelConfigMapper.insertSelective(channelConfigDO);
         if (result <= 0) return null;
         return channelConfigDO;

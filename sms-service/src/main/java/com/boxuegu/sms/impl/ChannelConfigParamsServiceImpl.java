@@ -7,6 +7,7 @@ import com.boxuegu.sms.domain.dto.ChannelConfigParamsDTO;
 import com.boxuegu.sms.enumeration.ChannelConfigParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -47,24 +48,28 @@ public class ChannelConfigParamsServiceImpl implements ChannelConfigParamsServic
     }
 
     @Override
+    @Transactional
     public void deleteChannelConfigParams(Integer channelConfigId) {
         if (null == channelConfigId) return;
         channelConfigParamsDao.deleteChannelConfigParams(channelConfigId);
     }
 
     @Override
+    @Transactional
     public void saveChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return;
         channelConfigParamsDao.saveChannelConfigParamsBatch(channelConfigParamsDOList);
     }
 
     @Override
+    @Transactional
     public void updateChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return;
         channelConfigParamsDao.updateChannelConfigParamsBatch(channelConfigParamsDOList);
     }
 
     @Override
+    @Transactional
     public void deleteChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return;
         channelConfigParamsDao.deleteChannelConfigParamsBatch(channelConfigParamsDOList);

@@ -58,8 +58,9 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         //2.删除渠道配置参数
         channelConfigParamsService.deleteChannelConfigParams(channelConfigDO.getId());
 
-        //3.禁用需要同时禁用其下对应的所有的渠道模板、渠道签名、服务短信模板 TODO
+        //3.删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板 TODO
     }
+
 
     @Override
     @Transactional
@@ -84,6 +85,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
 
     @Override
+    @Transactional
     public void updateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
         if (null == channelConfigDetailDTO) return;
 
@@ -153,8 +155,9 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
             }
         }
 
-        //3.禁用需要同时禁用其下对应的所有的渠道模板、渠道签名、服务短信模板 TODO
+        //3.禁用渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板 TODO
     }
+
 
     @Override
     public Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType,
@@ -180,10 +183,12 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         return new Page<>(list, 0, pageSize, currentPage);
     }
 
+
     @Override
     public List<ChannelConfigDTO> channelConfigs() {
         return channelConfigs(null, null);
     }
+
 
     @Override
     public List<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType) {
@@ -203,6 +208,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         return list;
     }
 
+
     @Override
     @Transactional
     public ChannelConfigDetailDTO channelConfigDetail(Integer id) {
@@ -219,12 +225,23 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         return channelConfigDetailDTO;
     }
 
+
     @Override
     public ChannelConfigDTO channelConfig(Integer id) {
+        if (null == id) return null;
         ChannelConfigDO channelConfigDO = channelConfigDao.channelConfig(id);
         if (null == channelConfigDO) return null;
         return ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
     }
+
+    @Override
+    public ChannelConfigDTO channelConfigWithinDeleted(Integer id) {
+        if (null == id) return null;
+        ChannelConfigDO channelConfigDO = channelConfigDao.channelConfigWithinDeleted(id);
+        if (null == channelConfigDO) return null;
+        return ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
+    }
+
 
     private boolean compareValuableValue(ChannelConfigDO existChannelConfigDO, ChannelConfigDO channelConfigDO) {
         if (existChannelConfigDO == channelConfigDO) return true;

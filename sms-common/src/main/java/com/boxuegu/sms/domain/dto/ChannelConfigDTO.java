@@ -30,7 +30,7 @@ public class ChannelConfigDTO implements Serializable {
     @ApiModelProperty("描述")
     private String desc;
 
-    @ApiModelProperty(value = "渠道账号配置类型", required = true)
+    @ApiModelProperty(value = "渠道配置类型", required = true)
     private ChannelConfigType type;
 
     @ApiModelProperty(value = "启禁用，0-禁用，1-启用", required = true)
@@ -43,6 +43,9 @@ public class ChannelConfigDTO implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(hidden = true)
     private Date updateTime;
+
+    @ApiModelProperty(value = "0-未删除，1-已删除", hidden = true)
+    private Integer deleteFlag;
 
     public Integer getId() {
         return id;
@@ -100,6 +103,14 @@ public class ChannelConfigDTO implements Serializable {
         this.updateTime = updateTime;
     }
 
+    public Integer getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Integer deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
     public static ChannelConfigDTO convertChannelConfigDO(ChannelConfigDO channelConfigDO) {
         if (null == channelConfigDO) return null;
         ChannelConfigDTO channelConfigDTO = new ChannelConfigDTO();
@@ -113,6 +124,8 @@ public class ChannelConfigDTO implements Serializable {
         ChannelConfigDO channelConfigDO = new ChannelConfigDO();
         BeanUtils.copyProperties(channelConfigDTO, channelConfigDO);
         channelConfigDO.setType(channelConfigDTO.getType().getType());
+        channelConfigDO.setCreateTime(null);
+        channelConfigDO.setUpdateTime(null);
         return channelConfigDO;
     }
 
@@ -127,12 +140,13 @@ public class ChannelConfigDTO implements Serializable {
                 type == that.type &&
                 Objects.equals(status, that.status) &&
                 Objects.equals(createTime, that.createTime) &&
-                Objects.equals(updateTime, that.updateTime);
+                Objects.equals(updateTime, that.updateTime) &&
+                Objects.equals(deleteFlag, that.deleteFlag);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, desc, type, status, createTime, updateTime);
+        return Objects.hash(id, name, desc, type, status, createTime, updateTime, deleteFlag);
     }
 
     @Override
@@ -145,6 +159,7 @@ public class ChannelConfigDTO implements Serializable {
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
+                ", deleteFlag=" + deleteFlag +
                 '}';
     }
 }

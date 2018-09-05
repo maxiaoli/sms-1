@@ -29,6 +29,48 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
     }
 
     @Override
+    public ChannelTemplateDO saveTemplate(ChannelTemplateDO channelTemplateDO) {
+        if (null == channelTemplateDO || null == channelTemplateDO.getChnlConfigId()
+                || !StringUtils.hasText(channelTemplateDO.getName())
+                || !StringUtils.hasText(channelTemplateDO.getCode())
+                || !StringUtils.hasText(channelTemplateDO.getContent()))
+            return null;
+
+        if (null == channelTemplateDO.getStatus())
+            channelTemplateDO.setStatus(0);
+
+        int result = channelTemplateMapper.insertSelective(channelTemplateDO);
+        if (result <= 0) return null;
+        return channelTemplateDO;
+    }
+
+    @Override
+    public void deleteTemplate(Integer id) {
+        if (null == id) return;
+
+        ChannelTemplateDO channelTemplateDO = new ChannelTemplateDO();
+        channelTemplateDO.setId(id);
+        channelTemplateDO.setStatus(0);
+        channelTemplateDO.setDeleteFlag(1);
+        channelTemplateMapper.updateByPrimaryKeySelective(channelTemplateDO);
+    }
+
+    @Override
+    public void updateTemplate(ChannelTemplateDO channelTemplateDO) {
+        if (null == channelTemplateDO || null == channelTemplateDO.getId()
+                || null == channelTemplateDO.getChnlConfigId()
+                || !StringUtils.hasText(channelTemplateDO.getName())
+                || !StringUtils.hasText(channelTemplateDO.getCode())
+                || !StringUtils.hasText(channelTemplateDO.getContent()))
+            return;
+
+        if (null == channelTemplateDO.getStatus())
+            channelTemplateDO.setStatus(0);
+
+        channelTemplateMapper.updateByPrimaryKeySelective(channelTemplateDO);
+    }
+
+    @Override
     public Page<ChannelTemplateDO> channelTemplates(Integer channelConfigId, String name, String code, Integer status, Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? 1 : currentPage;
         pageSize = null == pageSize ? 10 : pageSize;
@@ -51,5 +93,13 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
             return new Page<>(channelTemplateDOList, 0, pageSize, currentPage);
 
         return new Page<>(channelTemplateDOList, Long.valueOf(page.getTotal()).intValue(), pageSize, currentPage);
+    }
+
+    @Override
+    public ChannelTemplateDO channelTemplate(Integer id) {
+        if (null == id) return null;
+
+        ChannelTemplateDO channelTemplateDO = channelTemplateMapper.selectByPrimaryKey(id);
+        return null == channelTemplateDO || channelTemplateDO.getDeleteFlag().equals(1) ? null : channelTemplateDO;
     }
 }

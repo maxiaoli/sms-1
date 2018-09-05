@@ -10,5 +10,14 @@ import com.boxuegu.sms.utils.Page;
  */
 public interface ChannelTemplateDao {
 
+    ChannelTemplateDO saveTemplate(ChannelTemplateDO channelTemplateDO);
+
+    void deleteTemplate(Integer id);
+
+    void updateTemplate(ChannelTemplateDO channelTemplateDO);
+
     Page<ChannelTemplateDO> channelTemplates(Integer channelConfigId, String name, String code, Integer status, Integer currentPage, Integer pageSize);
+
+    ChannelTemplateDO channelTemplate(Integer id);
+
 }

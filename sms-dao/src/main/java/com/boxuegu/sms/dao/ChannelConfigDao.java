@@ -19,6 +19,8 @@ public interface ChannelConfigDao {
 
     ChannelConfigDO channelConfig(Integer id);
 
+    ChannelConfigDO channelConfigWithinDeleted(Integer id);
+
     void deleteChannelConfig(Integer id);
 
     ChannelConfigDO saveChannelConfig(ChannelConfigDO channelConfigDO);

@@ -9,6 +9,7 @@ import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
 import com.boxuegu.sms.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -36,6 +37,54 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
         this.channelConfigService = channelConfigService;
     }
 
+
+    @Override
+    @Transactional
+    public void saveTemplate(ChannelTemplateDTO channelTemplateDTO) {
+        if (null == channelTemplateDTO || null == channelTemplateDTO.getChannelConfig()
+                || null == channelTemplateDTO.getChannelConfig().getId())
+            return;
+
+        ChannelTemplateDO channelTemplateDO = ChannelTemplateDTO.convertToChannelTemplateDO(channelTemplateDTO);
+        if (null == channelTemplateDO) return;
+
+        channelTemplateDao.saveTemplate(channelTemplateDO);
+    }
+
+
+    @Override
+    @Transactional
+    public void deleteTemplate(Integer id) {
+        if (null == id) return;
+
+        //1.删除渠道模板
+        ChannelTemplateDO channelTemplateDO = channelTemplateDao.channelTemplate(id);
+        if (null == channelTemplateDO) return;
+
+        channelTemplateDao.deleteTemplate(channelTemplateDO.getId());
+
+        //2.删除渠道模板，需要禁用和其关联的短信服务模板。
+    }
+
+
+    @Override
+    public void updateTemplate(ChannelTemplateDTO channelTemplateDTO) {
+        if (null == channelTemplateDTO || null == channelTemplateDTO.getId()
+                || null == channelTemplateDTO.getChannelConfig()
+                || null == channelTemplateDTO.getChannelConfig().getId())
+            return;
+
+        //1.更新渠道模板
+        ChannelTemplateDO channelTemplateDO = ChannelTemplateDTO.convertToChannelTemplateDO(channelTemplateDTO);
+        if (null == channelTemplateDO) return;
+
+        channelTemplateDao.updateTemplate(channelTemplateDO);
+
+
+        //2.禁用渠道模板，需要禁用和其关联的短信服务模板。
+    }
+
+
     @Override
     public Page<ChannelTemplateDTO> channelTemplates(Integer channelConfigId, String name, String code, Integer status,
                                                      Integer currentPage, Integer pageSize) {
@@ -46,12 +95,12 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
         Page<ChannelTemplateDO> channelTemplateDOPage = channelTemplateDao
                 .channelTemplates(channelConfigId, name, code, status, currentPage, pageSize);
 
-        List<ChannelTemplateDTO> channelTemplateDTOList  = new ArrayList<>();
+        List<ChannelTemplateDTO> channelTemplateDTOList = new ArrayList<>();
         if (null == channelTemplateDOPage || CollectionUtils.isEmpty(channelTemplateDOPage.getItems()))
             return new Page<>(channelTemplateDTOList, 0, pageSize, currentPage);
 
         for (ChannelTemplateDO channelTemplateDO : channelTemplateDOPage.getItems()) {
-            ChannelConfigDTO channelConfigDTO = channelConfigService.channelConfig(channelTemplateDO.getChnlConfigId());
+            ChannelConfigDTO channelConfigDTO = channelConfigService.channelConfigWithinDeleted(channelTemplateDO.getChnlConfigId());
             ChannelTemplateDTO channelTemplateDTO = ChannelTemplateDTO.convertChannelTemplateDO(channelTemplateDO, channelConfigDTO);
             channelTemplateDTOList.add(channelTemplateDTO);
         }

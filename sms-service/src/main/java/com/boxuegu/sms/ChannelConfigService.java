@@ -30,4 +30,5 @@ public interface ChannelConfigService {
 
     ChannelConfigDTO channelConfig(Integer id);
 
+    ChannelConfigDTO channelConfigWithinDeleted(Integer id);
 }

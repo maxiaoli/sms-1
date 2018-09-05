@@ -49,6 +49,7 @@ public interface ChannelTemplateMapper {
         "#{params,jdbcType=VARCHAR}, #{status,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, ",
         "#{updateTime,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=BIT})"
     })
+    @Options(useGeneratedKeys = true)
     int insert(ChannelTemplateDO record);
 
     /**
@@ -56,6 +57,7 @@ public interface ChannelTemplateMapper {
      * @mbg.generated 2018-08-28
      */
     @InsertProvider(type=ChannelTemplateSqlProvider.class, method="insertSelective")
+    @Options(useGeneratedKeys = true)
     int insertSelective(ChannelTemplateDO record);
 
     /**

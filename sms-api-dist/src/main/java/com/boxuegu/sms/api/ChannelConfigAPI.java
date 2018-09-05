@@ -55,8 +55,7 @@ public class ChannelConfigAPI {
 
     /**
      * TODO
-     * 删除需要同时禁用其下对应的所有的
-     * 渠道模板、渠道签名、服务短信模板
+     * 删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板
      */
     @ApiOperation(value = "删除渠道配置", tags = {"渠道配置管理"})
     @ApiResponses({
@@ -64,6 +63,7 @@ public class ChannelConfigAPI {
     })
     @DeleteMapping("/config/{id}")
     public ResponseEntity<String> deleteConfig(@PathVariable("id") Integer id) {
+        if (null == id) return ResponseEntity.badRequest().body("缺少删除参数");
         channelConfigService.deleteChannelConfig(id);
         return ResponseEntity.ok("OK");
     }
@@ -71,8 +71,7 @@ public class ChannelConfigAPI {
 
     /**
      * TODO
-     * 禁用需要同时禁用其下对应的所有的
-     * 渠道模板、渠道签名、服务短信模板
+     * 禁用渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板
      */
     @ApiOperation(value = "修改渠道配置", tags = {"渠道配置管理"})
     @ApiResponses({
