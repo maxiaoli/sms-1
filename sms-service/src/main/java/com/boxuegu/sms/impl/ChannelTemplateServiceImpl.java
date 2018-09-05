@@ -6,6 +6,7 @@ import com.boxuegu.sms.dao.ChannelTemplateDao;
 import com.boxuegu.sms.domain.ChannelTemplateDO;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
+import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -82,6 +83,14 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
 
 
         //2.禁用渠道模板，需要禁用和其关联的短信服务模板。
+    }
+
+
+    @Override
+    public void updateTemplateStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus) {
+        if (null == channelConfigId || !CommonStatus.inStatus(targetStatus)) return;
+
+        channelTemplateDao.updateTemplateStatusByChannelConfigId(channelConfigId, targetStatus);
     }
 
 

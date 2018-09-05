@@ -4,6 +4,7 @@ import com.boxuegu.sms.dao.ChannelConfigParamsDao;
 import com.boxuegu.sms.dao.mapper.ChannelConfigParamsMapper;
 import com.boxuegu.sms.domain.ChannelConfigParamsDO;
 import com.boxuegu.sms.domain.ChannelConfigParamsDOCriteria;
+import com.boxuegu.sms.enumeration.DeleteFlag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
@@ -29,7 +30,7 @@ public class ChannelConfigParamsDaoImpl implements ChannelConfigParamsDao {
     public List<ChannelConfigParamsDO> channelConfigParams(Integer channelConfigId) {
         if (null == channelConfigId) return null;
         ChannelConfigParamsDOCriteria criteria = new ChannelConfigParamsDOCriteria();
-        criteria.createCriteria().andDeleteFlagEqualTo(0)
+        criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag())
                 .andChnlConfigIdEqualTo(channelConfigId);
         return channelConfigParamsMapper.selectByExample(criteria);
     }
@@ -39,10 +40,10 @@ public class ChannelConfigParamsDaoImpl implements ChannelConfigParamsDao {
         if (null == channelConfigId) return;
         ChannelConfigParamsDOCriteria criteria = new ChannelConfigParamsDOCriteria();
         criteria.createCriteria().andChnlConfigIdEqualTo(channelConfigId)
-                .andDeleteFlagEqualTo(0);//删除未被删除的
+                .andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());//删除未被删除的
 
         ChannelConfigParamsDO channelConfigParamsDO = new ChannelConfigParamsDO();
-        channelConfigParamsDO.setDeleteFlag(1);//删除
+        channelConfigParamsDO.setDeleteFlag(DeleteFlag.DELETED.getDeleteFlag());//删除
         channelConfigParamsMapper.updateByExampleSelective(channelConfigParamsDO, criteria);
     }
 
@@ -59,7 +60,7 @@ public class ChannelConfigParamsDaoImpl implements ChannelConfigParamsDao {
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return;
         for (ChannelConfigParamsDO channelConfigParamsDO : channelConfigParamsDOList) {
             ChannelConfigParamsDOCriteria criteria = new ChannelConfigParamsDOCriteria();
-            criteria.createCriteria().andDeleteFlagEqualTo(0)
+            criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag())
                     .andChnlConfigIdEqualTo(channelConfigParamsDO.getChnlConfigId())
                     .andKeyEqualTo(channelConfigParamsDO.getKey());//更新未被删除的指定渠道账号ID和KEY的值
             channelConfigParamsMapper.updateByExampleSelective(channelConfigParamsDO, criteria);
@@ -70,10 +71,10 @@ public class ChannelConfigParamsDaoImpl implements ChannelConfigParamsDao {
     public void deleteChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return;
         for (ChannelConfigParamsDO channelConfigParamsDO : channelConfigParamsDOList) {
-            channelConfigParamsDO.setDeleteFlag(1);
+            channelConfigParamsDO.setDeleteFlag(DeleteFlag.DELETED.getDeleteFlag());
 
             ChannelConfigParamsDOCriteria criteria = new ChannelConfigParamsDOCriteria();
-            criteria.createCriteria().andDeleteFlagEqualTo(0)
+            criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag())
                     .andChnlConfigIdEqualTo(channelConfigParamsDO.getChnlConfigId())
                     .andKeyEqualTo(channelConfigParamsDO.getKey());//删除未被删除的指定渠道账号ID和KEY的值
             channelConfigParamsMapper.updateByExampleSelective(channelConfigParamsDO, criteria);

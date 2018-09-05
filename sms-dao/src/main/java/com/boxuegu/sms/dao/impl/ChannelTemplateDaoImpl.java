@@ -4,6 +4,8 @@ import com.boxuegu.sms.dao.ChannelTemplateDao;
 import com.boxuegu.sms.dao.mapper.ChannelTemplateMapper;
 import com.boxuegu.sms.domain.ChannelTemplateDO;
 import com.boxuegu.sms.domain.ChannelTemplateDOCriteria;
+import com.boxuegu.sms.enumeration.CommonStatus;
+import com.boxuegu.sms.enumeration.DeleteFlag;
 import com.boxuegu.sms.utils.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +38,8 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
                 || !StringUtils.hasText(channelTemplateDO.getContent()))
             return null;
 
-        if (null == channelTemplateDO.getStatus())
-            channelTemplateDO.setStatus(0);
+        if (null == channelTemplateDO.getStatus() || !CommonStatus.inStatus(channelTemplateDO.getStatus()))
+            channelTemplateDO.setStatus(CommonStatus.DISABLE.getStatus());
 
         int result = channelTemplateMapper.insertSelective(channelTemplateDO);
         if (result <= 0) return null;
@@ -50,8 +52,8 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
 
         ChannelTemplateDO channelTemplateDO = new ChannelTemplateDO();
         channelTemplateDO.setId(id);
-        channelTemplateDO.setStatus(0);
-        channelTemplateDO.setDeleteFlag(1);
+        channelTemplateDO.setStatus(CommonStatus.DISABLE.getStatus());
+        channelTemplateDO.setDeleteFlag(DeleteFlag.DELETED.getDeleteFlag());
         channelTemplateMapper.updateByPrimaryKeySelective(channelTemplateDO);
     }
 
@@ -64,14 +66,29 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
                 || !StringUtils.hasText(channelTemplateDO.getContent()))
             return;
 
-        if (null == channelTemplateDO.getStatus())
-            channelTemplateDO.setStatus(0);
+        if (null == channelTemplateDO.getStatus() || !CommonStatus.inStatus(channelTemplateDO.getStatus()))
+            channelTemplateDO.setStatus(CommonStatus.DISABLE.getStatus());
 
         channelTemplateMapper.updateByPrimaryKeySelective(channelTemplateDO);
     }
 
     @Override
-    public Page<ChannelTemplateDO> channelTemplates(Integer channelConfigId, String name, String code, Integer status, Integer currentPage, Integer pageSize) {
+    public void updateTemplateStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus) {
+        if (null == channelConfigId || !CommonStatus.inStatus(targetStatus)) return;
+
+        ChannelTemplateDOCriteria criterion = new ChannelTemplateDOCriteria();
+        criterion.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag())
+                .andChnlConfigIdEqualTo(channelConfigId);
+
+        ChannelTemplateDO channelTemplateDO = new ChannelTemplateDO();
+        channelTemplateDO.setStatus(targetStatus);
+
+        channelTemplateMapper.updateByExampleSelective(channelTemplateDO, criterion);
+    }
+
+    @Override
+    public Page<ChannelTemplateDO> channelTemplates(Integer channelConfigId, String name, String code,
+                                                    Integer status, Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? 1 : currentPage;
         pageSize = null == pageSize ? 10 : pageSize;
 
@@ -82,7 +99,7 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
         if (null != channelConfigId) criteria.andChnlConfigIdEqualTo(channelConfigId);
         if (StringUtils.hasText(name)) criteria.andNameLike("%" + name + "%");
         if (StringUtils.hasText(code)) criteria.andCodeLike("%" + code + "%");
-        if (null != status && (status == 1 || status == 2)) criteria.andStatusEqualTo(status);
+        if (null != status && CommonStatus.inStatus(status)) criteria.andStatusEqualTo(status);
 
         criterion.setOrderByClause("create_time desc");
 
@@ -100,6 +117,8 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
         if (null == id) return null;
 
         ChannelTemplateDO channelTemplateDO = channelTemplateMapper.selectByPrimaryKey(id);
-        return null == channelTemplateDO || channelTemplateDO.getDeleteFlag().equals(1) ? null : channelTemplateDO;
+        return null == channelTemplateDO
+                || channelTemplateDO.getDeleteFlag().equals(DeleteFlag.DELETED.getDeleteFlag())
+                ? null : channelTemplateDO;
     }
 }

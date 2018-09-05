@@ -16,6 +16,8 @@ public interface ChannelTemplateDao {
 
     void updateTemplate(ChannelTemplateDO channelTemplateDO);
 
+    void updateTemplateStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus);
+
     Page<ChannelTemplateDO> channelTemplates(Integer channelConfigId, String name, String code, Integer status, Integer currentPage, Integer pageSize);
 
     ChannelTemplateDO channelTemplate(Integer id);

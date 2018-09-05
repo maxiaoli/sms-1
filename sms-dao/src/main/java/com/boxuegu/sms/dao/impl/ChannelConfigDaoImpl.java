@@ -4,6 +4,8 @@ import com.boxuegu.sms.dao.ChannelConfigDao;
 import com.boxuegu.sms.dao.mapper.ChannelConfigMapper;
 import com.boxuegu.sms.domain.ChannelConfigDO;
 import com.boxuegu.sms.domain.ChannelConfigDOCriteria;
+import com.boxuegu.sms.enumeration.CommonStatus;
+import com.boxuegu.sms.enumeration.DeleteFlag;
 import com.boxuegu.sms.utils.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,11 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     }
 
     @Override
-    public Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status, Integer currentPage, Integer pageSize) {
+    public Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status,
+                                                Integer currentPage, Integer pageSize) {
         ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
-        ChannelConfigDOCriteria.Criteria criteria = criterion.createCriteria().andDeleteFlagEqualTo(0);
+        ChannelConfigDOCriteria.Criteria criteria = criterion.createCriteria()
+                .andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());
         if (StringUtils.hasText(name)) {
             criteria.andNameLike("%" + name + "%");
         }
@@ -51,7 +55,8 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     @Override
     public List<ChannelConfigDO> channelConfigs(String name, Integer type) {
         ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
-        ChannelConfigDOCriteria.Criteria criteria = criterion.createCriteria().andDeleteFlagEqualTo(0);
+        ChannelConfigDOCriteria.Criteria criteria = criterion.createCriteria()
+                .andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());
         if (StringUtils.hasText(name)) {
             criteria.andNameLike("%" + name + "%");
         }
@@ -81,8 +86,8 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
         if (null == id) return;
         ChannelConfigDO channelConfigDO = new ChannelConfigDO();
         channelConfigDO.setId(id);
-        channelConfigDO.setStatus(0);//禁用
-        channelConfigDO.setDeleteFlag(1);//删除
+        channelConfigDO.setStatus(CommonStatus.DISABLE.getStatus());//禁用
+        channelConfigDO.setDeleteFlag(DeleteFlag.DELETED.getDeleteFlag());//删除
         channelConfigMapper.updateByPrimaryKeySelective(channelConfigDO);
     }
 
@@ -93,8 +98,8 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
                 || null == channelConfigDO.getType())
             return null;
 
-        if (null == channelConfigDO.getStatus())
-            channelConfigDO.setStatus(0);
+        if (!CommonStatus.inStatus(channelConfigDO.getStatus()))
+            channelConfigDO.setStatus(CommonStatus.DISABLE.getStatus());
 
         int result = channelConfigMapper.insertSelective(channelConfigDO);
         if (result <= 0) return null;

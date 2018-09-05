@@ -19,6 +19,9 @@ public interface ChannelTemplateService {
     void updateTemplate(ChannelTemplateDTO channelTemplateDTO);
 
 
+    void updateTemplateStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus);
+
+
     Page<ChannelTemplateDTO> channelTemplates(Integer channelConfigId, String name, String code, Integer status,
                                               Integer currentPage, Integer pageSize);
 

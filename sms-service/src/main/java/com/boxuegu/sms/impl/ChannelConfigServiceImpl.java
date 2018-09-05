@@ -2,6 +2,7 @@ package com.boxuegu.sms.impl;
 
 import com.boxuegu.sms.ChannelConfigParamsService;
 import com.boxuegu.sms.ChannelConfigService;
+import com.boxuegu.sms.ChannelTemplateService;
 import com.boxuegu.sms.dao.ChannelConfigDao;
 import com.boxuegu.sms.domain.ChannelConfigDO;
 import com.boxuegu.sms.domain.ChannelConfigParamsDO;
@@ -10,6 +11,7 @@ import com.boxuegu.sms.domain.dto.ChannelConfigDetailDTO;
 import com.boxuegu.sms.domain.dto.ChannelConfigParamsDTO;
 import com.boxuegu.sms.enumeration.ChannelConfigParam;
 import com.boxuegu.sms.enumeration.ChannelConfigType;
+import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
     private ChannelConfigParamsService channelConfigParamsService;
 
+    private ChannelTemplateService channelTemplateService;
+
     @Autowired
     public void setChannelConfigDao(ChannelConfigDao channelConfigDao) {
         this.channelConfigDao = channelConfigDao;
@@ -44,6 +48,10 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         this.channelConfigParamsService = channelConfigParamsService;
     }
 
+    @Autowired
+    public void setChannelTemplateService(ChannelTemplateService channelTemplateService) {
+        this.channelTemplateService = channelTemplateService;
+    }
 
     @Override
     @Transactional
@@ -59,6 +67,8 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         channelConfigParamsService.deleteChannelConfigParams(channelConfigDO.getId());
 
         //3.删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板 TODO
+        //禁用所属的渠道模板
+        channelTemplateService.updateTemplateStatusByChannelConfigId(channelConfigDO.getId(), CommonStatus.DISABLE.getStatus());
     }
 
 
@@ -156,6 +166,8 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         }
 
         //3.禁用渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板 TODO
+        //禁用所属的渠道模板
+        channelTemplateService.updateTemplateStatusByChannelConfigId(channelConfigDTO.getId(), CommonStatus.DISABLE.getStatus());
     }
 
 
@@ -170,7 +182,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
             type = channelConfigType.getType();
         }
 
-        if (null != status && (status < 0 || status > 1)) {
+        if (null != status && !CommonStatus.inStatus(status)) {
             status = null;
         }
 
