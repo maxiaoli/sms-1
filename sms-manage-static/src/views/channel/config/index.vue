@@ -448,7 +448,7 @@
         }).catch((err) => {
           this.pageLoading = false;
           this.disposeApiError(err);
-        })
+        });
       },
       changePage(currentPage) {
         this.criteria.currentPage = currentPage;
@@ -480,16 +480,3 @@
     }
   }
 </script>
-
-<style rel="stylesheet/scss" lang="scss" scoped>
-
-    .criteria-search {
-        text-align: left;
-        margin-bottom: 15px;
-
-        &-element {
-            margin-left: 10px;
-        }
-    }
-
-</style>
