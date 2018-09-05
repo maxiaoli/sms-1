@@ -16,6 +16,14 @@
                 </Select>
             </span>
 
+            <span class="criteria-search-element">
+                <span>状态：</span>
+                <Select v-model="criteria.status" clearable style="width:100px">
+                    <Option :value="1" :key="1">启用</Option>
+                    <Option :value="0" :key="0">禁用</Option>
+                </Select>
+            </span>
+
             <Button class="criteria-search-element" type="primary" shape="circle" icon="ios-search"
                     @click="channelConfigs">搜索
             </Button>
@@ -223,6 +231,7 @@
         criteria: {
           name: '',
           type: '',
+          status: null,
           currentPage: 1,
           pageSize: 10
         },
@@ -426,7 +435,8 @@
         api.get('/api/channel/configs/' + this.criteria.currentPage + '/' + this.criteria.pageSize, {
           params: {
             name: this.criteria.name,
-            type: this.criteria.type
+            type: this.criteria.type,
+            status: this.criteria.status
           }
         }).then((data) => {
           this.page.currentPage = data.currentPage;

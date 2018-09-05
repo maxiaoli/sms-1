@@ -28,7 +28,7 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     }
 
     @Override
-    public Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer currentPage, Integer pageSize) {
+    public Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status, Integer currentPage, Integer pageSize) {
         ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
         ChannelConfigDOCriteria.Criteria criteria = criterion.createCriteria().andDeleteFlagEqualTo(0);
         if (StringUtils.hasText(name)) {
@@ -36,6 +36,9 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
         }
         if (null != type) {
             criteria.andTypeEqualTo(type);
+        }
+        if (null != status) {
+            criteria.andStatusEqualTo(status);
         }
         criterion.setOrderByClause("create_time desc");
 

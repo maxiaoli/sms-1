@@ -20,7 +20,7 @@ public interface ChannelConfigService {
 
     void updateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO);
 
-    Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType, Integer currentPage, Integer pageSize);
+    Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType, Integer status, Integer currentPage, Integer pageSize);
 
     List<ChannelConfigDTO> channelConfigs();
 

@@ -160,7 +160,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
 
     @Override
-    public Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType,
+    public Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType, Integer status,
                                                  Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? 1 : currentPage;
         pageSize = null == pageSize ? 10 : pageSize;
@@ -170,7 +170,11 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
             type = channelConfigType.getType();
         }
 
-        Page<ChannelConfigDO> channelConfigDOPage = channelConfigDao.channelConfigs(name, type, currentPage, pageSize);
+        if (null != status && (status < 0 || status > 1)) {
+            status = null;
+        }
+
+        Page<ChannelConfigDO> channelConfigDOPage = channelConfigDao.channelConfigs(name, type, status, currentPage, pageSize);
 
         List<ChannelConfigDTO> list = new ArrayList<>();
         if (null != channelConfigDOPage && !CollectionUtils.isEmpty(channelConfigDOPage.getItems())) {

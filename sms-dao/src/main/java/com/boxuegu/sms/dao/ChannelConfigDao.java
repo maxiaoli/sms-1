@@ -13,7 +13,7 @@ import java.util.List;
  */
 public interface ChannelConfigDao {
 
-    Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer currentPage, Integer pageSize);
+    Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status, Integer currentPage, Integer pageSize);
 
     List<ChannelConfigDO> channelConfigs(String name, Integer type);
 
