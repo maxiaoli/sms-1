@@ -148,6 +148,7 @@
 
             <div class="modal-config-delete">
                 <Modal v-model="showConfigDeleteModal" title="删除渠道配置"
+                       :mask-closable="false" :loading="true"
                        @on-ok="deleteConfig" @on-cancel="cleanModalData">
                     <p style="text-align: center;">
                         确定要删除名称为“{{configDetail.config.name}}”的渠道配置么？<br/>
@@ -204,7 +205,7 @@
                   },
                   on: {
                     click: () => {
-                      this.getConfigDetailForUpdate(params.row.id);
+                      this.getConfigUpdateModal(params.row.id);
                     }
                   }
                 }, '修改'),
@@ -215,7 +216,7 @@
                   },
                   on: {
                     click: () => {
-                      this.confirmDeleteConfig(params.row);
+                      this.getConfigDeleteModal(params.row);
                     }
                   }
                 }, '删除')
@@ -277,7 +278,6 @@
           if (!valid) {
             this.cleanModalData();
             this.showConfigCreateModal = false;
-            this.$refs['createConfigForm'].resetFields();
             this.$Message.warning('参数校验失败！');
           } else {
             api.post('/api/channel/config', {
@@ -292,15 +292,12 @@
             }).then(() => {
               this.cleanModalData();
               this.showConfigCreateModal = false;
-              this.$refs['createConfigForm'].resetFields();
               this.$Message.success('新增渠道配置成功！');
-
               this.channelConfigs();
             }).catch((err) => {
               this.cleanModalData();
-              this.disposeApiError(err);
               this.showConfigCreateModal = false;
-              this.$refs['createConfigForm'].resetFields();
+              this.disposeApiError(err);
               this.channelConfigs();
             });
           }
@@ -308,6 +305,73 @@
       },
       getConfigCreateModal() {
         this.showConfigCreateModal = true;
+      },
+      deleteConfig() {
+        api.delete('/api/channel/config/' + this.configDetail.config.id).then(() => {
+          this.$Message.success('删除渠道配置成功');
+          this.cleanModalData();
+          this.showConfigDeleteModal = false;
+          this.channelConfigs();
+        }).catch((err) => {
+          this.disposeApiError(err);
+          this.cleanModalData();
+          this.showConfigDeleteModal = false;
+          this.channelConfigs();
+        });
+      },
+      getConfigDeleteModal(row) {
+        this.showConfigDeleteModal = true;
+        this.configDetail.config.id = row.id;
+        this.configDetail.config.name = row.name;
+      },
+      updateConfig() {
+        this.$refs['updateConfigForm'].validate((valid) => {
+          if (!valid) {
+            this.cleanModalData();
+            this.showConfigUpdateModal = false;
+            this.$refs['updateConfigForm'].resetFields();
+            this.$Message.warning('参数校验失败！');
+          } else {
+            api.put('/api/channel/config/' + this.configDetail.config.id, {
+              config: {
+                id: this.configDetail.config.id,
+                name: this.configDetail.config.name,
+                desc: this.configDetail.config.desc,
+                type: this.configDetail.config.type,
+                status: this.configDetail.config.status
+              },
+              params: this.configDetail.params
+            }).then(() => {
+              this.cleanModalData();
+              this.showConfigUpdateModal = false;
+              this.$Message.success('更新渠道配置成功！');
+              this.channelConfigs();
+            }).catch((err) => {
+              this.cleanModalData();
+              this.disposeApiError(err);
+              this.showConfigUpdateModal = false;
+              this.channelConfigs();
+            });
+          }
+        });
+      },
+      getConfigUpdateModal(configId) {
+        this.showConfigUpdateModal = true;
+        api.get('/api/channel/config/detail/' + configId).then((res) => {
+          this.configDetail = res;
+          this.getConfigTypeParams();
+        }).catch((err) => {
+          this.disposeApiError(err);
+          this.cleanModalData();
+          this.showConfigUpdateModal = false;
+        });
+      },
+      getConfigTypes() {
+        api.get('/api/channel/config/types').then((data) => {
+          this.configTypes = data;
+        }).catch((err) => {
+          this.disposeApiError(err);
+        })
       },
       getConfigTypeParams() {
         if (this.configDetail.config.type && this.configDetail.config.type !== '') {
@@ -337,70 +401,30 @@
             this.configDetail.params = tempConfigTypeParams;
           }).catch((err) => {
             this.configTypeParams = [];
-            this.cleanModalData();
             this.disposeApiError(err);
+            this.cleanModalData();
             this.showConfigUpdateModal = false;
             this.showConfigCreateModal = false;
           });
         }
       },
-      confirmDeleteConfig(config) {
-        this.showConfigDeleteModal = true;
-        this.configDetail.config.id = config.id;
-        this.configDetail.config.name = config.name;
-      },
-      getConfigDetailForUpdate(configId) {
-        this.showConfigUpdateModal = true;
-        api.get('/api/channel/config/detail/' + configId).then((res) => {
-          this.configDetail = res;
-          this.getConfigTypeParams();
-        }).catch((err) => {
-          this.cleanModalData();
-          this.disposeApiError(err);
-          this.showConfigUpdateModal = false;
-        });
-      },
-      updateConfig() {
-        this.$refs['updateConfigForm'].validate((valid) => {
-          if (!valid) {
-            this.cleanModalData();
-            this.showConfigUpdateModal = false;
-            this.$refs['updateConfigForm'].resetFields();
-            this.$Message.warning('参数校验失败！');
-          } else {
-            api.put('/api/channel/config/' + this.configDetail.config.id, {
-              config: {
-                id: this.configDetail.config.id,
-                name: this.configDetail.config.name,
-                desc: this.configDetail.config.desc,
-                type: this.configDetail.config.type,
-                status: this.configDetail.config.status
-              },
-              params: this.configDetail.params
-            }).then(() => {
-              this.cleanModalData();
-              this.showConfigUpdateModal = false;
-              this.$refs['updateConfigForm'].resetFields();
-              this.$Message.success('更新渠道配置成功！');
-
-              this.channelConfigs();
-            }).catch((err) => {
-              this.cleanModalData();
-              this.disposeApiError(err);
-              this.showConfigUpdateModal = false;
-              this.$refs['updateConfigForm'].resetFields();
-              this.channelConfigs();
-            });
+      channelConfigs() {
+        this.pageLoading = true;
+        api.get('/api/channel/configs/' + this.criteria.currentPage + '/' + this.criteria.pageSize, {
+          params: {
+            name: this.criteria.name,
+            type: this.criteria.type,
+            status: this.criteria.status
           }
-        });
-      },
-      deleteConfig() {
-        api.delete('/api/channel/config/' + this.configDetail.config.id).then(() => {
-          this.$Message.success('删除渠道配置成功');
-          this.cleanModalData();
-          this.channelConfigs();
+        }).then((data) => {
+          this.page.currentPage = data.currentPage;
+          this.page.pageSize = data.pageSize;
+          this.page.totalCount = data.totalCount;
+          this.page.items = data.items;
+
+          this.pageLoading = false;
         }).catch((err) => {
-          this.cleanModalData();
+          this.pageLoading = false;
           this.disposeApiError(err);
         });
       },
@@ -424,33 +448,6 @@
           }
         };
       },
-      getConfigTypes() {
-        api.get('/api/channel/config/types').then((data) => {
-          this.configTypes = data;
-        }).catch((err) => {
-          this.disposeApiError(err);
-        })
-      },
-      channelConfigs() {
-        this.pageLoading = true;
-        api.get('/api/channel/configs/' + this.criteria.currentPage + '/' + this.criteria.pageSize, {
-          params: {
-            name: this.criteria.name,
-            type: this.criteria.type,
-            status: this.criteria.status
-          }
-        }).then((data) => {
-          this.page.currentPage = data.currentPage;
-          this.page.pageSize = data.pageSize;
-          this.page.totalCount = data.totalCount;
-          this.page.items = data.items;
-
-          this.pageLoading = false;
-        }).catch((err) => {
-          this.pageLoading = false;
-          this.disposeApiError(err);
-        });
-      },
       changePage(currentPage) {
         this.criteria.currentPage = currentPage;
         this.channelConfigs();
@@ -463,13 +460,13 @@
       disposeApiError(err) {
         switch (err.status) {
           case 400:
-            this.$Message.warning(err.data);
+            this.$Message.error(err.data);
             break;
           case 401:
             this.$Message.error('未认证！');
             break;
           case 403:
-            this.$Message.warning('您没有权限访问该资源！');
+            this.$Message.error('您没有权限访问该资源！');
             break;
           case 500:
             this.$Message.error('系统异常！');
