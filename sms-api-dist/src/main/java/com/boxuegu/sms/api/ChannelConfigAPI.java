@@ -63,7 +63,7 @@ public class ChannelConfigAPI {
     })
     @DeleteMapping("/config/{id}")
     public ResponseEntity<String> deleteConfig(@PathVariable("id") Integer id) {
-        if (null == id) return ResponseEntity.badRequest().body("缺少删除参数");
+        if (null == id) return ResponseEntity.badRequest().body("缺少指定删除参数");
         channelConfigService.deleteChannelConfig(id);
         return ResponseEntity.ok("OK");
     }
@@ -80,6 +80,7 @@ public class ChannelConfigAPI {
     @PutMapping("/config/{id}")
     public ResponseEntity<String> updateConfig(@PathVariable("id") Integer id,
                                                @ModelAttribute ChannelConfigDetailDTO channelConfigDetailDTO) {
+        if (null == id) return ResponseEntity.badRequest().body("缺少指定更新参数!");
         ResponseEntity<String> res = validateChannelConfigParams(channelConfigDetailDTO);
         if (res != null) return res;
 

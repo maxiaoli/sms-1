@@ -82,7 +82,7 @@ public class ChannelTemplateAPI {
     })
     @DeleteMapping("/template/{id}")
     public ResponseEntity<String> deleteTemplate(@PathVariable("id") Integer id) {
-        if (null == id) return ResponseEntity.badRequest().body("缺少删除参数");
+        if (null == id) return ResponseEntity.badRequest().body("缺少指定删除参数");
         channelTemplateService.deleteTemplate(id);
         return ResponseEntity.ok("OK");
     }
