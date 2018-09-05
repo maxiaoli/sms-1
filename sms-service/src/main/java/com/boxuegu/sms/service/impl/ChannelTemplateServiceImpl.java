@@ -1,7 +1,7 @@
-package com.boxuegu.sms.impl;
+package com.boxuegu.sms.service.impl;
 
-import com.boxuegu.sms.ChannelConfigService;
-import com.boxuegu.sms.ChannelTemplateService;
+import com.boxuegu.sms.service.ChannelConfigService;
+import com.boxuegu.sms.service.ChannelTemplateService;
 import com.boxuegu.sms.dao.ChannelTemplateDao;
 import com.boxuegu.sms.domain.ChannelTemplateDO;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;

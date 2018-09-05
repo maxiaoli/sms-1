@@ -1,7 +1,7 @@
 package com.boxuegu.sms.api;
 
-import com.boxuegu.sms.ChannelConfigService;
-import com.boxuegu.sms.ChannelTemplateService;
+import com.boxuegu.sms.service.ChannelConfigService;
+import com.boxuegu.sms.service.ChannelTemplateService;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
 import com.boxuegu.sms.utils.Page;

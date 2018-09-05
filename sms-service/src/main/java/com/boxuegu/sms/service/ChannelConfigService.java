@@ -1,4 +1,4 @@
-package com.boxuegu.sms;
+package com.boxuegu.sms.service;
 
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelConfigDetailDTO;
