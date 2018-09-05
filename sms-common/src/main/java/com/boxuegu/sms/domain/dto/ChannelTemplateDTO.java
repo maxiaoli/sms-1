@@ -165,14 +165,13 @@ public class ChannelTemplateDTO implements Serializable {
                 Objects.equals(content, that.content) &&
                 Objects.equals(params, that.params) &&
                 Objects.equals(status, that.status) &&
-                Objects.equals(createTime, that.createTime) &&
-                Objects.equals(updateTime, that.updateTime) &&
                 Objects.equals(deleteFlag, that.deleteFlag);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, channelConfig, name, code, content, params, status, createTime, updateTime, deleteFlag);
+
+        return Objects.hash(id, channelConfig, name, code, content, params, status, deleteFlag);
     }
 
     @Override

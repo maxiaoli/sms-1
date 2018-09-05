@@ -1,40 +1,37 @@
 package com.boxuegu.sms.domain.dto;
 
-import com.boxuegu.sms.domain.ChannelConfigDO;
-import com.boxuegu.sms.enumeration.ChannelConfigType;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
 /**
- * 渠道配置
+ * 渠道签名
  *
- * @author leonzhangxf 20180903
+ * @author leonzhangxf 20180905
  */
-@ApiModel("渠道配置")
-public class ChannelConfigDTO implements Serializable {
+@ApiModel("渠道签名")
+public class ChannelSignatureDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty("ID")
     private Integer id;
 
-    @ApiModelProperty(value = "名称", required = true)
-    private String name;
+    @ApiModelProperty(value = "渠道配置，在提交修改和保存时，只需要传递其ID即可", required = true)
+    private ChannelConfigDTO channelConfig;
+
+    @ApiModelProperty(value = "签名", required = true)
+    private String signature;
 
     @ApiModelProperty("描述")
     private String desc;
 
-    @ApiModelProperty(value = "渠道配置类型", required = true)
-    private ChannelConfigType type;
-
     @ApiModelProperty(value = "启禁用，0-禁用，1-启用", required = true)
-    private Integer status = 0;
+    private Integer status;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @ApiModelProperty(hidden = true)
@@ -55,12 +52,20 @@ public class ChannelConfigDTO implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public ChannelConfigDTO getChannelConfig() {
+        return channelConfig;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setChannelConfig(ChannelConfigDTO channelConfig) {
+        this.channelConfig = channelConfig;
+    }
+
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
     }
 
     public String getDesc() {
@@ -69,14 +74,6 @@ public class ChannelConfigDTO implements Serializable {
 
     public void setDesc(String desc) {
         this.desc = desc;
-    }
-
-    public ChannelConfigType getType() {
-        return type;
-    }
-
-    public void setType(ChannelConfigType type) {
-        this.type = type;
     }
 
     public Integer getStatus() {
@@ -111,33 +108,15 @@ public class ChannelConfigDTO implements Serializable {
         this.deleteFlag = deleteFlag;
     }
 
-    public static ChannelConfigDTO convertChannelConfigDO(ChannelConfigDO channelConfigDO) {
-        if (null == channelConfigDO) return null;
-        ChannelConfigDTO channelConfigDTO = new ChannelConfigDTO();
-        BeanUtils.copyProperties(channelConfigDO, channelConfigDTO);
-        channelConfigDTO.setType(ChannelConfigType.getConfigType(channelConfigDO.getType()));
-        return channelConfigDTO;
-    }
-
-    public static ChannelConfigDO convertToChannelConfigDO(ChannelConfigDTO channelConfigDTO) {
-        if (null == channelConfigDTO) return null;
-        ChannelConfigDO channelConfigDO = new ChannelConfigDO();
-        BeanUtils.copyProperties(channelConfigDTO, channelConfigDO);
-        channelConfigDO.setType(channelConfigDTO.getType().getType());
-        channelConfigDO.setCreateTime(null);
-        channelConfigDO.setUpdateTime(null);
-        return channelConfigDO;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ChannelConfigDTO that = (ChannelConfigDTO) o;
+        ChannelSignatureDTO that = (ChannelSignatureDTO) o;
         return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
+                Objects.equals(channelConfig, that.channelConfig) &&
+                Objects.equals(signature, that.signature) &&
                 Objects.equals(desc, that.desc) &&
-                type == that.type &&
                 Objects.equals(status, that.status) &&
                 Objects.equals(deleteFlag, that.deleteFlag);
     }
@@ -145,16 +124,16 @@ public class ChannelConfigDTO implements Serializable {
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, name, desc, type, status, deleteFlag);
+        return Objects.hash(id, channelConfig, signature, desc, status, deleteFlag);
     }
 
     @Override
     public String toString() {
-        return "ChannelConfigDTO{" +
+        return "ChannelSignatureDTO{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", channelConfig=" + channelConfig +
+                ", signature='" + signature + '\'' +
                 ", desc='" + desc + '\'' +
-                ", type=" + type +
                 ", status=" + status +
                 ", createTime=" + createTime +
                 ", updateTime=" + updateTime +
