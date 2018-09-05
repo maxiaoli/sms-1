@@ -1,5 +1,6 @@
 package com.boxuegu.sms.api;
 
+import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.service.ChannelConfigService;
 import com.boxuegu.sms.service.ChannelTemplateService;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
@@ -166,6 +167,8 @@ public class ChannelTemplateAPI {
             return ResponseEntity.badRequest().body("渠道模板Code不能为空！");
         if (!StringUtils.hasText(channelTemplateDTO.getContent()))
             return ResponseEntity.badRequest().body("渠道模板内容不能为空！");
+        if (!CommonStatus.inStatus(channelTemplateDTO.getStatus()))
+            return ResponseEntity.badRequest().body("渠道模板状态不能为空！");
         if (null == channelTemplateDTO.getChannelConfig() || null == channelTemplateDTO.getChannelConfig().getId())
             return ResponseEntity.badRequest().body("渠道模板所要关联的渠道配置不能为空！");
         return null;

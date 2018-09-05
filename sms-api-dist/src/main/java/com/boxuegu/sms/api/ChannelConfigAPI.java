@@ -1,5 +1,6 @@
 package com.boxuegu.sms.api;
 
+import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.service.ChannelConfigService;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelConfigDetailDTO;
@@ -45,7 +46,7 @@ public class ChannelConfigAPI {
     })
     @PostMapping("/config")
     public ResponseEntity<String> saveConfig(@ModelAttribute ChannelConfigDetailDTO channelConfigDetailDTO) {
-        ResponseEntity<String> res = validateChannelConfigParams(channelConfigDetailDTO);
+        ResponseEntity<String> res = validateChannelConfig(channelConfigDetailDTO);
         if (res != null) return res;
 
         channelConfigService.saveChannelConfig(channelConfigDetailDTO);
@@ -81,7 +82,7 @@ public class ChannelConfigAPI {
     public ResponseEntity<String> updateConfig(@PathVariable("id") Integer id,
                                                @ModelAttribute ChannelConfigDetailDTO channelConfigDetailDTO) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定更新参数!");
-        ResponseEntity<String> res = validateChannelConfigParams(channelConfigDetailDTO);
+        ResponseEntity<String> res = validateChannelConfig(channelConfigDetailDTO);
         if (res != null) return res;
 
         channelConfigDetailDTO.getConfig().setId(id);
@@ -156,7 +157,7 @@ public class ChannelConfigAPI {
      * @param channelConfigDetailDTO 渠道配置详情
      * @return API响应信息，如果校验通过则返回null
      */
-    private ResponseEntity<String> validateChannelConfigParams(ChannelConfigDetailDTO channelConfigDetailDTO) {
+    private ResponseEntity<String> validateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
         if (null == channelConfigDetailDTO) return ResponseEntity.badRequest().body("参数不能为空！");
 
         ChannelConfigDTO channelConfigDTO = channelConfigDetailDTO.getConfig();
@@ -164,8 +165,10 @@ public class ChannelConfigAPI {
 
         if (!StringUtils.hasText(channelConfigDTO.getName()))
             return ResponseEntity.badRequest().body("渠道配置名称参数不能为空！");
-        if (null == channelConfigDTO.getType())
-            return ResponseEntity.badRequest().body("渠道配置类型参数不能为空！");
+        if (!ChannelConfigType.contains(channelConfigDTO.getType()))
+            return ResponseEntity.badRequest().body("渠道配置类型参数不能为空或不支持的渠道配置类型！");
+        if (!CommonStatus.inStatus(channelConfigDTO.getStatus()))
+            return ResponseEntity.badRequest().body("渠道配置状态不能为空！");
 
         // 启用检查，对应渠道参数必须配置完全
         if (channelConfigDTO.getStatus().equals(1)) {
@@ -175,7 +178,7 @@ public class ChannelConfigAPI {
                     if (CollectionUtils.isEmpty(params))
                         return ResponseEntity.badRequest().body("启用前需要配置完全对应渠道所需要的参数！");
 
-                    //参数类型不完全匹配，或去重后参数个数不匹配都不算参数配置完全。
+                    //参数类型不完全匹配，或去重后参数个数不匹配都不算参数配置完全，或有参数的值仍然为空。
                     if (!params.stream().allMatch((channelConfigParams) -> ChannelConfigParam
                             .getChannelConfigParams(ChannelConfigType.ALIYUN).contains(channelConfigParams.getKey()))
                             ||

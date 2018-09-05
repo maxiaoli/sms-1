@@ -2,12 +2,14 @@ package com.boxuegu.sms.api;
 
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelSignatureDTO;
+import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.service.ChannelConfigService;
 import com.boxuegu.sms.service.ChannelSignatureService;
 import com.boxuegu.sms.utils.Page;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,6 +54,9 @@ public class ChannelSignatureAPI {
     })
     @PostMapping("/signature")
     public ResponseEntity<String> saveTemplate(@ModelAttribute ChannelSignatureDTO channelSignatureDTO) {
+        ResponseEntity<String> res = validateSignature(channelSignatureDTO);
+        if (res != null) return res;
+
 
         //在渠道配置删除后，会禁用渠道签名
         //这时，去新增渠道签名（不启用）而不修改关联的渠道配置，则不会允许其进行修改。
@@ -131,5 +136,17 @@ public class ChannelSignatureAPI {
     @GetMapping("/signature/configs")
     public ResponseEntity<List<ChannelConfigDTO>> channelConfigs() {
         return ResponseEntity.ok(channelConfigService.channelConfigs());
+    }
+
+
+    private ResponseEntity<String> validateSignature(ChannelSignatureDTO channelSignatureDTO) {
+        if (null == channelSignatureDTO) return ResponseEntity.badRequest().body("参数不能为空！");
+        if (!StringUtils.hasText(channelSignatureDTO.getSignature()))
+            return ResponseEntity.badRequest().body("渠道签名的签名不能为空！");
+        if (!CommonStatus.inStatus(channelSignatureDTO.getStatus()))
+            return ResponseEntity.badRequest().body("渠道签名状态不能为空！");
+        if (null == channelSignatureDTO.getChannelConfig() || null == channelSignatureDTO.getChannelConfig().getId())
+            return ResponseEntity.badRequest().body("渠道签名所要关联的渠道配置不能为空！");
+        return null;
     }
 }

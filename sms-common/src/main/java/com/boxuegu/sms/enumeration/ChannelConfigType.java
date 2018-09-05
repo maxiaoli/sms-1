@@ -37,4 +37,17 @@ public enum ChannelConfigType {
         }
         return null;
     }
+
+    public static boolean contains(ChannelConfigType param) {
+        if (null == param) return false;
+        ChannelConfigType[] values = ChannelConfigType.values();
+        if (values.length > 0) {
+            for (ChannelConfigType value : values) {
+                if (value.getType() == param.getType()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
