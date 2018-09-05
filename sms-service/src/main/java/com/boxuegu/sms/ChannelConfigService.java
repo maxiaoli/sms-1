@@ -5,6 +5,8 @@ import com.boxuegu.sms.domain.dto.ChannelConfigDetailDTO;
 import com.boxuegu.sms.enumeration.ChannelConfigType;
 import com.boxuegu.sms.utils.Page;
 
+import java.util.List;
+
 /**
  * 渠道配置Service
  *
@@ -20,6 +22,12 @@ public interface ChannelConfigService {
 
     Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType, Integer currentPage, Integer pageSize);
 
+    List<ChannelConfigDTO> channelConfigs();
+
+    List<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType);
+
     ChannelConfigDetailDTO channelConfigDetail(Integer id);
+
+    ChannelConfigDTO channelConfig(Integer id);
 
 }

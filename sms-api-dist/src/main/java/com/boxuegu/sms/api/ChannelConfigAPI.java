@@ -53,6 +53,11 @@ public class ChannelConfigAPI {
     }
 
 
+    /**
+     * TODO
+     * 删除需要同时禁用其下对应的所有的
+     * 渠道模板、渠道签名、服务短信模板
+     */
     @ApiOperation(value = "删除渠道配置", tags = {"渠道配置管理"})
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
@@ -64,6 +69,11 @@ public class ChannelConfigAPI {
     }
 
 
+    /**
+     * TODO
+     * 禁用需要同时禁用其下对应的所有的
+     * 渠道模板、渠道签名、服务短信模板
+     */
     @ApiOperation(value = "修改渠道配置", tags = {"渠道配置管理"})
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)

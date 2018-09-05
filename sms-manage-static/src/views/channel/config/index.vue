@@ -3,12 +3,18 @@
     <div>
 
         <div class="criteria-search">
-            <Input class="criteria-search-element" v-model="criteria.name" placeholder="名称" clearable
-                   style="width: 200px"/>
+            <span class="criteria-search-element">
+                <span>名称：</span>
+                <Input v-model="criteria.name" placeholder="名称" clearable
+                       style="width: 200px"/>
+            </span>
 
-            <Select class="criteria-search-element" v-model="criteria.type" clearable style="width:200px">
-                <Option v-for="item in configTypes" :value="item" :key="item">{{ item }}</Option>
-            </Select>
+            <span class="criteria-search-element">
+                <span>渠道配置类型：</span>
+                <Select v-model="criteria.type" clearable style="width:200px">
+                    <Option v-for="item in configTypes" :value="item" :key="item">{{ item }}</Option>
+                </Select>
+            </span>
 
             <Button class="criteria-search-element" type="primary" shape="circle" icon="ios-search"
                     @click="channelConfigs">搜索
@@ -87,7 +93,7 @@
 
                     <div class="modal-config-update-tabs">
 
-                        <Form ref="updateConfigForm" :model="configDetail.config" :label-width="120" :rules="formRules">
+                        <Form ref="updateConfigForm" :model="configDetail.config" :label-width="100" :rules="formRules">
                             <FormItem label="名称" prop="name">
                                 <Input v-model="configDetail.config.name" size="large" placeholder="渠道配置名称"
                                        :maxlength="45" style="width: 250px;"/>
@@ -111,6 +117,8 @@
                                     <span slot="open">启用</span>
                                     <span slot="close">禁用</span>
                                 </i-switch>
+                                <br/>
+                                <span style="color: red;">（禁用渠道配置将禁用其下的渠道模板、渠道签名以及短信服务模板！）</span>
                             </FormItem>
 
                             <FormItem label="渠道配置参数">
@@ -133,7 +141,10 @@
             <div class="modal-config-delete">
                 <Modal v-model="showConfigDeleteModal" title="删除渠道配置"
                        @on-ok="deleteConfig" @on-cancel="cleanModalData">
-                    <p>确定要删除名称为“{{configDetail.config.name}}”的渠道配置么？</p>
+                    <p style="text-align: center;">
+                        确定要删除名称为“{{configDetail.config.name}}”的渠道配置么？<br/>
+                        <span style="color: red;">（删除渠道配置将禁用其下的渠道模板、渠道签名以及短信服务模板！）</span>
+                    </p>
                 </Modal>
             </div>
         </div>
@@ -467,7 +478,7 @@
         margin-bottom: 15px;
 
         &-element {
-            margin-left: 5px;
+            margin-left: 10px;
         }
     }
 

@@ -1,8 +1,10 @@
 package com.boxuegu.sms.domain.dto;
 
+import com.boxuegu.sms.domain.ChannelTemplateDO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -117,6 +119,14 @@ public class ChannelTemplateDTO implements Serializable {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public static ChannelTemplateDTO convertChannelTemplateDO(ChannelTemplateDO channelTemplateDO, ChannelConfigDTO channelConfig) {
+        if (null == channelTemplateDO || null == channelConfig) return null;
+        ChannelTemplateDTO channelTemplateDTO = new ChannelTemplateDTO();
+        BeanUtils.copyProperties(channelTemplateDO, channelTemplateDTO);
+        channelTemplateDTO.setChannelConfig(channelConfig);
+        return channelTemplateDTO;
     }
 
     @Override

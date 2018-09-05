@@ -1,17 +1,15 @@
 package com.boxuegu.sms.api;
 
+import com.boxuegu.sms.ChannelConfigService;
 import com.boxuegu.sms.ChannelTemplateService;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
-import com.boxuegu.sms.domain.dto.ChannelConfigDetailDTO;
 import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
-import com.boxuegu.sms.enumeration.ChannelConfigType;
 import com.boxuegu.sms.utils.Page;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,9 +29,16 @@ public class ChannelTemplateAPI {
 
     private ChannelTemplateService channelTemplateService;
 
+    private ChannelConfigService channelConfigService;
+
     @Autowired
     public void setChannelTemplateService(ChannelTemplateService channelTemplateService) {
         this.channelTemplateService = channelTemplateService;
+    }
+
+    @Autowired
+    public void setChannelConfigService(ChannelConfigService channelConfigService) {
+        this.channelConfigService = channelConfigService;
     }
 
     //TODO
@@ -42,7 +47,8 @@ public class ChannelTemplateAPI {
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
     @PostMapping("/template")
-    public ResponseEntity<String> saveConfig(@ModelAttribute ChannelTemplateDTO channelTemplateDTO) {
+    public ResponseEntity<String> saveTemplate(@ModelAttribute ChannelTemplateDTO channelTemplateDTO) {
+
         return ResponseEntity.ok("OK");
     }
 
@@ -53,7 +59,7 @@ public class ChannelTemplateAPI {
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
     @DeleteMapping("/template/{id}")
-    public ResponseEntity<String> deleteConfig(@PathVariable("id") Integer id) {
+    public ResponseEntity<String> deleteTemplate(@PathVariable("id") Integer id) {
         return ResponseEntity.ok("OK");
     }
 
@@ -64,13 +70,12 @@ public class ChannelTemplateAPI {
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
     @PutMapping("/template/{id}")
-    public ResponseEntity<String> updateConfig(@PathVariable("id") Integer id,
+    public ResponseEntity<String> updateTemplate(@PathVariable("id") Integer id,
                                                @ModelAttribute ChannelTemplateDTO channelTemplateDTO) {
         return ResponseEntity.ok("OK");
     }
 
 
-    //TODO
     @ApiOperation(value = "渠道模板分页列表", tags = {"渠道模板管理"})
     @ApiImplicitParams({
             @ApiImplicitParam(name = "configId", value = "渠道配置ID", dataTypeClass = Integer.class, paramType = "query"),
@@ -81,7 +86,7 @@ public class ChannelTemplateAPI {
             @ApiImplicitParam(name = "pageSize", value = "每页数", dataTypeClass = Integer.class, paramType = "path", required = true),
     })
     @GetMapping("/templates/{currentPage}/{pageSize}")
-    public ResponseEntity<Page<ChannelTemplateDTO>> configs(
+    public ResponseEntity<Page<ChannelTemplateDTO>> templates(
             @RequestParam(value = "configId", required = false) Integer channelConfigId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String code,
@@ -96,13 +101,12 @@ public class ChannelTemplateAPI {
     }
 
 
-    //TODO
     @ApiOperation(value = "渠道配置列表", tags = {"渠道模板管理"})
     @ApiResponses({
-            @ApiResponse(code = 200, message = "OK", response = ChannelConfigType.class, responseContainer = "List")
+            @ApiResponse(code = 200, message = "OK", response = ChannelConfigDTO.class, responseContainer = "List")
     })
     @GetMapping("/template/configs")
     public ResponseEntity<List<ChannelConfigDTO>> channelConfigs() {
-        return ResponseEntity.ok(null);
+        return ResponseEntity.ok(channelConfigService.channelConfigs());
     }
 }

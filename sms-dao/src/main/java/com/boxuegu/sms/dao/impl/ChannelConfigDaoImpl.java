@@ -46,6 +46,21 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     }
 
     @Override
+    public List<ChannelConfigDO> channelConfigs(String name, Integer type) {
+        ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
+        ChannelConfigDOCriteria.Criteria criteria = criterion.createCriteria().andDeleteFlagEqualTo(0);
+        if (StringUtils.hasText(name)) {
+            criteria.andNameLike("%" + name + "%");
+        }
+        if (null != type) {
+            criteria.andTypeEqualTo(type);
+        }
+        criterion.setOrderByClause("create_time desc");
+
+        return channelConfigMapper.selectByExample(criterion);
+    }
+
+    @Override
     public ChannelConfigDO channelConfig(Integer id) {
         if (null == id) return null;
         ChannelConfigDO channelConfigDO = channelConfigMapper.selectByPrimaryKey(id);

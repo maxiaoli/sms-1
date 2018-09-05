@@ -44,15 +44,21 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         this.channelConfigParamsService = channelConfigParamsService;
     }
 
+
     @Override
     @Transactional
     public void deleteChannelConfig(Integer id) {
         if (null == id) return;
+
+        //1.删除渠道配置
         ChannelConfigDO channelConfigDO = channelConfigDao.channelConfig(id);
         if (null == channelConfigDO) return;
         channelConfigDao.deleteChannelConfig(channelConfigDO.getId());
 
+        //2.删除渠道配置参数
         channelConfigParamsService.deleteChannelConfigParams(channelConfigDO.getId());
+
+        //3.禁用需要同时禁用其下对应的所有的渠道模板、渠道签名、服务短信模板 TODO
     }
 
     @Override
@@ -75,6 +81,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
                 ChannelConfigParamsDTO.convertToChannelConfigParamsDOBatch(params, channelConfigDO.getId());
         channelConfigParamsService.saveChannelConfigParamsBatch(channelConfigParamsDOList);
     }
+
 
     @Override
     public void updateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
@@ -146,6 +153,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
             }
         }
 
+        //3.禁用需要同时禁用其下对应的所有的渠道模板、渠道签名、服务短信模板 TODO
     }
 
     @Override
@@ -173,20 +181,49 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
     }
 
     @Override
+    public List<ChannelConfigDTO> channelConfigs() {
+        return channelConfigs(null, null);
+    }
+
+    @Override
+    public List<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType) {
+        Integer type = null;
+        if (null != channelConfigType) {
+            type = channelConfigType.getType();
+        }
+
+        List<ChannelConfigDO> channelConfigDOList = channelConfigDao.channelConfigs(name, type);
+        List<ChannelConfigDTO> list = new ArrayList<>();
+        if (CollectionUtils.isEmpty(channelConfigDOList)) return list;
+
+        for (ChannelConfigDO channelConfigDO : channelConfigDOList) {
+            ChannelConfigDTO channelConfigDTO = ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
+            list.add(channelConfigDTO);
+        }
+        return list;
+    }
+
+    @Override
     @Transactional
     public ChannelConfigDetailDTO channelConfigDetail(Integer id) {
         if (null == id) return null;
 
         ChannelConfigDetailDTO channelConfigDetailDTO = new ChannelConfigDetailDTO();
 
-        ChannelConfigDO channelConfigDO = channelConfigDao.channelConfig(id);
-        if (null == channelConfigDO) return null;
-        ChannelConfigDTO channelConfigDTO = ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
+        ChannelConfigDTO channelConfigDTO = channelConfig(id);
+        if (null == channelConfigDTO) return null;
         channelConfigDetailDTO.setConfig(channelConfigDTO);
 
         List<ChannelConfigParamsDTO> channelConfigParamsDTOList = channelConfigParamsService.channelConfigParams(id);
         channelConfigDetailDTO.setParams(channelConfigParamsDTOList);
         return channelConfigDetailDTO;
+    }
+
+    @Override
+    public ChannelConfigDTO channelConfig(Integer id) {
+        ChannelConfigDO channelConfigDO = channelConfigDao.channelConfig(id);
+        if (null == channelConfigDO) return null;
+        return ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
     }
 
     private boolean compareValuableValue(ChannelConfigDO existChannelConfigDO, ChannelConfigDO channelConfigDO) {
