@@ -176,9 +176,10 @@
         showConfigDeleteModal: false,
         pageLoading: false,
         column: [
-          {title: '序号', type: 'index'},
+          {title: '序号', type: 'index', width: 70},
           {title: '名称', key: 'name'},
           {title: '类型', key: 'type'},
+          {title: '描述', key: 'desc', tooltip: true},
           {
             title: '状态', key: 'status',
             render: (h, params) => {
