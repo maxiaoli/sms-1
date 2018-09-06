@@ -74,8 +74,8 @@ const routeMap = [
     ]
   },
   {
-    path: '/api',
-    name: 'api',
+    path: '/service',
+    name: 'service',
     component: load('layout/index'),
     meta: {
       requiresAuth: true,
@@ -87,7 +87,7 @@ const routeMap = [
       {
         path: 'log',
         name: 'service-log',
-        component: load('api/log/index'),
+        component: load('service/log/index'),
         meta: {
           requiresAuth: true,
           sideShow: true,
@@ -99,7 +99,7 @@ const routeMap = [
       {
         path: 'client',
         name: 'service-client',
-        component: load('api/client/index'),
+        component: load('service/client/index'),
         meta: {
           requiresAuth: true,
           sideShow: true,
@@ -111,7 +111,7 @@ const routeMap = [
       {
         path: 'template',
         name: 'service-template',
-        component: load('api/template/index'),
+        component: load('service/template/index'),
         meta: {
           requiresAuth: true,
           sideShow: true,
