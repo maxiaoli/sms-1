@@ -170,6 +170,11 @@ public class ChannelConfigAPI {
         if (!CommonStatus.inStatus(channelConfigDTO.getStatus()))
             return ResponseEntity.badRequest().body("渠道配置状态不能为空！");
 
+        //渠道配置名称全局唯一
+        ChannelConfigDTO existChannelConfigDTO = channelConfigService.channelConfigWithinDeletedByName(channelConfigDTO.getName());
+        if (null != existChannelConfigDTO)
+            return ResponseEntity.badRequest().body("渠道配置名称已经存在！");
+
         // 启用检查，对应渠道参数必须配置完全
         if (channelConfigDTO.getStatus().equals(1)) {
             switch (channelConfigDTO.getType()) {

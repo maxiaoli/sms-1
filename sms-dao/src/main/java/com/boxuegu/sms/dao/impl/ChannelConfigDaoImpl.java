@@ -10,6 +10,7 @@ import com.boxuegu.sms.utils.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
@@ -27,6 +28,40 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     @Autowired
     public void setChannelConfigMapper(ChannelConfigMapper channelConfigMapper) {
         this.channelConfigMapper = channelConfigMapper;
+    }
+
+
+    @Override
+    public ChannelConfigDO saveChannelConfig(ChannelConfigDO channelConfigDO) {
+        if (null == channelConfigDO
+                || !StringUtils.hasText(channelConfigDO.getName())
+                || null == channelConfigDO.getType())
+            return null;
+
+        if (!CommonStatus.inStatus(channelConfigDO.getStatus()))
+            channelConfigDO.setStatus(CommonStatus.DISABLE.getStatus());
+
+        int result = channelConfigMapper.insertSelective(channelConfigDO);
+        if (result <= 0) return null;
+        return channelConfigDO;
+    }
+
+
+    @Override
+    public void deleteChannelConfig(Integer id) {
+        if (null == id) return;
+        ChannelConfigDO channelConfigDO = new ChannelConfigDO();
+        channelConfigDO.setId(id);
+        channelConfigDO.setStatus(CommonStatus.DISABLE.getStatus());//禁用
+        channelConfigDO.setDeleteFlag(DeleteFlag.DELETED.getDeleteFlag());//删除
+        channelConfigMapper.updateByPrimaryKeySelective(channelConfigDO);
+    }
+
+
+    @Override
+    public void updateChannelConfig(ChannelConfigDO channelConfigDO) {
+        if (null == channelConfigDO) return;
+        channelConfigMapper.updateByPrimaryKeySelective(channelConfigDO);
     }
 
     @Override
@@ -52,6 +87,7 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
         return new Page<>(channelConfigDOList, Long.valueOf(page.getTotal()).intValue(), pageSize, currentPage);
     }
 
+
     @Override
     public List<ChannelConfigDO> channelConfigs(String name, Integer type) {
         ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
@@ -68,12 +104,14 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
         return channelConfigMapper.selectByExample(criterion);
     }
 
+
     @Override
     public ChannelConfigDO channelConfig(Integer id) {
         if (null == id) return null;
         ChannelConfigDO channelConfigDO = channelConfigMapper.selectByPrimaryKey(id);
         return null == channelConfigDO || channelConfigDO.getDeleteFlag().equals(1) ? null : channelConfigDO;
     }
+
 
     @Override
     public ChannelConfigDO channelConfigWithinDeleted(Integer id) {
@@ -82,33 +120,14 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     }
 
     @Override
-    public void deleteChannelConfig(Integer id) {
-        if (null == id) return;
-        ChannelConfigDO channelConfigDO = new ChannelConfigDO();
-        channelConfigDO.setId(id);
-        channelConfigDO.setStatus(CommonStatus.DISABLE.getStatus());//禁用
-        channelConfigDO.setDeleteFlag(DeleteFlag.DELETED.getDeleteFlag());//删除
-        channelConfigMapper.updateByPrimaryKeySelective(channelConfigDO);
-    }
+    public ChannelConfigDO channelConfigWithinDeletedByName(String name) {
+        if (!StringUtils.hasText(name)) return null;
 
-    @Override
-    public ChannelConfigDO saveChannelConfig(ChannelConfigDO channelConfigDO) {
-        if (null == channelConfigDO
-                || !StringUtils.hasText(channelConfigDO.getName())
-                || null == channelConfigDO.getType())
-            return null;
+        ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
+        criterion.createCriteria().andNameEqualTo(name);
 
-        if (!CommonStatus.inStatus(channelConfigDO.getStatus()))
-            channelConfigDO.setStatus(CommonStatus.DISABLE.getStatus());
-
-        int result = channelConfigMapper.insertSelective(channelConfigDO);
-        if (result <= 0) return null;
-        return channelConfigDO;
-    }
-
-    @Override
-    public void updateChannelConfig(ChannelConfigDO channelConfigDO) {
-        if (null == channelConfigDO) return;
-        channelConfigMapper.updateByPrimaryKeySelective(channelConfigDO);
+        List<ChannelConfigDO> channelConfigDOList = channelConfigMapper.selectByExample(criterion);
+        if (CollectionUtils.isEmpty(channelConfigDOList)) return null;
+        return channelConfigDOList.get(0);
     }
 }

@@ -271,6 +271,15 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         return ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
     }
 
+    @Override
+    public ChannelConfigDTO channelConfigWithinDeletedByName(String name) {
+        if (!StringUtils.hasText(name)) return null;
+
+        ChannelConfigDO channelConfigDO = channelConfigDao.channelConfigWithinDeletedByName(name);
+        if (null == channelConfigDO) return null;
+        return ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
+    }
+
 
     private boolean compareValuableValue(ChannelConfigDO existChannelConfigDO, ChannelConfigDO channelConfigDO) {
         if (existChannelConfigDO == channelConfigDO) return true;

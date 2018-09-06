@@ -13,18 +13,27 @@ import java.util.List;
  */
 public interface ChannelConfigDao {
 
-    Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status, Integer currentPage, Integer pageSize);
-
-    List<ChannelConfigDO> channelConfigs(String name, Integer type);
-
-    ChannelConfigDO channelConfig(Integer id);
-
-    ChannelConfigDO channelConfigWithinDeleted(Integer id);
-
-    void deleteChannelConfig(Integer id);
 
     ChannelConfigDO saveChannelConfig(ChannelConfigDO channelConfigDO);
 
+
+    void deleteChannelConfig(Integer id);
+
+
     void updateChannelConfig(ChannelConfigDO channelConfigDO);
 
+
+    Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status, Integer currentPage, Integer pageSize);
+
+
+    List<ChannelConfigDO> channelConfigs(String name, Integer type);
+
+
+    ChannelConfigDO channelConfig(Integer id);
+
+
+    ChannelConfigDO channelConfigWithinDeleted(Integer id);
+
+
+    ChannelConfigDO channelConfigWithinDeletedByName(String name);
 }

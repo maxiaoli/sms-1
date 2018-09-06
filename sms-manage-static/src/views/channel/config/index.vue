@@ -53,6 +53,8 @@
                             <FormItem label="名称" prop="name">
                                 <Input v-model="configDetail.config.name" size="large" placeholder="渠道配置名称"
                                        :maxlength="45" style="width: 250px;"/>
+                                <br/>
+                                <span>（渠道配置名称全局唯一！）</span>
                             </FormItem>
 
                             <FormItem label="描述" prop="desc">
@@ -105,6 +107,8 @@
                             <FormItem label="名称" prop="name">
                                 <Input v-model="configDetail.config.name" size="large" placeholder="渠道配置名称"
                                        :maxlength="45" style="width: 250px;"/>
+                                <br/>
+                                <span>（渠道配置名称全局唯一！）</span>
                             </FormItem>
 
                             <FormItem label="描述" prop="desc">
