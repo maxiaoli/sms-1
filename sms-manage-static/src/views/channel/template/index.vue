@@ -89,7 +89,7 @@
                             <span>多变量按顺序用英文逗号分隔,如"name,vcode"。无变量不用填写。</span>
                         </FormItem>
 
-                        <FormItem label="渠道配置状态" prop="status">
+                        <FormItem label="渠道模板状态" prop="status">
                             <i-switch v-model="channelTemplate.status" size="large"
                                       :true-value="1" :false-value="0">
                                 <span slot="open">启用</span>
@@ -140,7 +140,7 @@
                             <span>多变量按顺序用英文逗号分隔,如"name,vcode"。无变量不用填写。</span>
                         </FormItem>
 
-                        <FormItem label="渠道配置状态" prop="status">
+                        <FormItem label="渠道模板状态" prop="status">
                             <i-switch v-model="channelTemplate.status" size="large"
                                       :true-value="1" :false-value="0">
                                 <span slot="open">启用</span>
@@ -226,6 +226,12 @@
           },
           {title: '序号', type: 'index', width: 70},
           {title: '名称', key: 'name'},
+          {
+            title: '渠道配置', key: 'channelConfig',
+            render: (h, params) => {
+              return h('span', params.row.channelConfig.name);
+            }
+          },
           {title: '模板Code', key: 'code'},
           {title: '模板内容', key: 'content', tooltip: true},
           {title: '模板参数', key: 'params'},
@@ -340,7 +346,7 @@
       },
       deleteTemplate() {
         api.delete('/api/channel/template/' + this.channelTemplate.id).then(() => {
-          this.$Message.success('删除渠道模板成功');
+          this.$Message.success('删除渠道模板成功！');
           this.cleanModalData();
           this.showTemplateDeleteModal = false;
           this.channelTemplates();

@@ -21,7 +21,7 @@
 
 <script>
   export default {
-    name: 'channel-template-template-expand-row',
+    name: 'channel-template-expand-row',
     props: {
       row: Object
     }
