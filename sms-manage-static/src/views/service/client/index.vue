@@ -99,15 +99,14 @@
 
                         <FormItem label="密钥" prop="key">
                             <Input v-model="client.key" size="large" placeholder="密钥"
-                                   :maxlength="60" style="width: 300px;"/>
+                                   :maxlength="60" style="width: 320px;"/>
+                            <Button type="info" @click="generateKey" style="margin-top: 10px;">生成密钥</Button>
                         </FormItem>
-
 
                         <FormItem label="描述" prop="content">
                             <Input v-model="client.desc" type="textarea" placeholder="描述"
                                    :maxlength="250" :rows="3" style="width: 250px;"/>
                         </FormItem>
-
 
                         <FormItem label="接入方状态" prop="status">
                             <i-switch v-model="client.status" size="large"
