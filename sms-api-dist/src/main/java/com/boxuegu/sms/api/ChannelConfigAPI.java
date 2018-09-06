@@ -95,7 +95,7 @@ public class ChannelConfigAPI {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "名称", dataTypeClass = String.class, paramType = "query"),
             @ApiImplicitParam(name = "type", value = "渠道账号配置类型", dataTypeClass = ChannelConfigType.class, paramType = "query"),
-            @ApiImplicitParam(name = "status", value = "启禁用，0-禁用，1-启用", dataTypeClass = Integer.class, paramType = "query"),
+            @ApiImplicitParam(name = "status", value = "启禁用，0-禁用，1-启用", dataTypeClass = Integer.class, paramType = "query", allowableValues = "0,1"),
             @ApiImplicitParam(name = "currentPage", value = "当前页", dataTypeClass = Integer.class, paramType = "path", required = true),
             @ApiImplicitParam(name = "pageSize", value = "每页数", dataTypeClass = Integer.class, paramType = "path", required = true),
     })
