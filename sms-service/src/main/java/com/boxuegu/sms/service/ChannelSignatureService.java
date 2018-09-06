@@ -28,4 +28,7 @@ public interface ChannelSignatureService {
 
 
     List<ChannelSignatureDTO> signatures();
+
+
+    ChannelSignatureDTO signature(Integer id);
 }

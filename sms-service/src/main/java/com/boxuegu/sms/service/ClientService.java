@@ -1,5 +1,6 @@
 package com.boxuegu.sms.service;
 
+import com.boxuegu.sms.domain.ClientDO;
 import com.boxuegu.sms.domain.dto.ClientDTO;
 import com.boxuegu.sms.utils.Page;
 
@@ -30,4 +31,5 @@ public interface ClientService {
 
     List<ClientDTO> clientsWithinDeletedByCode(String code);
 
+    ClientDTO client(Integer id);
 }

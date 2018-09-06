@@ -122,6 +122,7 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
 
 
     @Override
+    @Transactional
     public Page<ChannelTemplateDTO> templates(Integer channelConfigId, String name, String code, Integer status,
                                               Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
@@ -146,6 +147,7 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
     }
 
     @Override
+    @Transactional
     public List<ChannelTemplateDTO> templates() {
         List<ChannelTemplateDO> channelTemplateDOList = channelTemplateDao.templates();
         if (CollectionUtils.isEmpty(channelTemplateDOList)) return null;
@@ -157,5 +159,15 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
             list.add(channelTemplateDTO);
         }
         return list;
+    }
+
+    @Override
+    @Transactional
+    public ChannelTemplateDTO template(Integer id) {
+        if (null == id) return null;
+        ChannelTemplateDO channelTemplateDO = channelTemplateDao.template(id);
+        if (null == channelTemplateDO) return null;
+        ChannelConfigDTO channelConfigDTO = channelConfigService.config(channelTemplateDO.getChnlConfigId());
+        return ChannelTemplateDTO.convertChannelTemplateDO(channelTemplateDO, channelConfigDTO);
     }
 }

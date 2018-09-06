@@ -121,6 +121,13 @@ public class ChannelSignatureDaoImpl implements ChannelSignatureDao {
     }
 
     @Override
+    public List<ChannelSignatureDO> signatures() {
+        ChannelSignatureDOCriteria criteria = new ChannelSignatureDOCriteria();
+        criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());
+        return channelSignatureMapper.selectByExample(criteria);
+    }
+
+    @Override
     public ChannelSignatureDO signature(Integer id) {
         if (null == id) return null;
 

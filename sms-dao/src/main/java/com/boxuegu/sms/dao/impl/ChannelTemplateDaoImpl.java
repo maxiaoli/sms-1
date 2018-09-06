@@ -124,10 +124,11 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
         return channelTemplateMapper.selectByExample(criteria);
     }
 
-    //TODO
     @Override
     public List<ChannelTemplateDO> templates() {
-        return null;
+        ChannelTemplateDOCriteria criteria = new ChannelTemplateDOCriteria();
+        criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());
+        return channelTemplateMapper.selectByExample(criteria);
     }
 
     @Override

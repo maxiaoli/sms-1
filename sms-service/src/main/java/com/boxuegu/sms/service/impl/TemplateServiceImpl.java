@@ -2,6 +2,9 @@ package com.boxuegu.sms.service.impl;
 
 import com.boxuegu.sms.dao.TemplateDao;
 import com.boxuegu.sms.domain.TemplateDO;
+import com.boxuegu.sms.domain.dto.ChannelSignatureDTO;
+import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
+import com.boxuegu.sms.domain.dto.ClientDTO;
 import com.boxuegu.sms.domain.dto.TemplateDTO;
 import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.service.ChannelSignatureService;
@@ -81,7 +84,6 @@ public class TemplateServiceImpl implements TemplateService {
         templateDao.updateTemplateStatusByChannelTemplateIdList(channelTemplateIdList, targetStatus);
     }
 
-    //TODO
     @Override
     public List<TemplateDTO> templatesWithinDeletedByTemplateId(String templateId) {
         if (!StringUtils.hasText(templateId)) return null;
@@ -91,8 +93,10 @@ public class TemplateServiceImpl implements TemplateService {
 
         List<TemplateDTO> list = new ArrayList<>();
         for (TemplateDO templateDO : templateDOList) {
-
-            TemplateDTO templateDTO = TemplateDTO.convertTemplateDO(templateDO, null, null, null);
+            ClientDTO clientDTO = clientService.client(templateDO.getClientId());
+            ChannelSignatureDTO channelSignatureDTO = channelSignatureService.signature(templateDO.getChnlSignatureId());
+            ChannelTemplateDTO channelTemplateDTO = channelTemplateService.template(templateDO.getChnlTemplateId());
+            TemplateDTO templateDTO = TemplateDTO.convertTemplateDO(templateDO, clientDTO, channelSignatureDTO, channelTemplateDTO);
             if (null != templateDTO) list.add(templateDTO);
         }
         return list;

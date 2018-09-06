@@ -121,6 +121,7 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
 
 
     @Override
+    @Transactional
     public Page<ChannelSignatureDTO> signatures(Integer channelConfigId, String signature, Integer status,
                                                 Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
@@ -145,6 +146,7 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
     }
 
     @Override
+    @Transactional
     public List<ChannelSignatureDTO> signatures() {
         List<ChannelSignatureDO> channelSignatureDOList = channelSignatureDao.signatures();
         if (CollectionUtils.isEmpty(channelSignatureDOList)) return null;
@@ -156,5 +158,15 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
             list.add(channelSignatureDTO);
         }
         return list;
+    }
+
+    @Override
+    @Transactional
+    public ChannelSignatureDTO signature(Integer id) {
+        if (null == id) return null;
+        ChannelSignatureDO channelSignatureDO = channelSignatureDao.signature(id);
+        if (null == channelSignatureDO) return null;
+        ChannelConfigDTO channelConfigDTO = channelConfigService.config(channelSignatureDO.getChnlConfigId());
+        return ChannelSignatureDTO.convertChannelSignatureDO(channelSignatureDO, channelConfigDTO);
     }
 }

@@ -27,5 +27,9 @@ public interface ChannelTemplateService {
     Page<ChannelTemplateDTO> templates(Integer channelConfigId, String name, String code, Integer status,
                                        Integer currentPage, Integer pageSize);
 
+
     List<ChannelTemplateDTO> templates();
+
+
+    ChannelTemplateDTO template(Integer id);
 }

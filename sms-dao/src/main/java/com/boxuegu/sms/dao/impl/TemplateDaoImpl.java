@@ -9,6 +9,7 @@ import com.boxuegu.sms.enumeration.DeleteFlag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -79,9 +80,12 @@ public class TemplateDaoImpl implements TemplateDao {
         templateMapper.updateByExampleSelective(templateDO, criteria);
     }
 
-    //TODO
     @Override
     public List<TemplateDO> templatesWithinDeletedByTemplateId(String templateId) {
-        return null;
+        if (!StringUtils.hasText(templateId)) return null;
+
+        TemplateDOCriteria criteria = new TemplateDOCriteria();
+        criteria.createCriteria().andTemplateIdEqualTo(templateId);
+        return templateMapper.selectByExample(criteria);
     }
 }

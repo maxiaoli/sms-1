@@ -124,4 +124,12 @@ public class ClientServiceImpl implements ClientService {
         }
         return list;
     }
+
+    @Override
+    public ClientDTO client(Integer id) {
+        if (null == id) return null;
+        ClientDO clientDO = clientDao.client(id);
+        if (null == clientDO) return null;
+        return ClientDTO.convertClientDO(clientDO);
+    }
 }
