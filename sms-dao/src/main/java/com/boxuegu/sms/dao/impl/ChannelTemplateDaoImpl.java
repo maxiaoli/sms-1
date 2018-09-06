@@ -38,7 +38,7 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
                 || !StringUtils.hasText(channelTemplateDO.getContent()))
             return null;
 
-        if (null == channelTemplateDO.getStatus() || !CommonStatus.inStatus(channelTemplateDO.getStatus()))
+        if (!CommonStatus.inStatus(channelTemplateDO.getStatus()))
             channelTemplateDO.setStatus(CommonStatus.DISABLE.getStatus());
 
         int result = channelTemplateMapper.insertSelective(channelTemplateDO);
@@ -66,7 +66,7 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
                 || !StringUtils.hasText(channelTemplateDO.getContent()))
             return;
 
-        if (null == channelTemplateDO.getStatus() || !CommonStatus.inStatus(channelTemplateDO.getStatus()))
+        if (!CommonStatus.inStatus(channelTemplateDO.getStatus()))
             channelTemplateDO.setStatus(CommonStatus.DISABLE.getStatus());
 
         channelTemplateMapper.updateByPrimaryKeySelective(channelTemplateDO);
@@ -94,7 +94,8 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
 
         ChannelTemplateDOCriteria criterion = new ChannelTemplateDOCriteria();
 
-        ChannelTemplateDOCriteria.Criteria criteria = criterion.createCriteria().andDeleteFlagEqualTo(0);
+        ChannelTemplateDOCriteria.Criteria criteria = criterion.createCriteria()
+                .andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());
 
         if (null != channelConfigId) criteria.andChnlConfigIdEqualTo(channelConfigId);
         if (StringUtils.hasText(name)) criteria.andNameLike("%" + name + "%");

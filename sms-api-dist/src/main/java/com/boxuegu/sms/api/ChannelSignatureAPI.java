@@ -45,10 +45,9 @@ public class ChannelSignatureAPI {
 
 
     /**
-     * TODO
      * 启用渠道签名，需要其所属的渠道配置已经启用
      */
-    @ApiOperation(value = "保存渠道签名", tags = {"渠道签名管理"})
+    @ApiOperation(value = "保存渠道签名", tags = {"渠道签名管理"}, notes = "渠道配置只需要上传其ID即可。")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
@@ -56,7 +55,6 @@ public class ChannelSignatureAPI {
     public ResponseEntity<String> saveSignature(@ModelAttribute ChannelSignatureDTO channelSignatureDTO) {
         ResponseEntity<String> res = validateSignature(channelSignatureDTO);
         if (res != null) return res;
-
 
         //在渠道配置删除后，会禁用渠道签名
         //这时，去新增渠道签名（不启用）而不修改关联的渠道配置，则不会允许其进行修改。
@@ -66,10 +64,12 @@ public class ChannelSignatureAPI {
 
         //在渠道配置禁用后，会禁用渠道签名
         //这时，去启用渠道签名，不会允许其启用，需要先启用对应的渠道配置
-        if (null == channelConfigDTO.getStatus()) channelConfigDTO.setStatus(0);
-        if (channelSignatureDTO.getStatus().equals(1) && channelConfigDTO.getStatus().equals(0))
+        if (null == channelConfigDTO.getStatus()) channelConfigDTO.setStatus(CommonStatus.DISABLE.getStatus());
+        if (channelSignatureDTO.getStatus().equals(CommonStatus.ENABLE.getStatus())
+                && channelConfigDTO.getStatus().equals(CommonStatus.DISABLE.getStatus()))
             return ResponseEntity.badRequest().body("启用渠道签名需要先启用对应的渠道配置！");
 
+        channelSignatureService.saveSignature(channelSignatureDTO);
         return ResponseEntity.ok("OK");
     }
 
@@ -85,6 +85,7 @@ public class ChannelSignatureAPI {
     @DeleteMapping("/signature/{id}")
     public ResponseEntity<String> deleteSignature(@PathVariable("id") Integer id) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定删除参数");
+        channelSignatureService.deleteSignature(id);
         return ResponseEntity.ok("OK");
     }
 
@@ -94,19 +95,34 @@ public class ChannelSignatureAPI {
      * 启用渠道签名，需要其所属的渠道配置已经启用
      * 禁用渠道签名，需要禁用和其关联的短信服务模板
      */
-    @ApiOperation(value = "修改渠道签名", tags = {"渠道签名管理"})
+    @ApiOperation(value = "修改渠道签名", tags = {"渠道签名管理"}, notes = "渠道配置只需要上传其ID即可。")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
     @PutMapping("/signature/{id}")
     public ResponseEntity<String> updateSignature(@PathVariable("id") Integer id,
-                                                 @ModelAttribute ChannelSignatureDTO channelSignatureDTO) {
+                                                  @ModelAttribute ChannelSignatureDTO channelSignatureDTO) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定更新参数");
 
+        channelSignatureDTO.setId(id);
+
+        //在渠道配置删除后，会禁用渠道签名
+        //这时，去修改渠道签名（不启用）而不修改关联的渠道配置，则不会允许其进行修改。
+        ChannelConfigDTO channelConfigDTO = channelConfigService.channelConfig(channelSignatureDTO.getChannelConfig().getId());
+        if (null == channelConfigDTO)
+            return ResponseEntity.badRequest().body("所关联的渠道配置不存在或已被删除！");
+
+        //在渠道配置禁用后，会禁用渠道签名
+        //这时，去启用渠道签名，不会允许其启用，需要先启用对应的渠道配置
+        if (null == channelConfigDTO.getStatus()) channelConfigDTO.setStatus(CommonStatus.DISABLE.getStatus());
+        if (channelSignatureDTO.getStatus().equals(CommonStatus.ENABLE.getStatus())
+                && channelConfigDTO.getStatus().equals(CommonStatus.DISABLE.getStatus()))
+            return ResponseEntity.badRequest().body("启用渠道签名需要先启用对应的渠道配置！");
+
+        channelSignatureService.updateSignature(channelSignatureDTO);
         return ResponseEntity.ok("OK");
     }
 
-    //TODO
     @ApiOperation(value = "渠道签名分页列表", tags = {"渠道签名管理"})
     @ApiImplicitParams({
             @ApiImplicitParam(name = "configId", value = "渠道配置ID", dataTypeClass = Integer.class, paramType = "query"),
@@ -125,8 +141,8 @@ public class ChannelSignatureAPI {
         currentPage = null == currentPage ? 1 : currentPage;
         pageSize = null == pageSize ? 10 : pageSize;
 
-
-        return ResponseEntity.ok(null);
+        Page<ChannelSignatureDTO> page = channelSignatureService.signatures(channelConfigId, signature, status, currentPage, pageSize);
+        return ResponseEntity.ok(page);
     }
 
 

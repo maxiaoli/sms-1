@@ -1,10 +1,10 @@
 package com.boxuegu.sms.api;
 
+import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
+import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
 import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.service.ChannelConfigService;
 import com.boxuegu.sms.service.ChannelTemplateService;
-import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
-import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
 import com.boxuegu.sms.utils.Page;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class ChannelTemplateAPI {
     /**
      * 启用渠道模板，需要其所属的渠道配置已经启用
      */
-    @ApiOperation(value = "保存渠道模板", tags = {"渠道模板管理"})
+    @ApiOperation(value = "保存渠道模板", tags = {"渠道模板管理"}, notes = "渠道配置只需要上传其ID即可。")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
@@ -64,8 +64,9 @@ public class ChannelTemplateAPI {
 
         //在渠道配置禁用后，会禁用渠道模板
         //这时，去启用渠道模板，不会允许其启用，需要先启用对应的渠道配置
-        if (null == channelConfigDTO.getStatus()) channelConfigDTO.setStatus(0);
-        if (channelTemplateDTO.getStatus().equals(1) && channelConfigDTO.getStatus().equals(0))
+        if (null == channelConfigDTO.getStatus()) channelConfigDTO.setStatus(CommonStatus.DISABLE.getStatus());
+        if (channelTemplateDTO.getStatus().equals(CommonStatus.ENABLE.getStatus())
+                && channelConfigDTO.getStatus().equals(CommonStatus.DISABLE.getStatus()))
             return ResponseEntity.badRequest().body("启用渠道模板需要先启用对应的渠道配置！");
 
         channelTemplateService.saveTemplate(channelTemplateDTO);
@@ -94,13 +95,13 @@ public class ChannelTemplateAPI {
      * 启用渠道模板，需要其所属的渠道配置已经启用
      * 禁用渠道模板，需要禁用和其关联的短信服务模板
      */
-    @ApiOperation(value = "修改渠道模板", tags = {"渠道模板管理"})
+    @ApiOperation(value = "修改渠道模板", tags = {"渠道模板管理"}, notes = "渠道配置只需要上传其ID即可。")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
     @PutMapping("/template/{id}")
     public ResponseEntity<String> updateTemplate(@PathVariable("id") Integer id,
-                                               @ModelAttribute ChannelTemplateDTO channelTemplateDTO) {
+                                                 @ModelAttribute ChannelTemplateDTO channelTemplateDTO) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定更新参数!");
         ResponseEntity<String> res = validateTemplate(channelTemplateDTO);
         if (res != null) return res;
@@ -115,8 +116,9 @@ public class ChannelTemplateAPI {
 
         //在渠道配置禁用后，会禁用渠道模板
         //这时，去启用渠道模板，不会允许其启用，需要先启用对应的渠道配置
-        if (null == channelConfigDTO.getStatus()) channelConfigDTO.setStatus(0);
-        if (channelTemplateDTO.getStatus().equals(1) && channelConfigDTO.getStatus().equals(0))
+        if (null == channelConfigDTO.getStatus()) channelConfigDTO.setStatus(CommonStatus.DISABLE.getStatus());
+        if (channelTemplateDTO.getStatus().equals(CommonStatus.ENABLE.getStatus())
+                && channelConfigDTO.getStatus().equals(CommonStatus.DISABLE.getStatus()))
             return ResponseEntity.badRequest().body("启用渠道模板需要先启用对应的渠道配置！");
 
         channelTemplateService.updateTemplate(channelTemplateDTO);
@@ -144,7 +146,8 @@ public class ChannelTemplateAPI {
         currentPage = null == currentPage ? 1 : currentPage;
         pageSize = null == pageSize ? 10 : pageSize;
 
-        Page<ChannelTemplateDTO> page = channelTemplateService.channelTemplates(channelConfigId, name, code, status, currentPage, pageSize);
+        Page<ChannelTemplateDTO> page = channelTemplateService.channelTemplates(channelConfigId, name, code, status,
+                currentPage, pageSize);
         return ResponseEntity.ok(page);
     }
 

@@ -1,8 +1,10 @@
 package com.boxuegu.sms.domain.dto;
 
+import com.boxuegu.sms.domain.ChannelSignatureDO;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import org.springframework.beans.BeanUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -43,6 +45,24 @@ public class ChannelSignatureDTO implements Serializable {
 
     @ApiModelProperty(value = "0-未删除，1-已删除", hidden = true)
     private Integer deleteFlag;
+
+    public static ChannelSignatureDTO convertChannelSignatureDO(ChannelSignatureDO channelSignatureDO, ChannelConfigDTO channelConfig) {
+        if (null == channelSignatureDO || null == channelConfig) return null;
+        ChannelSignatureDTO channelSignatureDTO = new ChannelSignatureDTO();
+        BeanUtils.copyProperties(channelSignatureDO, channelSignatureDTO);
+        channelSignatureDTO.setChannelConfig(channelConfig);
+        return channelSignatureDTO;
+    }
+
+    public static ChannelSignatureDO convertToChannelSignatureDO(ChannelSignatureDTO channelSignatureDTO) {
+        if (null == channelSignatureDTO) return null;
+        ChannelSignatureDO channelSignatureDO = new ChannelSignatureDO();
+        BeanUtils.copyProperties(channelSignatureDTO, channelSignatureDO);
+        channelSignatureDO.setChnlConfigId(channelSignatureDTO.getChannelConfig().getId());
+        channelSignatureDO.setCreateTime(null);
+        channelSignatureDO.setUpdateTime(null);
+        return channelSignatureDO;
+    }
 
     public Integer getId() {
         return id;

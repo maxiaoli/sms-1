@@ -49,6 +49,7 @@ public interface ChannelSignatureMapper {
         "#{status,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, ",
         "#{updateTime,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=BIT})"
     })
+    @Options(useGeneratedKeys = true)
     int insert(ChannelSignatureDO record);
 
     /**
@@ -56,6 +57,7 @@ public interface ChannelSignatureMapper {
      * @mbg.generated 2018-09-05
      */
     @InsertProvider(type=ChannelSignatureSqlProvider.class, method="insertSelective")
+    @Options(useGeneratedKeys = true)
     int insertSelective(ChannelSignatureDO record);
 
     /**

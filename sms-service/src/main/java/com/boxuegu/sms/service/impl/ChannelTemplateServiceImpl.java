@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +73,10 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
     public void updateTemplate(ChannelTemplateDTO channelTemplateDTO) {
         if (null == channelTemplateDTO || null == channelTemplateDTO.getId()
                 || null == channelTemplateDTO.getChannelConfig()
-                || null == channelTemplateDTO.getChannelConfig().getId())
+                || null == channelTemplateDTO.getChannelConfig().getId()
+                || !StringUtils.hasText(channelTemplateDTO.getName())
+                || !StringUtils.hasText(channelTemplateDTO.getCode())
+                || !StringUtils.hasText(channelTemplateDTO.getContent()))
             return;
 
         //1.更新渠道模板
