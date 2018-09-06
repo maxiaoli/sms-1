@@ -85,18 +85,6 @@ const routeMap = [
     },
     children: [
       {
-        path: 'log',
-        name: 'service-log',
-        component: load('service/log/index'),
-        meta: {
-          requiresAuth: true,
-          sideShow: true,
-          title: '发送记录查询',
-          icon: 'md-book',
-          cacheView: false
-        }
-      },
-      {
         path: 'client',
         name: 'service-client',
         component: load('service/client/index'),
@@ -117,7 +105,19 @@ const routeMap = [
           sideShow: true,
           title: '模板管理',
           icon: 'ios-copy',
-          cacheView: true
+          cacheView: false
+        }
+      },
+      {
+        path: 'log',
+        name: 'service-log',
+        component: load('service/log/index'),
+        meta: {
+          requiresAuth: true,
+          sideShow: true,
+          title: '发送记录查询',
+          icon: 'md-book',
+          cacheView: false
         }
       }
     ]

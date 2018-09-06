@@ -4,6 +4,7 @@ import com.boxuegu.sms.constant.SMSConstant;
 import com.boxuegu.sms.domain.dto.ClientDTO;
 import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.service.ClientService;
+import com.boxuegu.sms.utils.KeyGenerateUtils;
 import com.boxuegu.sms.utils.Page;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,6 +106,14 @@ public class ClientAPI {
         return ResponseEntity.ok(page);
     }
 
+
+    @ApiOperation(value = "生成接入方密钥")
+    @GetMapping("/client/key")
+    public ResponseEntity<String> generateKey() {
+        return ResponseEntity.ok(KeyGenerateUtils.generateKey());
+    }
+
+
     /**
      * 对新增，或更新的入口参数进行校验
      *
@@ -124,7 +133,7 @@ public class ClientAPI {
             return ResponseEntity.badRequest().body("接入方状态不能为空！");
 
         //接入方标识编号code 全局唯一（包含删除）
-        List<ClientDTO> existClientDTOList = clientService.clientWithinDeletedByCode(clientDTO.getName());
+        List<ClientDTO> existClientDTOList = clientService.clientWithinDeletedByCode(clientDTO.getCode());
         if (creation) {
             if (!CollectionUtils.isEmpty(existClientDTOList))
                 return ResponseEntity.badRequest().body("接入方名称已存在！接入方名称全局唯一，不能重复！");
