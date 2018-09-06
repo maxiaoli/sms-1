@@ -98,10 +98,23 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public List<ClientDTO> clientWithinDeletedByCode(String code) {
+    public List<ClientDTO> clients() {
+        List<ClientDO> clientDOList = clientDao.clients();
+        if (CollectionUtils.isEmpty(clientDOList)) return null;
+
+        List<ClientDTO> list = new ArrayList<>();
+        for (ClientDO clientDO : clientDOList) {
+            ClientDTO clientDTO = ClientDTO.convertClientDO(clientDO);
+            if (null != clientDTO) list.add(clientDTO);
+        }
+        return list;
+    }
+
+    @Override
+    public List<ClientDTO> clientsWithinDeletedByCode(String code) {
         if (!StringUtils.hasText(code)) return null;
 
-        List<ClientDO> clientDOList = clientDao.clientWithinDeletedByCode(code);
+        List<ClientDO> clientDOList = clientDao.clientsWithinDeletedByCode(code);
         if (CollectionUtils.isEmpty(clientDOList)) return null;
 
         List<ClientDTO> list = new ArrayList<>();

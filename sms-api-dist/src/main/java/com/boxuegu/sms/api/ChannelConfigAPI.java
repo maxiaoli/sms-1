@@ -47,10 +47,10 @@ public class ChannelConfigAPI {
     })
     @PostMapping("/config")
     public ResponseEntity<String> saveConfig(@ModelAttribute ChannelConfigDetailDTO channelConfigDetailDTO) {
-        ResponseEntity<String> res = validateChannelConfig(channelConfigDetailDTO, true);
+        ResponseEntity<String> res = validateConfig(channelConfigDetailDTO, true);
         if (res != null) return res;
 
-        channelConfigService.saveChannelConfig(channelConfigDetailDTO);
+        channelConfigService.saveConfig(channelConfigDetailDTO);
         return ResponseEntity.ok("OK");
     }
 
@@ -65,7 +65,7 @@ public class ChannelConfigAPI {
     @DeleteMapping("/config/{id}")
     public ResponseEntity<String> deleteConfig(@PathVariable("id") Integer id) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定删除参数");
-        channelConfigService.deleteChannelConfig(id);
+        channelConfigService.deleteConfig(id);
         return ResponseEntity.ok("OK");
     }
 
@@ -81,11 +81,11 @@ public class ChannelConfigAPI {
     public ResponseEntity<String> updateConfig(@PathVariable("id") Integer id,
                                                @ModelAttribute ChannelConfigDetailDTO channelConfigDetailDTO) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定更新参数!");
-        ResponseEntity<String> res = validateChannelConfig(channelConfigDetailDTO, false);
+        ResponseEntity<String> res = validateConfig(channelConfigDetailDTO, false);
         if (res != null) return res;
 
         channelConfigDetailDTO.getConfig().setId(id);
-        channelConfigService.updateChannelConfig(channelConfigDetailDTO);
+        channelConfigService.updateConfig(channelConfigDetailDTO);
         return ResponseEntity.ok("OK");
     }
 
@@ -110,7 +110,7 @@ public class ChannelConfigAPI {
 
         if (!CommonStatus.inStatus(status)) status = null;
 
-        Page<ChannelConfigDTO> channelConfigDTOPage = channelConfigService.channelConfigs(name, type, status, currentPage, pageSize);
+        Page<ChannelConfigDTO> channelConfigDTOPage = channelConfigService.configs(name, type, status, currentPage, pageSize);
 
         return ResponseEntity.ok(channelConfigDTOPage);
     }
@@ -159,8 +159,8 @@ public class ChannelConfigAPI {
      * @param creation               是否是新增操作校验
      * @return API响应信息，如果校验通过则返回null
      */
-    private ResponseEntity<String> validateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO,
-                                                         boolean creation) {
+    private ResponseEntity<String> validateConfig(ChannelConfigDetailDTO channelConfigDetailDTO,
+                                                  boolean creation) {
         if (null == channelConfigDetailDTO) return ResponseEntity.badRequest().body("参数不能为空！");
 
         ChannelConfigDTO channelConfigDTO = channelConfigDetailDTO.getConfig();
@@ -174,7 +174,7 @@ public class ChannelConfigAPI {
             return ResponseEntity.badRequest().body("渠道配置状态不能为空！");
 
         //渠道配置名称全局唯一
-        List<ChannelConfigDTO> existChannelConfigDTOList = channelConfigService.channelConfigWithinDeletedByName(channelConfigDTO.getName());
+        List<ChannelConfigDTO> existChannelConfigDTOList = channelConfigService.configsWithinDeletedByName(channelConfigDTO.getName());
         if (creation) {
             if (!CollectionUtils.isEmpty(existChannelConfigDTOList))
                 return ResponseEntity.badRequest().body("渠道配置名称已经存在！");

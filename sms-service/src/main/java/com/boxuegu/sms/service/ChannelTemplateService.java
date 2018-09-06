@@ -3,6 +3,8 @@ package com.boxuegu.sms.service;
 import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
 import com.boxuegu.sms.utils.Page;
 
+import java.util.List;
+
 /**
  * 渠道模板 Service
  *
@@ -22,7 +24,8 @@ public interface ChannelTemplateService {
     void updateTemplateStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus);
 
 
-    Page<ChannelTemplateDTO> channelTemplates(Integer channelConfigId, String name, String code, Integer status,
-                                              Integer currentPage, Integer pageSize);
+    Page<ChannelTemplateDTO> templates(Integer channelConfigId, String name, String code, Integer status,
+                                       Integer currentPage, Integer pageSize);
 
+    List<ChannelTemplateDTO> templates();
 }

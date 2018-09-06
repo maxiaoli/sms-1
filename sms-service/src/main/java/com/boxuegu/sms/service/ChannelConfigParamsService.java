@@ -12,13 +12,13 @@ import java.util.List;
  */
 public interface ChannelConfigParamsService {
 
-    List<ChannelConfigParamsDTO> channelConfigParams(Integer channelConfigId);
+    List<ChannelConfigParamsDTO> configParams(Integer channelConfigId);
 
-    void deleteChannelConfigParams(Integer channelConfigId);
+    void deleteConfigParams(Integer channelConfigId);
 
-    void saveChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList);
+    void saveConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList);
 
-    void updateChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList);
+    void updateConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList);
 
-    void deleteChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList);
+    void deleteConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList);
 }

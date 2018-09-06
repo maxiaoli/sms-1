@@ -59,7 +59,7 @@ public class ChannelSignatureAPI {
 
         //在渠道配置删除后，会禁用渠道签名
         //这时，去新增渠道签名（不启用）而不修改关联的渠道配置，则不会允许其进行修改。
-        ChannelConfigDTO channelConfigDTO = channelConfigService.channelConfig(channelSignatureDTO.getChannelConfig().getId());
+        ChannelConfigDTO channelConfigDTO = channelConfigService.config(channelSignatureDTO.getChannelConfig().getId());
         if (null == channelConfigDTO)
             return ResponseEntity.badRequest().body("所关联的渠道配置不存在或已被删除！");
 
@@ -107,7 +107,7 @@ public class ChannelSignatureAPI {
 
         //在渠道配置删除后，会禁用渠道签名
         //这时，去修改渠道签名（不启用）而不修改关联的渠道配置，则不会允许其进行修改。
-        ChannelConfigDTO channelConfigDTO = channelConfigService.channelConfig(channelSignatureDTO.getChannelConfig().getId());
+        ChannelConfigDTO channelConfigDTO = channelConfigService.config(channelSignatureDTO.getChannelConfig().getId());
         if (null == channelConfigDTO)
             return ResponseEntity.badRequest().body("所关联的渠道配置不存在或已被删除！");
 
@@ -153,7 +153,7 @@ public class ChannelSignatureAPI {
     })
     @GetMapping("/signature/configs")
     public ResponseEntity<List<ChannelConfigDTO>> channelConfigs() {
-        return ResponseEntity.ok(channelConfigService.channelConfigs());
+        return ResponseEntity.ok(channelConfigService.configs());
     }
 
 

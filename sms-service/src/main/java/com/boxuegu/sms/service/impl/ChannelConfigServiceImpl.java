@@ -62,16 +62,16 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
     @Override
     @Transactional
-    public void deleteChannelConfig(Integer id) {
+    public void deleteConfig(Integer id) {
         if (null == id) return;
 
         //1.删除渠道配置
-        ChannelConfigDO channelConfigDO = channelConfigDao.channelConfig(id);
+        ChannelConfigDO channelConfigDO = channelConfigDao.config(id);
         if (null == channelConfigDO) return;
-        channelConfigDao.deleteChannelConfig(channelConfigDO.getId());
+        channelConfigDao.deleteConfig(channelConfigDO.getId());
 
         //2.删除渠道配置参数
-        channelConfigParamsService.deleteChannelConfigParams(channelConfigDO.getId());
+        channelConfigParamsService.deleteConfigParams(channelConfigDO.getId());
 
         //3.删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板（通过渠道模板、以及渠道签名的禁用来级联禁用）
         //禁用所属的渠道模板
@@ -83,7 +83,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
     @Override
     @Transactional
-    public void saveChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
+    public void saveConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
         if (null == channelConfigDetailDTO) return;
         //1.保存主配置
         ChannelConfigDTO channelConfigDTO = channelConfigDetailDTO.getConfig();
@@ -91,7 +91,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
         ChannelConfigDO channelConfigDO = ChannelConfigDTO.convertToChannelConfigDO(channelConfigDTO);
         if (null == channelConfigDO) return;
-        channelConfigDao.saveChannelConfig(channelConfigDO);
+        channelConfigDao.saveConfig(channelConfigDO);
         if (null == channelConfigDO.getId()) return;
 
         //2.保存参数配置
@@ -99,38 +99,38 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         if (CollectionUtils.isEmpty(params)) return;
         List<ChannelConfigParamsDO> channelConfigParamsDOList =
                 ChannelConfigParamsDTO.convertToChannelConfigParamsDOBatch(params, channelConfigDO.getId());
-        channelConfigParamsService.saveChannelConfigParamsBatch(channelConfigParamsDOList);
+        channelConfigParamsService.saveConfigParamsBatch(channelConfigParamsDOList);
     }
 
 
     @Override
     @Transactional
-    public void updateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
+    public void updateConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
         if (null == channelConfigDetailDTO) return;
 
         //1.更新主配置
         ChannelConfigDTO channelConfigDTO = channelConfigDetailDTO.getConfig();
         if (null == channelConfigDTO) return;
 
-        ChannelConfigDO existChannelConfigDO = channelConfigDao.channelConfig(channelConfigDTO.getId());
+        ChannelConfigDO existChannelConfigDO = channelConfigDao.config(channelConfigDTO.getId());
         if (null == existChannelConfigDO) return;
         ChannelConfigDO channelConfigDO = ChannelConfigDTO.convertToChannelConfigDO(channelConfigDTO);
         if (null == channelConfigDO) return;
 
         if (!compareValuableValue(existChannelConfigDO, channelConfigDO)) {
-            channelConfigDao.updateChannelConfig(channelConfigDO);
+            channelConfigDao.updateConfig(channelConfigDO);
         }
 
         //2.更新参数配置
         List<ChannelConfigParamsDTO> params = channelConfigDetailDTO.getParams();
         if (CollectionUtils.isEmpty(params)) return;
 
-        List<ChannelConfigParamsDTO> existParams = channelConfigParamsService.channelConfigParams(channelConfigDO.getId());
+        List<ChannelConfigParamsDTO> existParams = channelConfigParamsService.configParams(channelConfigDO.getId());
         if (CollectionUtils.isEmpty(existParams)) {
             //之前没有，全部是新增的
             List<ChannelConfigParamsDO> channelConfigParamsDOList =
                     ChannelConfigParamsDTO.convertToChannelConfigParamsDOBatch(params, channelConfigDO.getId());
-            channelConfigParamsService.saveChannelConfigParamsBatch(channelConfigParamsDOList);
+            channelConfigParamsService.saveConfigParamsBatch(channelConfigParamsDOList);
         } else {
             //之前有，分成新增、要更新的、以及要删除的 分开处理
             Map<ChannelConfigParam, String> existMap = existParams.stream()
@@ -158,19 +158,19 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
             if (!CollectionUtils.isEmpty(newParams)) {
                 List<ChannelConfigParamsDO> newParamsDOList =
                         ChannelConfigParamsDTO.convertToChannelConfigParamsDOBatch(newParams, channelConfigDO.getId());
-                channelConfigParamsService.saveChannelConfigParamsBatch(newParamsDOList);
+                channelConfigParamsService.saveConfigParamsBatch(newParamsDOList);
             }
 
             if (!CollectionUtils.isEmpty(differentParams)) {
                 List<ChannelConfigParamsDO> differentParamsDOList =
                         ChannelConfigParamsDTO.convertToChannelConfigParamsDOBatch(differentParams, channelConfigDO.getId());
-                channelConfigParamsService.updateChannelConfigParamsBatch(differentParamsDOList);
+                channelConfigParamsService.updateConfigParamsBatch(differentParamsDOList);
             }
 
             if (!CollectionUtils.isEmpty(deleteParams)) {
                 List<ChannelConfigParamsDO> deleteParamsDOList =
                         ChannelConfigParamsDTO.convertToChannelConfigParamsDOBatch(deleteParams, channelConfigDO.getId());
-                channelConfigParamsService.deleteChannelConfigParamsBatch(deleteParamsDOList);
+                channelConfigParamsService.deleteConfigParamsBatch(deleteParamsDOList);
             }
         }
 
@@ -183,8 +183,8 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
 
     @Override
-    public Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType, Integer status,
-                                                 Integer currentPage, Integer pageSize) {
+    public Page<ChannelConfigDTO> configs(String name, ChannelConfigType channelConfigType, Integer status,
+                                          Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
         pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
 
@@ -195,7 +195,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
         if (!CommonStatus.inStatus(status)) status = null;
 
-        Page<ChannelConfigDO> channelConfigDOPage = channelConfigDao.channelConfigs(name, type, status, currentPage, pageSize);
+        Page<ChannelConfigDO> channelConfigDOPage = channelConfigDao.configs(name, type, status, currentPage, pageSize);
 
         List<ChannelConfigDTO> list = new ArrayList<>();
         if (null != channelConfigDOPage && !CollectionUtils.isEmpty(channelConfigDOPage.getItems())) {
@@ -210,19 +210,19 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
 
     @Override
-    public List<ChannelConfigDTO> channelConfigs() {
-        return channelConfigs(null, null);
+    public List<ChannelConfigDTO> configs() {
+        return configs(null, null);
     }
 
 
     @Override
-    public List<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType) {
+    public List<ChannelConfigDTO> configs(String name, ChannelConfigType channelConfigType) {
         Integer type = null;
         if (null != channelConfigType) {
             type = channelConfigType.getType();
         }
 
-        List<ChannelConfigDO> channelConfigDOList = channelConfigDao.channelConfigs(name, type);
+        List<ChannelConfigDO> channelConfigDOList = channelConfigDao.configs(name, type);
         List<ChannelConfigDTO> list = new ArrayList<>();
         if (CollectionUtils.isEmpty(channelConfigDOList)) return list;
 
@@ -241,37 +241,37 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
         ChannelConfigDetailDTO channelConfigDetailDTO = new ChannelConfigDetailDTO();
 
-        ChannelConfigDTO channelConfigDTO = channelConfig(id);
+        ChannelConfigDTO channelConfigDTO = config(id);
         if (null == channelConfigDTO) return null;
         channelConfigDetailDTO.setConfig(channelConfigDTO);
 
-        List<ChannelConfigParamsDTO> channelConfigParamsDTOList = channelConfigParamsService.channelConfigParams(id);
+        List<ChannelConfigParamsDTO> channelConfigParamsDTOList = channelConfigParamsService.configParams(id);
         channelConfigDetailDTO.setParams(channelConfigParamsDTOList);
         return channelConfigDetailDTO;
     }
 
 
     @Override
-    public ChannelConfigDTO channelConfig(Integer id) {
+    public ChannelConfigDTO config(Integer id) {
         if (null == id) return null;
-        ChannelConfigDO channelConfigDO = channelConfigDao.channelConfig(id);
+        ChannelConfigDO channelConfigDO = channelConfigDao.config(id);
         if (null == channelConfigDO) return null;
         return ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
     }
 
     @Override
-    public ChannelConfigDTO channelConfigWithinDeleted(Integer id) {
+    public ChannelConfigDTO configWithinDeleted(Integer id) {
         if (null == id) return null;
-        ChannelConfigDO channelConfigDO = channelConfigDao.channelConfigWithinDeleted(id);
+        ChannelConfigDO channelConfigDO = channelConfigDao.configWithinDeleted(id);
         if (null == channelConfigDO) return null;
         return ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
     }
 
     @Override
-    public List<ChannelConfigDTO> channelConfigWithinDeletedByName(String name) {
+    public List<ChannelConfigDTO> configsWithinDeletedByName(String name) {
         if (!StringUtils.hasText(name)) return null;
 
-        List<ChannelConfigDO> channelConfigDOList = channelConfigDao.channelConfigWithinDeletedByName(name);
+        List<ChannelConfigDO> channelConfigDOList = channelConfigDao.configsWithinDeletedByName(name);
         if (CollectionUtils.isEmpty(channelConfigDOList)) return null;
 
         List<ChannelConfigDTO> list = new ArrayList<>();

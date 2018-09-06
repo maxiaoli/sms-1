@@ -59,7 +59,7 @@ public class ChannelTemplateAPI {
 
         //在渠道配置删除后，会禁用渠道模板
         //这时，去修改渠道模板（不启用）而不修改关联的渠道配置，则不会允许其进行修改。
-        ChannelConfigDTO channelConfigDTO = channelConfigService.channelConfig(channelTemplateDTO.getChannelConfig().getId());
+        ChannelConfigDTO channelConfigDTO = channelConfigService.config(channelTemplateDTO.getChannelConfig().getId());
         if (null == channelConfigDTO)
             return ResponseEntity.badRequest().body("所关联的渠道配置不存在或已被删除！");
 
@@ -109,7 +109,7 @@ public class ChannelTemplateAPI {
 
         //在渠道配置删除后，会禁用渠道模板
         //这时，去修改渠道模板（不启用）而不修改关联的渠道配置，则不会允许其进行修改。
-        ChannelConfigDTO channelConfigDTO = channelConfigService.channelConfig(channelTemplateDTO.getChannelConfig().getId());
+        ChannelConfigDTO channelConfigDTO = channelConfigService.config(channelTemplateDTO.getChannelConfig().getId());
         if (null == channelConfigDTO)
             return ResponseEntity.badRequest().body("所关联的渠道配置不存在或已被删除！");
 
@@ -147,7 +147,7 @@ public class ChannelTemplateAPI {
 
         if (!CommonStatus.inStatus(status)) status = null;
 
-        Page<ChannelTemplateDTO> page = channelTemplateService.channelTemplates(channelConfigId, name, code, status,
+        Page<ChannelTemplateDTO> page = channelTemplateService.templates(channelConfigId, name, code, status,
                 currentPage, pageSize);
         return ResponseEntity.ok(page);
     }
@@ -159,7 +159,7 @@ public class ChannelTemplateAPI {
     })
     @GetMapping("/template/configs")
     public ResponseEntity<List<ChannelConfigDTO>> channelConfigs() {
-        return ResponseEntity.ok(channelConfigService.channelConfigs());
+        return ResponseEntity.ok(channelConfigService.configs());
     }
 
 

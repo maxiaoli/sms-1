@@ -25,12 +25,15 @@ public interface ChannelTemplateDao {
     void updateTemplateStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus);
 
 
-    Page<ChannelTemplateDO> channelTemplates(Integer channelConfigId, String name, String code, Integer status, Integer currentPage, Integer pageSize);
+    Page<ChannelTemplateDO> templates(Integer channelConfigId, String name, String code, Integer status, Integer currentPage, Integer pageSize);
 
 
-    List<ChannelTemplateDO> channelTemplates(Integer channelConfigId);
+    List<ChannelTemplateDO> templates(Integer channelConfigId);
 
 
-    ChannelTemplateDO channelTemplate(Integer id);
+    List<ChannelTemplateDO> templates();
+
+
+    ChannelTemplateDO template(Integer id);
 
 }

@@ -30,6 +30,9 @@ public interface ChannelSignatureDao {
     List<ChannelSignatureDO> signatures(Integer channelConfigId);
 
 
+    List<ChannelSignatureDO> signatures();
+
+
     ChannelSignatureDO signature(Integer id);
 
 }

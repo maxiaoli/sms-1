@@ -33,7 +33,7 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
 
 
     @Override
-    public ChannelConfigDO saveChannelConfig(ChannelConfigDO channelConfigDO) {
+    public ChannelConfigDO saveConfig(ChannelConfigDO channelConfigDO) {
         if (null == channelConfigDO
                 || !StringUtils.hasText(channelConfigDO.getName())
                 || null == channelConfigDO.getType())
@@ -49,7 +49,7 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
 
 
     @Override
-    public void deleteChannelConfig(Integer id) {
+    public void deleteConfig(Integer id) {
         if (null == id) return;
         ChannelConfigDO channelConfigDO = new ChannelConfigDO();
         channelConfigDO.setId(id);
@@ -60,14 +60,14 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
 
 
     @Override
-    public void updateChannelConfig(ChannelConfigDO channelConfigDO) {
+    public void updateConfig(ChannelConfigDO channelConfigDO) {
         if (null == channelConfigDO) return;
         channelConfigMapper.updateByPrimaryKeySelective(channelConfigDO);
     }
 
     @Override
-    public Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status,
-                                                Integer currentPage, Integer pageSize) {
+    public Page<ChannelConfigDO> configs(String name, Integer type, Integer status,
+                                         Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
         pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
 
@@ -93,7 +93,7 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
 
 
     @Override
-    public List<ChannelConfigDO> channelConfigs(String name, Integer type) {
+    public List<ChannelConfigDO> configs(String name, Integer type) {
         ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
         ChannelConfigDOCriteria.Criteria criteria = criterion.createCriteria()
                 .andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());
@@ -110,7 +110,7 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
 
 
     @Override
-    public ChannelConfigDO channelConfig(Integer id) {
+    public ChannelConfigDO config(Integer id) {
         if (null == id) return null;
         ChannelConfigDO channelConfigDO = channelConfigMapper.selectByPrimaryKey(id);
         return null == channelConfigDO || channelConfigDO.getDeleteFlag().equals(1) ? null : channelConfigDO;
@@ -118,13 +118,13 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
 
 
     @Override
-    public ChannelConfigDO channelConfigWithinDeleted(Integer id) {
+    public ChannelConfigDO configWithinDeleted(Integer id) {
         if (null == id) return null;
         return channelConfigMapper.selectByPrimaryKey(id);
     }
 
     @Override
-    public List<ChannelConfigDO> channelConfigWithinDeletedByName(String name) {
+    public List<ChannelConfigDO> configsWithinDeletedByName(String name) {
         if (!StringUtils.hasText(name)) return null;
 
         ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();

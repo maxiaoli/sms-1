@@ -25,8 +25,12 @@ public interface ClientDao {
     Page<ClientDO> clients(String code, String name, Integer status, Integer currentPage, Integer pageSize);
 
 
+    List<ClientDO> clients();
+
+
     ClientDO client(Integer id);
 
 
-    List<ClientDO> clientWithinDeletedByCode(String code);
+    List<ClientDO> clientsWithinDeletedByCode(String code);
+
 }

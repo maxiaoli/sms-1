@@ -133,7 +133,7 @@ public class ClientAPI {
             return ResponseEntity.badRequest().body("接入方状态不能为空！");
 
         //接入方标识编号code 全局唯一（包含删除）
-        List<ClientDTO> existClientDTOList = clientService.clientWithinDeletedByCode(clientDTO.getCode());
+        List<ClientDTO> existClientDTOList = clientService.clientsWithinDeletedByCode(clientDTO.getCode());
         if (creation) {
             if (!CollectionUtils.isEmpty(existClientDTOList))
                 return ResponseEntity.badRequest().body("接入方名称已存在！接入方名称全局唯一，不能重复！");

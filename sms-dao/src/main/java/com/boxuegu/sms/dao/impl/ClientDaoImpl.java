@@ -95,6 +95,13 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
+    public List<ClientDO> clients() {
+        ClientDOCriteria criteria = new ClientDOCriteria();
+        criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());
+        return clientMapper.selectByExample(criteria);
+    }
+
+    @Override
     public ClientDO client(Integer id) {
         if (null == id) return null;
 
@@ -105,7 +112,7 @@ public class ClientDaoImpl implements ClientDao {
     }
 
     @Override
-    public List<ClientDO> clientWithinDeletedByCode(String code) {
+    public List<ClientDO> clientsWithinDeletedByCode(String code) {
         if (!StringUtils.hasText(code)) return null;
 
         ClientDOCriteria criteria = new ClientDOCriteria();

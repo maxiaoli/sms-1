@@ -25,6 +25,9 @@ public interface ClientService {
     Page<ClientDTO> clients(String code, String name, Integer status, Integer currentPage, Integer pageSize);
 
 
-    List<ClientDTO> clientWithinDeletedByCode(String code);
+    List<ClientDTO> clients();
+
+
+    List<ClientDTO> clientsWithinDeletedByCode(String code);
 
 }

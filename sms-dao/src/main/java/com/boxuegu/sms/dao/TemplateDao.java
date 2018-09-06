@@ -1,5 +1,7 @@
 package com.boxuegu.sms.dao;
 
+import com.boxuegu.sms.domain.TemplateDO;
+
 import java.util.List;
 
 /**
@@ -20,4 +22,7 @@ public interface TemplateDao {
 
 
     void updateTemplateStatusByChannelTemplateIdList(List<Integer> channelTemplateIdList, Integer targetStatus);
+
+
+    List<TemplateDO> templatesWithinDeletedByTemplateId(String templateId);
 }

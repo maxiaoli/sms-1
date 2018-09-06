@@ -136,11 +136,25 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
             return new Page<>(channelSignatureDTOList, 0, pageSize, currentPage);
 
         for (ChannelSignatureDO channelSignatureDO : channelSignatureDOPage.getItems()) {
-            ChannelConfigDTO channelConfigDTO = channelConfigService.channelConfigWithinDeleted(channelSignatureDO.getChnlConfigId());
+            ChannelConfigDTO channelConfigDTO = channelConfigService.configWithinDeleted(channelSignatureDO.getChnlConfigId());
             ChannelSignatureDTO channelSignatureDTO = ChannelSignatureDTO.convertChannelSignatureDO(channelSignatureDO, channelConfigDTO);
             channelSignatureDTOList.add(channelSignatureDTO);
         }
 
         return new Page<>(channelSignatureDTOList, channelSignatureDOPage.getTotalCount(), pageSize, currentPage);
+    }
+
+    @Override
+    public List<ChannelSignatureDTO> signatures() {
+        List<ChannelSignatureDO> channelSignatureDOList = channelSignatureDao.signatures();
+        if (CollectionUtils.isEmpty(channelSignatureDOList)) return null;
+
+        List<ChannelSignatureDTO> list = new ArrayList<>();
+        for (ChannelSignatureDO channelSignatureDO : channelSignatureDOList) {
+            ChannelConfigDTO channelConfigDTO = channelConfigService.configWithinDeleted(channelSignatureDO.getChnlConfigId());
+            ChannelSignatureDTO channelSignatureDTO = ChannelSignatureDTO.convertChannelSignatureDO(channelSignatureDO, channelConfigDTO);
+            list.add(channelSignatureDTO);
+        }
+        return list;
     }
 }

@@ -3,6 +3,8 @@ package com.boxuegu.sms.service;
 import com.boxuegu.sms.domain.dto.ChannelSignatureDTO;
 import com.boxuegu.sms.utils.Page;
 
+import java.util.List;
+
 /**
  * 渠道签名 Service
  *
@@ -24,4 +26,6 @@ public interface ChannelSignatureService {
 
     Page<ChannelSignatureDTO> signatures(Integer channelConfigId, String signature, Integer status, Integer currentPage, Integer pageSize);
 
+
+    List<ChannelSignatureDTO> signatures();
 }

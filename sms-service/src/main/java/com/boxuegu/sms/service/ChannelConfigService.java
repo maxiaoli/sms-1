@@ -14,23 +14,23 @@ import java.util.List;
  */
 public interface ChannelConfigService {
 
-    void deleteChannelConfig(Integer id);
+    void deleteConfig(Integer id);
 
-    void saveChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO);
+    void saveConfig(ChannelConfigDetailDTO channelConfigDetailDTO);
 
-    void updateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO);
+    void updateConfig(ChannelConfigDetailDTO channelConfigDetailDTO);
 
-    Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType, Integer status, Integer currentPage, Integer pageSize);
+    Page<ChannelConfigDTO> configs(String name, ChannelConfigType channelConfigType, Integer status, Integer currentPage, Integer pageSize);
 
-    List<ChannelConfigDTO> channelConfigs();
+    List<ChannelConfigDTO> configs();
 
-    List<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType);
+    List<ChannelConfigDTO> configs(String name, ChannelConfigType channelConfigType);
 
     ChannelConfigDetailDTO channelConfigDetail(Integer id);
 
-    ChannelConfigDTO channelConfig(Integer id);
+    ChannelConfigDTO config(Integer id);
 
-    ChannelConfigDTO channelConfigWithinDeleted(Integer id);
+    ChannelConfigDTO configWithinDeleted(Integer id);
 
-    List<ChannelConfigDTO> channelConfigWithinDeletedByName(String name);
+    List<ChannelConfigDTO> configsWithinDeletedByName(String name);
 }

@@ -78,4 +78,10 @@ public class TemplateDaoImpl implements TemplateDao {
         templateDO.setStatus(targetStatus);
         templateMapper.updateByExampleSelective(templateDO, criteria);
     }
+
+    //TODO
+    @Override
+    public List<TemplateDO> templatesWithinDeletedByTemplateId(String templateId) {
+        return null;
+    }
 }

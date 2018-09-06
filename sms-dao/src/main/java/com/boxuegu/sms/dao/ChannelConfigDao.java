@@ -14,26 +14,26 @@ import java.util.List;
 public interface ChannelConfigDao {
 
 
-    ChannelConfigDO saveChannelConfig(ChannelConfigDO channelConfigDO);
+    ChannelConfigDO saveConfig(ChannelConfigDO channelConfigDO);
 
 
-    void deleteChannelConfig(Integer id);
+    void deleteConfig(Integer id);
 
 
-    void updateChannelConfig(ChannelConfigDO channelConfigDO);
+    void updateConfig(ChannelConfigDO channelConfigDO);
 
 
-    Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status, Integer currentPage, Integer pageSize);
+    Page<ChannelConfigDO> configs(String name, Integer type, Integer status, Integer currentPage, Integer pageSize);
 
 
-    List<ChannelConfigDO> channelConfigs(String name, Integer type);
+    List<ChannelConfigDO> configs(String name, Integer type);
 
 
-    ChannelConfigDO channelConfig(Integer id);
+    ChannelConfigDO config(Integer id);
 
 
-    ChannelConfigDO channelConfigWithinDeleted(Integer id);
+    ChannelConfigDO configWithinDeleted(Integer id);
 
 
-    List<ChannelConfigDO> channelConfigWithinDeletedByName(String name);
+    List<ChannelConfigDO> configsWithinDeletedByName(String name);
 }

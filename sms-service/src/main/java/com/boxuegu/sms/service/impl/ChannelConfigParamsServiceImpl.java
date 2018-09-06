@@ -29,7 +29,7 @@ public class ChannelConfigParamsServiceImpl implements ChannelConfigParamsServic
     }
 
     @Override
-    public List<ChannelConfigParamsDTO> channelConfigParams(Integer channelConfigId) {
+    public List<ChannelConfigParamsDTO> configParams(Integer channelConfigId) {
 
         List<ChannelConfigParamsDO> channelConfigParamsDOList = channelConfigParamsDao.channelConfigParams(channelConfigId);
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return null;
@@ -49,28 +49,28 @@ public class ChannelConfigParamsServiceImpl implements ChannelConfigParamsServic
 
     @Override
     @Transactional
-    public void deleteChannelConfigParams(Integer channelConfigId) {
+    public void deleteConfigParams(Integer channelConfigId) {
         if (null == channelConfigId) return;
         channelConfigParamsDao.deleteChannelConfigParams(channelConfigId);
     }
 
     @Override
     @Transactional
-    public void saveChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
+    public void saveConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return;
         channelConfigParamsDao.saveChannelConfigParamsBatch(channelConfigParamsDOList);
     }
 
     @Override
     @Transactional
-    public void updateChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
+    public void updateConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return;
         channelConfigParamsDao.updateChannelConfigParamsBatch(channelConfigParamsDOList);
     }
 
     @Override
     @Transactional
-    public void deleteChannelConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
+    public void deleteConfigParamsBatch(List<ChannelConfigParamsDO> channelConfigParamsDOList) {
         if (CollectionUtils.isEmpty(channelConfigParamsDOList)) return;
         channelConfigParamsDao.deleteChannelConfigParamsBatch(channelConfigParamsDOList);
     }

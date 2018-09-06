@@ -88,8 +88,8 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
     }
 
     @Override
-    public Page<ChannelTemplateDO> channelTemplates(Integer channelConfigId, String name, String code,
-                                                    Integer status, Integer currentPage, Integer pageSize) {
+    public Page<ChannelTemplateDO> templates(Integer channelConfigId, String name, String code,
+                                             Integer status, Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
         pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
 
@@ -115,7 +115,7 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
     }
 
     @Override
-    public List<ChannelTemplateDO> channelTemplates(Integer channelConfigId) {
+    public List<ChannelTemplateDO> templates(Integer channelConfigId) {
         if (null == channelConfigId) return null;
 
         ChannelTemplateDOCriteria criteria = new ChannelTemplateDOCriteria();
@@ -124,8 +124,14 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
         return channelTemplateMapper.selectByExample(criteria);
     }
 
+    //TODO
     @Override
-    public ChannelTemplateDO channelTemplate(Integer id) {
+    public List<ChannelTemplateDO> templates() {
+        return null;
+    }
+
+    @Override
+    public ChannelTemplateDO template(Integer id) {
         if (null == id) return null;
 
         ChannelTemplateDO channelTemplateDO = channelTemplateMapper.selectByPrimaryKey(id);

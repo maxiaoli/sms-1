@@ -1,5 +1,7 @@
 package com.boxuegu.sms.service;
 
+import com.boxuegu.sms.domain.dto.TemplateDTO;
+
 import java.util.List;
 
 /**
@@ -20,4 +22,7 @@ public interface TemplateService {
 
 
     void updateTemplateStatusByChannelTemplateIdList(List<Integer> channelTemplateIdList, Integer targetStatus);
+
+    
+    List<TemplateDTO> templatesWithinDeletedByTemplateId(String templateId);
 }

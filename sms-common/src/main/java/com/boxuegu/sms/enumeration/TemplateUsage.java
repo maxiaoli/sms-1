@@ -7,20 +7,34 @@ package com.boxuegu.sms.enumeration;
  */
 public enum TemplateUsage {
 
-    VERIFICATION(0), //验证
+    VERIFICATION("VERIFICATION", 0, "验证"), //验证
 
-    NOTIFICATION(1), //通知
+    NOTIFICATION("NOTIFICATION", 1, "通知"), //通知
 
-    PROMOTION(2); //推广
+    PROMOTION("PROMOTION", 2, "推广"); //推广
+
+    private String name;
 
     private int code;
 
-    TemplateUsage(int code) {
+    private String desc;
+
+    TemplateUsage(String name, int code, String desc) {
+        this.name = name;
         this.code = code;
+        this.desc = desc;
     }
 
     public int getCode() {
         return code;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDesc() {
+        return desc;
     }
 
     public static TemplateUsage getTemplateUsage(Integer params) {
@@ -34,7 +48,20 @@ public enum TemplateUsage {
                 }
             }
         }
+        return null;
+    }
 
+    public static TemplateUsage getTemplateUsage(String params) {
+        if (null == params) return null;
+
+        TemplateUsage[] values = TemplateUsage.values();
+        if (values.length > 0) {
+            for (TemplateUsage value : values) {
+                if (value.getName().equals(params)) {
+                    return value;
+                }
+            }
+        }
         return null;
     }
 }
