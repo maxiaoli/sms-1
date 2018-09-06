@@ -35,5 +35,5 @@ public interface ChannelConfigDao {
     ChannelConfigDO channelConfigWithinDeleted(Integer id);
 
 
-    ChannelConfigDO channelConfigWithinDeletedByName(String name);
+    List<ChannelConfigDO> channelConfigWithinDeletedByName(String name);
 }

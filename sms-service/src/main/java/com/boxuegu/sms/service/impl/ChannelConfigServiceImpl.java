@@ -1,5 +1,6 @@
 package com.boxuegu.sms.service.impl;
 
+import com.boxuegu.sms.constant.SMSConstant;
 import com.boxuegu.sms.service.ChannelConfigParamsService;
 import com.boxuegu.sms.service.ChannelConfigService;
 import com.boxuegu.sms.service.ChannelSignatureService;
@@ -187,17 +188,15 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
     @Override
     public Page<ChannelConfigDTO> channelConfigs(String name, ChannelConfigType channelConfigType, Integer status,
                                                  Integer currentPage, Integer pageSize) {
-        currentPage = null == currentPage ? 1 : currentPage;
-        pageSize = null == pageSize ? 10 : pageSize;
+        currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
+        pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
 
         Integer type = null;
         if (null != channelConfigType) {
             type = channelConfigType.getType();
         }
 
-        if (null != status && !CommonStatus.inStatus(status)) {
-            status = null;
-        }
+        if (!CommonStatus.inStatus(status)) status = null;
 
         Page<ChannelConfigDO> channelConfigDOPage = channelConfigDao.channelConfigs(name, type, status, currentPage, pageSize);
 
@@ -272,12 +271,19 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
     }
 
     @Override
-    public ChannelConfigDTO channelConfigWithinDeletedByName(String name) {
+    public List<ChannelConfigDTO> channelConfigWithinDeletedByName(String name) {
         if (!StringUtils.hasText(name)) return null;
 
-        ChannelConfigDO channelConfigDO = channelConfigDao.channelConfigWithinDeletedByName(name);
-        if (null == channelConfigDO) return null;
-        return ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
+        List<ChannelConfigDO> channelConfigDOList = channelConfigDao.channelConfigWithinDeletedByName(name);
+        if (CollectionUtils.isEmpty(channelConfigDOList)) return null;
+
+        List<ChannelConfigDTO> list = new ArrayList<>();
+        for (ChannelConfigDO channelConfigDO : channelConfigDOList) {
+            ChannelConfigDTO channelConfigDTO = ChannelConfigDTO.convertChannelConfigDO(channelConfigDO);
+            if (null != channelConfigDTO) list.add(channelConfigDTO);
+        }
+
+        return list;
     }
 
 

@@ -1,5 +1,6 @@
 package com.boxuegu.sms.api;
 
+import com.boxuegu.sms.constant.SMSConstant;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelSignatureDTO;
 import com.boxuegu.sms.enumeration.CommonStatus;
@@ -138,8 +139,10 @@ public class ChannelSignatureAPI {
             @RequestParam(required = false) Integer status,
             @PathVariable("currentPage") Integer currentPage,
             @PathVariable("pageSize") Integer pageSize) {
-        currentPage = null == currentPage ? 1 : currentPage;
-        pageSize = null == pageSize ? 10 : pageSize;
+        currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
+        pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
+
+        if (!CommonStatus.inStatus(status)) status = null;
 
         Page<ChannelSignatureDTO> page = channelSignatureService.signatures(channelConfigId, signature, status, currentPage, pageSize);
         return ResponseEntity.ok(page);

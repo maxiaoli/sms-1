@@ -1,12 +1,13 @@
 package com.boxuegu.sms.api;
 
-import com.boxuegu.sms.enumeration.CommonStatus;
-import com.boxuegu.sms.service.ChannelConfigService;
+import com.boxuegu.sms.constant.SMSConstant;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelConfigDetailDTO;
 import com.boxuegu.sms.domain.dto.ChannelConfigParamsDTO;
 import com.boxuegu.sms.enumeration.ChannelConfigParam;
 import com.boxuegu.sms.enumeration.ChannelConfigType;
+import com.boxuegu.sms.enumeration.CommonStatus;
+import com.boxuegu.sms.service.ChannelConfigService;
 import com.boxuegu.sms.utils.Page;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,7 +47,7 @@ public class ChannelConfigAPI {
     })
     @PostMapping("/config")
     public ResponseEntity<String> saveConfig(@ModelAttribute ChannelConfigDetailDTO channelConfigDetailDTO) {
-        ResponseEntity<String> res = validateChannelConfig(channelConfigDetailDTO);
+        ResponseEntity<String> res = validateChannelConfig(channelConfigDetailDTO, true);
         if (res != null) return res;
 
         channelConfigService.saveChannelConfig(channelConfigDetailDTO);
@@ -82,7 +83,7 @@ public class ChannelConfigAPI {
     public ResponseEntity<String> updateConfig(@PathVariable("id") Integer id,
                                                @ModelAttribute ChannelConfigDetailDTO channelConfigDetailDTO) {
         if (null == id) return ResponseEntity.badRequest().body("缺少指定更新参数!");
-        ResponseEntity<String> res = validateChannelConfig(channelConfigDetailDTO);
+        ResponseEntity<String> res = validateChannelConfig(channelConfigDetailDTO, false);
         if (res != null) return res;
 
         channelConfigDetailDTO.getConfig().setId(id);
@@ -106,8 +107,10 @@ public class ChannelConfigAPI {
             @RequestParam(required = false) Integer status,
             @PathVariable("currentPage") Integer currentPage,
             @PathVariable("pageSize") Integer pageSize) {
-        currentPage = null == currentPage ? 1 : currentPage;
-        pageSize = null == pageSize ? 10 : pageSize;
+        currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
+        pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
+
+        if (!CommonStatus.inStatus(status)) status = null;
 
         Page<ChannelConfigDTO> channelConfigDTOPage = channelConfigService.channelConfigs(name, type, status, currentPage, pageSize);
 
@@ -155,9 +158,11 @@ public class ChannelConfigAPI {
      * 对新增，或更新的入口参数进行校验
      *
      * @param channelConfigDetailDTO 渠道配置详情
+     * @param creation               是否是新增操作校验
      * @return API响应信息，如果校验通过则返回null
      */
-    private ResponseEntity<String> validateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO) {
+    private ResponseEntity<String> validateChannelConfig(ChannelConfigDetailDTO channelConfigDetailDTO,
+                                                         boolean creation) {
         if (null == channelConfigDetailDTO) return ResponseEntity.badRequest().body("参数不能为空！");
 
         ChannelConfigDTO channelConfigDTO = channelConfigDetailDTO.getConfig();
@@ -171,9 +176,15 @@ public class ChannelConfigAPI {
             return ResponseEntity.badRequest().body("渠道配置状态不能为空！");
 
         //渠道配置名称全局唯一
-        ChannelConfigDTO existChannelConfigDTO = channelConfigService.channelConfigWithinDeletedByName(channelConfigDTO.getName());
-        if (null != existChannelConfigDTO)
-            return ResponseEntity.badRequest().body("渠道配置名称已经存在！");
+        List<ChannelConfigDTO> existChannelConfigDTOList = channelConfigService.channelConfigWithinDeletedByName(channelConfigDTO.getName());
+        if (creation) {
+            if (!CollectionUtils.isEmpty(existChannelConfigDTOList))
+                return ResponseEntity.badRequest().body("渠道配置名称已经存在！");
+        } else {
+            if (!CollectionUtils.isEmpty(existChannelConfigDTOList) && existChannelConfigDTOList.size() > 1)
+                return ResponseEntity.badRequest().body("渠道配置名称已经存在！");
+        }
+
 
         // 启用检查，对应渠道参数必须配置完全
         if (channelConfigDTO.getStatus().equals(1)) {

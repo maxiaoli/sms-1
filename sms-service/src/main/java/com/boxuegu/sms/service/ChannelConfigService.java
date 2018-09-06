@@ -32,5 +32,5 @@ public interface ChannelConfigService {
 
     ChannelConfigDTO channelConfigWithinDeleted(Integer id);
 
-    ChannelConfigDTO channelConfigWithinDeletedByName(String name);
+    List<ChannelConfigDTO> channelConfigWithinDeletedByName(String name);
 }

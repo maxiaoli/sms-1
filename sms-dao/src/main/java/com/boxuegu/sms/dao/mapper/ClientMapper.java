@@ -49,6 +49,7 @@ public interface ClientMapper {
         "#{status,jdbcType=BIT}, #{createTime,jdbcType=TIMESTAMP}, ",
         "#{updateTime,jdbcType=TIMESTAMP}, #{deleteFlag,jdbcType=BIT})"
     })
+    @Options(useGeneratedKeys = true)
     int insert(ClientDO record);
 
     /**
@@ -56,6 +57,7 @@ public interface ClientMapper {
      * @mbg.generated 2018-08-28
      */
     @InsertProvider(type=ClientSqlProvider.class, method="insertSelective")
+    @Options(useGeneratedKeys = true)
     int insertSelective(ClientDO record);
 
     /**

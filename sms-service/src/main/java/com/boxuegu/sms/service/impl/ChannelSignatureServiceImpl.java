@@ -1,6 +1,7 @@
 package com.boxuegu.sms.service.impl;
 
 
+import com.boxuegu.sms.constant.SMSConstant;
 import com.boxuegu.sms.dao.ChannelSignatureDao;
 import com.boxuegu.sms.domain.ChannelSignatureDO;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
@@ -101,8 +102,10 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
     @Override
     public Page<ChannelSignatureDTO> signatures(Integer channelConfigId, String signature, Integer status,
                                                 Integer currentPage, Integer pageSize) {
-        currentPage = null == currentPage ? 1 : currentPage;
-        pageSize = null == pageSize ? 10 : pageSize;
+        currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
+        pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
+
+        if (!CommonStatus.inStatus(status)) status = null;
 
         Page<ChannelSignatureDO> channelSignatureDOPage = channelSignatureDao
                 .signatures(channelConfigId, signature, status, currentPage, pageSize);

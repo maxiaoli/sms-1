@@ -1,5 +1,6 @@
 package com.boxuegu.sms.dao.impl;
 
+import com.boxuegu.sms.constant.SMSConstant;
 import com.boxuegu.sms.dao.ChannelTemplateDao;
 import com.boxuegu.sms.dao.mapper.ChannelTemplateMapper;
 import com.boxuegu.sms.domain.ChannelTemplateDO;
@@ -89,8 +90,8 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
     @Override
     public Page<ChannelTemplateDO> channelTemplates(Integer channelConfigId, String name, String code,
                                                     Integer status, Integer currentPage, Integer pageSize) {
-        currentPage = null == currentPage ? 1 : currentPage;
-        pageSize = null == pageSize ? 10 : pageSize;
+        currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
+        pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
 
         ChannelTemplateDOCriteria criterion = new ChannelTemplateDOCriteria();
 

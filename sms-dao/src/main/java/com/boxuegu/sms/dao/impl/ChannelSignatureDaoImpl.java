@@ -1,5 +1,6 @@
 package com.boxuegu.sms.dao.impl;
 
+import com.boxuegu.sms.constant.SMSConstant;
 import com.boxuegu.sms.dao.ChannelSignatureDao;
 import com.boxuegu.sms.dao.mapper.ChannelSignatureMapper;
 import com.boxuegu.sms.domain.ChannelSignatureDO;
@@ -7,6 +8,7 @@ import com.boxuegu.sms.domain.ChannelSignatureDOCriteria;
 import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.enumeration.DeleteFlag;
 import com.boxuegu.sms.utils.Page;
+import com.github.pagehelper.Constant;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -86,8 +88,8 @@ public class ChannelSignatureDaoImpl implements ChannelSignatureDao {
     @Override
     public Page<ChannelSignatureDO> signatures(Integer channelConfigId, String signature, Integer status,
                                                Integer currentPage, Integer pageSize) {
-        currentPage = null == currentPage ? 1 : currentPage;
-        pageSize = null == pageSize ? 10 : pageSize;
+        currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
+        pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
 
         ChannelSignatureDOCriteria criterion = new ChannelSignatureDOCriteria();
 

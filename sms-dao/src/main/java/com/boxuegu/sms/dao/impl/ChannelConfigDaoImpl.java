@@ -1,5 +1,6 @@
 package com.boxuegu.sms.dao.impl;
 
+import com.boxuegu.sms.constant.SMSConstant;
 import com.boxuegu.sms.dao.ChannelConfigDao;
 import com.boxuegu.sms.dao.mapper.ChannelConfigMapper;
 import com.boxuegu.sms.domain.ChannelConfigDO;
@@ -67,6 +68,9 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     @Override
     public Page<ChannelConfigDO> channelConfigs(String name, Integer type, Integer status,
                                                 Integer currentPage, Integer pageSize) {
+        currentPage = null == currentPage ? SMSConstant.DEFAULT_CURRENT_PAGE : currentPage;
+        pageSize = null == pageSize ? SMSConstant.DEFAULT_PAGE_SIZE : pageSize;
+
         ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
         ChannelConfigDOCriteria.Criteria criteria = criterion.createCriteria()
                 .andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag());
@@ -120,7 +124,7 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
     }
 
     @Override
-    public ChannelConfigDO channelConfigWithinDeletedByName(String name) {
+    public List<ChannelConfigDO> channelConfigWithinDeletedByName(String name) {
         if (!StringUtils.hasText(name)) return null;
 
         ChannelConfigDOCriteria criterion = new ChannelConfigDOCriteria();
@@ -128,6 +132,6 @@ public class ChannelConfigDaoImpl implements ChannelConfigDao {
 
         List<ChannelConfigDO> channelConfigDOList = channelConfigMapper.selectByExample(criterion);
         if (CollectionUtils.isEmpty(channelConfigDOList)) return null;
-        return channelConfigDOList.get(0);
+        return channelConfigDOList;
     }
 }
