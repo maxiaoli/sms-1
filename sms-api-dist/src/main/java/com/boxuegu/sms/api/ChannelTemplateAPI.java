@@ -47,7 +47,7 @@ public class ChannelTemplateAPI {
     /**
      * 启用渠道模板，需要其所属的渠道配置已经启用
      */
-    @ApiOperation(value = "保存渠道模板", tags = {"渠道模板管理"}, notes = "渠道配置只需要上传其ID即可。")
+    @ApiOperation(value = "保存渠道模板", notes = "渠道配置只需要上传其ID即可。")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
@@ -78,7 +78,7 @@ public class ChannelTemplateAPI {
      * TODO
      * 删除渠道模板，需要禁用和其关联的短信服务模板
      */
-    @ApiOperation(value = "删除渠道模板", tags = {"渠道模板管理"})
+    @ApiOperation(value = "删除渠道模板")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
@@ -95,7 +95,7 @@ public class ChannelTemplateAPI {
      * 启用渠道模板，需要其所属的渠道配置已经启用
      * 禁用渠道模板，需要禁用和其关联的短信服务模板
      */
-    @ApiOperation(value = "修改渠道模板", tags = {"渠道模板管理"}, notes = "渠道配置只需要上传其ID即可。")
+    @ApiOperation(value = "修改渠道模板", notes = "渠道配置只需要上传其ID即可。")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
@@ -126,7 +126,7 @@ public class ChannelTemplateAPI {
     }
 
 
-    @ApiOperation(value = "渠道模板分页列表", tags = {"渠道模板管理"})
+    @ApiOperation(value = "渠道模板分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "configId", value = "渠道配置ID", dataTypeClass = Integer.class, paramType = "query"),
             @ApiImplicitParam(name = "name", value = "名称", dataTypeClass = String.class, paramType = "query"),
@@ -152,7 +152,7 @@ public class ChannelTemplateAPI {
     }
 
 
-    @ApiOperation(value = "渠道配置列表", tags = {"渠道模板管理"})
+    @ApiOperation(value = "渠道配置列表")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = ChannelConfigDTO.class, responseContainer = "List")
     })

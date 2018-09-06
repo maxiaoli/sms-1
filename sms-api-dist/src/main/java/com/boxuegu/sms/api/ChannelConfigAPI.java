@@ -40,7 +40,7 @@ public class ChannelConfigAPI {
         this.channelConfigService = channelConfigService;
     }
 
-    @ApiOperation(value = "保存渠道配置", tags = {"渠道配置管理"})
+    @ApiOperation(value = "保存渠道配置")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
@@ -58,7 +58,7 @@ public class ChannelConfigAPI {
      * TODO
      * 删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板
      */
-    @ApiOperation(value = "删除渠道配置", tags = {"渠道配置管理"})
+    @ApiOperation(value = "删除渠道配置")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
@@ -74,7 +74,7 @@ public class ChannelConfigAPI {
      * TODO
      * 禁用渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板
      */
-    @ApiOperation(value = "修改渠道配置", tags = {"渠道配置管理"})
+    @ApiOperation(value = "修改渠道配置")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = String.class)
     })
@@ -91,7 +91,7 @@ public class ChannelConfigAPI {
     }
 
 
-    @ApiOperation(value = "渠道配置分页列表", tags = {"渠道配置管理"})
+    @ApiOperation(value = "渠道配置分页列表")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "name", value = "名称", dataTypeClass = String.class, paramType = "query"),
             @ApiImplicitParam(name = "type", value = "渠道账号配置类型", dataTypeClass = ChannelConfigType.class, paramType = "query"),
@@ -115,7 +115,7 @@ public class ChannelConfigAPI {
     }
 
 
-    @ApiOperation(value = "渠道配置详情", tags = {"渠道配置管理"})
+    @ApiOperation(value = "渠道配置详情")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = ChannelConfigDetailDTO.class)
     })
@@ -128,7 +128,7 @@ public class ChannelConfigAPI {
     }
 
 
-    @ApiOperation(value = "渠道配置类型", tags = {"渠道配置管理"})
+    @ApiOperation(value = "渠道配置类型")
     @ApiResponses({
             @ApiResponse(code = 200, message = "OK", response = ChannelConfigType.class, responseContainer = "List")
     })
@@ -138,7 +138,7 @@ public class ChannelConfigAPI {
     }
 
 
-    @ApiOperation(value = "渠道配置类型参数", tags = {"渠道配置管理"})
+    @ApiOperation(value = "渠道配置类型参数")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "type", value = "渠道配置类型", dataTypeClass = ChannelConfigType.class, paramType = "query"),
     })
