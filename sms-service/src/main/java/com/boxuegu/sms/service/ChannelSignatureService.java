@@ -19,6 +19,9 @@ public interface ChannelSignatureService {
     void updateSignature(ChannelSignatureDTO channelSignatureDTO);
 
 
+    void updateSignatureStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus);
+
+
     Page<ChannelSignatureDTO> signatures(Integer channelConfigId, String signature, Integer status, Integer currentPage, Integer pageSize);
 
 }

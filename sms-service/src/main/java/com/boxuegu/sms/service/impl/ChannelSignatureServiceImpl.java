@@ -5,11 +5,13 @@ import com.boxuegu.sms.dao.ChannelSignatureDao;
 import com.boxuegu.sms.domain.ChannelSignatureDO;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelSignatureDTO;
+import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.service.ChannelConfigService;
 import com.boxuegu.sms.service.ChannelSignatureService;
 import com.boxuegu.sms.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -38,7 +40,9 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
         this.channelConfigService = channelConfigService;
     }
 
+
     @Override
+    @Transactional
     public void saveSignature(ChannelSignatureDTO channelSignatureDTO) {
         if (null == channelSignatureDTO || null == channelSignatureDTO.getChannelConfig()
                 || null == channelSignatureDTO.getChannelConfig().getId())
@@ -50,7 +54,9 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
         channelSignatureDao.saveSignature(channelSignatureDO);
     }
 
+
     @Override
+    @Transactional
     public void deleteSignature(Integer id) {
         if (null == id) return;
 
@@ -63,7 +69,9 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
         //2.删除渠道签名，需要禁用和其关联的短信服务模板
     }
 
+
     @Override
+    @Transactional
     public void updateSignature(ChannelSignatureDTO channelSignatureDTO) {
         if (null == channelSignatureDTO || null == channelSignatureDTO.getId()
                 || null == channelSignatureDTO.getChannelConfig()
@@ -79,6 +87,16 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
 
         //2.禁用渠道签名，需要禁用和其关联的短信服务模板
     }
+
+
+    @Override
+    @Transactional
+    public void updateSignatureStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus) {
+        if (null == channelConfigId || !CommonStatus.inStatus(targetStatus)) return;
+
+        channelSignatureDao.updateSignatureStatusByChannelConfigId(channelConfigId, targetStatus);
+    }
+
 
     @Override
     public Page<ChannelSignatureDTO> signatures(Integer channelConfigId, String signature, Integer status,

@@ -2,6 +2,7 @@ package com.boxuegu.sms.service.impl;
 
 import com.boxuegu.sms.service.ChannelConfigParamsService;
 import com.boxuegu.sms.service.ChannelConfigService;
+import com.boxuegu.sms.service.ChannelSignatureService;
 import com.boxuegu.sms.service.ChannelTemplateService;
 import com.boxuegu.sms.dao.ChannelConfigDao;
 import com.boxuegu.sms.domain.ChannelConfigDO;
@@ -38,6 +39,8 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
 
     private ChannelTemplateService channelTemplateService;
 
+    private ChannelSignatureService channelSignatureService;
+
     @Autowired
     public void setChannelConfigDao(ChannelConfigDao channelConfigDao) {
         this.channelConfigDao = channelConfigDao;
@@ -52,6 +55,12 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
     public void setChannelTemplateService(ChannelTemplateService channelTemplateService) {
         this.channelTemplateService = channelTemplateService;
     }
+
+    @Autowired
+    public void setChannelSignatureService(ChannelSignatureService channelSignatureService) {
+        this.channelSignatureService = channelSignatureService;
+    }
+
 
     @Override
     @Transactional
@@ -69,6 +78,8 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         //3.删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板 TODO
         //禁用所属的渠道模板
         channelTemplateService.updateTemplateStatusByChannelConfigId(channelConfigDO.getId(), CommonStatus.DISABLE.getStatus());
+        //禁用所属的渠道签名
+        channelSignatureService.updateSignatureStatusByChannelConfigId(channelConfigDO.getId(), CommonStatus.DISABLE.getStatus());
     }
 
 
@@ -168,6 +179,8 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         //3.禁用渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板 TODO
         //禁用所属的渠道模板
         channelTemplateService.updateTemplateStatusByChannelConfigId(channelConfigDTO.getId(), CommonStatus.DISABLE.getStatus());
+        //禁用所属的渠道签名
+        channelSignatureService.updateSignatureStatusByChannelConfigId(channelConfigDO.getId(), CommonStatus.DISABLE.getStatus());
     }
 
 

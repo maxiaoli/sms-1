@@ -70,6 +70,20 @@ public class ChannelSignatureDaoImpl implements ChannelSignatureDao {
     }
 
     @Override
+    public void updateSignatureStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus) {
+        if (null == channelConfigId || !CommonStatus.inStatus(targetStatus)) return;
+
+        ChannelSignatureDOCriteria criteria = new ChannelSignatureDOCriteria();
+        criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag())
+                .andChnlConfigIdEqualTo(channelConfigId);
+
+        ChannelSignatureDO channelSignatureDO = new ChannelSignatureDO();
+        channelSignatureDO.setStatus(targetStatus);
+
+        channelSignatureMapper.updateByExampleSelective(channelSignatureDO, criteria);
+    }
+
+    @Override
     public Page<ChannelSignatureDO> signatures(Integer channelConfigId, String signature, Integer status,
                                                Integer currentPage, Integer pageSize) {
         currentPage = null == currentPage ? 1 : currentPage;

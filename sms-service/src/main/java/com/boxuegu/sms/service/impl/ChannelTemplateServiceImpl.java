@@ -70,6 +70,7 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
 
 
     @Override
+    @Transactional
     public void updateTemplate(ChannelTemplateDTO channelTemplateDTO) {
         if (null == channelTemplateDTO || null == channelTemplateDTO.getId()
                 || null == channelTemplateDTO.getChannelConfig()
@@ -91,6 +92,7 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
 
 
     @Override
+    @Transactional
     public void updateTemplateStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus) {
         if (null == channelConfigId || !CommonStatus.inStatus(targetStatus)) return;
 

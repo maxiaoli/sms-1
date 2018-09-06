@@ -19,6 +19,9 @@ public interface ChannelSignatureDao {
     void updateSignature(ChannelSignatureDO channelSignatureDO);
 
 
+    void updateSignatureStatusByChannelConfigId(Integer channelConfigId, Integer targetStatus);
+
+
     Page<ChannelSignatureDO> signatures(Integer channelConfigId, String signature, Integer status, Integer currentPage, Integer pageSize);
 
 
