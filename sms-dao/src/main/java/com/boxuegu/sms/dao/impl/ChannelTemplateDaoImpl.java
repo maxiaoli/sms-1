@@ -115,6 +115,16 @@ public class ChannelTemplateDaoImpl implements ChannelTemplateDao {
     }
 
     @Override
+    public List<ChannelTemplateDO> channelTemplates(Integer channelConfigId) {
+        if (null == channelConfigId) return null;
+
+        ChannelTemplateDOCriteria criteria = new ChannelTemplateDOCriteria();
+        criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag())
+                .andChnlConfigIdEqualTo(channelConfigId);
+        return channelTemplateMapper.selectByExample(criteria);
+    }
+
+    @Override
     public ChannelTemplateDO channelTemplate(Integer id) {
         if (null == id) return null;
 

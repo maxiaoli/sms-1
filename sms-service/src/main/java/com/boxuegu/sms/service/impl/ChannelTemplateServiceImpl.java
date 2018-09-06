@@ -1,13 +1,14 @@
 package com.boxuegu.sms.service.impl;
 
 import com.boxuegu.sms.constant.SMSConstant;
-import com.boxuegu.sms.service.ChannelConfigService;
-import com.boxuegu.sms.service.ChannelTemplateService;
 import com.boxuegu.sms.dao.ChannelTemplateDao;
 import com.boxuegu.sms.domain.ChannelTemplateDO;
 import com.boxuegu.sms.domain.dto.ChannelConfigDTO;
 import com.boxuegu.sms.domain.dto.ChannelTemplateDTO;
 import com.boxuegu.sms.enumeration.CommonStatus;
+import com.boxuegu.sms.service.ChannelConfigService;
+import com.boxuegu.sms.service.ChannelTemplateService;
+import com.boxuegu.sms.service.TemplateService;
 import com.boxuegu.sms.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 渠道模板 Service
@@ -30,6 +32,8 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
 
     private ChannelConfigService channelConfigService;
 
+    private TemplateService templateService;
+
     @Autowired
     public void setChannelTemplateDao(ChannelTemplateDao channelTemplateDao) {
         this.channelTemplateDao = channelTemplateDao;
@@ -40,6 +44,10 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
         this.channelConfigService = channelConfigService;
     }
 
+    @Autowired
+    public void setTemplateService(TemplateService templateService) {
+        this.templateService = templateService;
+    }
 
     @Override
     @Transactional
@@ -67,6 +75,7 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
         channelTemplateDao.deleteTemplate(channelTemplateDO.getId());
 
         //2.删除渠道模板，需要禁用和其关联的短信服务模板。
+        templateService.updateTemplateStatusByChannelTemplateId(channelTemplateDO.getId(), CommonStatus.DISABLE.getStatus());
     }
 
 
@@ -87,8 +96,8 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
 
         channelTemplateDao.updateTemplate(channelTemplateDO);
 
-
         //2.禁用渠道模板，需要禁用和其关联的短信服务模板。
+        templateService.updateTemplateStatusByChannelTemplateId(channelTemplateDO.getId(), CommonStatus.DISABLE.getStatus());
     }
 
 
@@ -98,6 +107,17 @@ public class ChannelTemplateServiceImpl implements ChannelTemplateService {
         if (null == channelConfigId || !CommonStatus.inStatus(targetStatus)) return;
 
         channelTemplateDao.updateTemplateStatusByChannelConfigId(channelConfigId, targetStatus);
+
+        if (targetStatus.equals(CommonStatus.DISABLE.getStatus())) {
+            List<ChannelTemplateDO> channelTemplateDOList = channelTemplateDao.channelTemplates(channelConfigId);
+            if (!CollectionUtils.isEmpty(channelTemplateDOList)) {
+                List<Integer> channelTemplateDOIdList = channelTemplateDOList.stream()
+                        .map(ChannelTemplateDO::getId).collect(Collectors.toList());
+                if (!CollectionUtils.isEmpty(channelTemplateDOIdList)) {
+                    templateService.updateTemplateStatusByChannelTemplateIdList(channelTemplateDOIdList, CommonStatus.DISABLE.getStatus());
+                }
+            }
+        }
     }
 
 

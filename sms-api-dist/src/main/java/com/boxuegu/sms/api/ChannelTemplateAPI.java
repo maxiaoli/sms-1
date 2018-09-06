@@ -76,7 +76,6 @@ public class ChannelTemplateAPI {
 
 
     /**
-     * TODO
      * 删除渠道模板，需要禁用和其关联的短信服务模板
      */
     @ApiOperation(value = "删除渠道模板")
@@ -92,7 +91,6 @@ public class ChannelTemplateAPI {
 
 
     /**
-     * TODO
      * 启用渠道模板，需要其所属的渠道配置已经启用
      * 禁用渠道模板，需要禁用和其关联的短信服务模板
      */

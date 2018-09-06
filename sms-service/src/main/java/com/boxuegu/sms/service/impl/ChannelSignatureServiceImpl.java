@@ -9,6 +9,7 @@ import com.boxuegu.sms.domain.dto.ChannelSignatureDTO;
 import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.service.ChannelConfigService;
 import com.boxuegu.sms.service.ChannelSignatureService;
+import com.boxuegu.sms.service.TemplateService;
 import com.boxuegu.sms.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 渠道签名 Service
@@ -31,6 +33,8 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
 
     private ChannelConfigService channelConfigService;
 
+    private TemplateService templateService;
+
     @Autowired
     public void setChannelSignatureDao(ChannelSignatureDao channelSignatureDao) {
         this.channelSignatureDao = channelSignatureDao;
@@ -41,6 +45,10 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
         this.channelConfigService = channelConfigService;
     }
 
+    @Autowired
+    public void setTemplateService(TemplateService templateService) {
+        this.templateService = templateService;
+    }
 
     @Override
     @Transactional
@@ -68,6 +76,7 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
         channelSignatureDao.deleteSignature(channelSignatureDO.getId());
 
         //2.删除渠道签名，需要禁用和其关联的短信服务模板
+        templateService.updateTemplateStatusByChannelSignatureId(channelSignatureDO.getId(), CommonStatus.DISABLE.getStatus());
     }
 
 
@@ -87,6 +96,7 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
         channelSignatureDao.updateSignature(channelSignatureDO);
 
         //2.禁用渠道签名，需要禁用和其关联的短信服务模板
+        templateService.updateTemplateStatusByChannelSignatureId(channelSignatureDO.getId(), CommonStatus.DISABLE.getStatus());
     }
 
 
@@ -96,6 +106,17 @@ public class ChannelSignatureServiceImpl implements ChannelSignatureService {
         if (null == channelConfigId || !CommonStatus.inStatus(targetStatus)) return;
 
         channelSignatureDao.updateSignatureStatusByChannelConfigId(channelConfigId, targetStatus);
+
+        //如果是禁用渠道签名，则需要同时禁用所属其的短信服务模板
+        if (targetStatus.equals(CommonStatus.DISABLE.getStatus())) {
+            List<ChannelSignatureDO> channelSignatureDOList = channelSignatureDao.signatures(channelConfigId);
+            if (!CollectionUtils.isEmpty(channelSignatureDOList)) {
+                List<Integer> channelSignatureDOIdList = channelSignatureDOList.stream().map(ChannelSignatureDO::getId)
+                        .collect(Collectors.toList());
+                if (!CollectionUtils.isEmpty(channelSignatureDOIdList))
+                    templateService.updateTemplateStatusByChannelSignatureIdList(channelSignatureDOIdList, CommonStatus.DISABLE.getStatus());
+            }
+        }
     }
 
 

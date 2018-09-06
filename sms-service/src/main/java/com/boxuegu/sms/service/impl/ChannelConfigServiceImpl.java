@@ -1,10 +1,6 @@
 package com.boxuegu.sms.service.impl;
 
 import com.boxuegu.sms.constant.SMSConstant;
-import com.boxuegu.sms.service.ChannelConfigParamsService;
-import com.boxuegu.sms.service.ChannelConfigService;
-import com.boxuegu.sms.service.ChannelSignatureService;
-import com.boxuegu.sms.service.ChannelTemplateService;
 import com.boxuegu.sms.dao.ChannelConfigDao;
 import com.boxuegu.sms.domain.ChannelConfigDO;
 import com.boxuegu.sms.domain.ChannelConfigParamsDO;
@@ -14,6 +10,7 @@ import com.boxuegu.sms.domain.dto.ChannelConfigParamsDTO;
 import com.boxuegu.sms.enumeration.ChannelConfigParam;
 import com.boxuegu.sms.enumeration.ChannelConfigType;
 import com.boxuegu.sms.enumeration.CommonStatus;
+import com.boxuegu.sms.service.*;
 import com.boxuegu.sms.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,7 +73,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
         //2.删除渠道配置参数
         channelConfigParamsService.deleteChannelConfigParams(channelConfigDO.getId());
 
-        //3.删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板 TODO
+        //3.删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板（通过渠道模板、以及渠道签名的禁用来级联禁用）
         //禁用所属的渠道模板
         channelTemplateService.updateTemplateStatusByChannelConfigId(channelConfigDO.getId(), CommonStatus.DISABLE.getStatus());
         //禁用所属的渠道签名
@@ -177,7 +174,7 @@ public class ChannelConfigServiceImpl implements ChannelConfigService {
             }
         }
 
-        //3.禁用渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板 TODO
+        //3.禁用渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板（通过渠道模板、以及渠道签名的禁用来级联禁用）
         //禁用所属的渠道模板
         channelTemplateService.updateTemplateStatusByChannelConfigId(channelConfigDTO.getId(), CommonStatus.DISABLE.getStatus());
         //禁用所属的渠道签名

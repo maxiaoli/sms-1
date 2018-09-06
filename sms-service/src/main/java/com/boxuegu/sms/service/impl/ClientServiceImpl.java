@@ -9,6 +9,7 @@ import com.boxuegu.sms.service.ClientService;
 import com.boxuegu.sms.utils.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
@@ -31,6 +32,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public void saveClient(ClientDTO clientDTO) {
         if (null == clientDTO || !StringUtils.hasText(clientDTO.getCode())
                 || !StringUtils.hasText(clientDTO.getCode())
@@ -47,6 +49,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public void deleteClient(Integer id) {
         if (null == id) return;
 
@@ -57,6 +60,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
+    @Transactional
     public void updateClient(ClientDTO clientDTO) {
         if (null == clientDTO || null == clientDTO.getId()
                 || !StringUtils.hasText(clientDTO.getCode())

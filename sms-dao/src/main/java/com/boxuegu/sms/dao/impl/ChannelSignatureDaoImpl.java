@@ -8,7 +8,6 @@ import com.boxuegu.sms.domain.ChannelSignatureDOCriteria;
 import com.boxuegu.sms.enumeration.CommonStatus;
 import com.boxuegu.sms.enumeration.DeleteFlag;
 import com.boxuegu.sms.utils.Page;
-import com.github.pagehelper.Constant;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -109,6 +108,16 @@ public class ChannelSignatureDaoImpl implements ChannelSignatureDao {
             return new Page<>(channelSignatureDOList, 0, pageSize, currentPage);
 
         return new Page<>(channelSignatureDOList, Long.valueOf(page.getTotal()).intValue(), pageSize, currentPage);
+    }
+
+    @Override
+    public List<ChannelSignatureDO> signatures(Integer channelConfigId) {
+        if (null == channelConfigId) return null;
+
+        ChannelSignatureDOCriteria criteria = new ChannelSignatureDOCriteria();
+        criteria.createCriteria().andDeleteFlagEqualTo(DeleteFlag.NO_DELETED.getDeleteFlag())
+                .andChnlConfigIdEqualTo(channelConfigId);
+        return channelSignatureMapper.selectByExample(criteria);
     }
 
     @Override

@@ -56,7 +56,6 @@ public class ChannelConfigAPI {
 
 
     /**
-     * TODO
      * 删除渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板
      */
     @ApiOperation(value = "删除渠道配置")
@@ -72,7 +71,6 @@ public class ChannelConfigAPI {
 
 
     /**
-     * TODO
      * 禁用渠道配置，需要同时禁用其下对应的所有的渠道模板、渠道签名、短信服务模板
      */
     @ApiOperation(value = "修改渠道配置")
